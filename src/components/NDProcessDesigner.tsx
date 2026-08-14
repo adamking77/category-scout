@@ -64,7 +64,7 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
   const plan = useMemo(() => buildProcessPlan(inputs, profileContext), [inputs, profileContext]);
   const markdown = useMemo(() => buildProcessMarkdown(inputs, plan), [inputs, plan]);
 
-  const hasExistingDraft = Object.values(initialInputs).some((value) => value.trim().length > 0);
+  const hasExistingDraft = Object.values(initialInputs).some((value) => typeof value === "string" && value.trim().length > 0);
   const hasSavedProcesses = artifacts.length > 0;
 
   const updateInputs = useCallback((update: Partial<ProcessDesignerInputs>) => {
