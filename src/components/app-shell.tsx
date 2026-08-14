@@ -315,7 +315,7 @@ export function ProjectDrawer({
                       <span
                         className="mono"
                         style={{
-                          fontSize: 9,
+                          fontSize: 10,
                           color: "var(--ink-muted)",
                           opacity: 0.6,
                           marginTop: 3,

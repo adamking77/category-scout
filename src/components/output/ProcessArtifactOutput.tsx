@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { ArrowRight, Check, Copy, DownloadSimple } from "@phosphor-icons/react";
 import { MetaLabel } from "../ui";
 import type { ProcessMove, ProcessPlan } from "../../types";
@@ -6,6 +6,7 @@ import { OutputSection, LeadTakeaway, SectionHeading } from "./OutputSection";
 import { OutputActionBar } from "./OutputActionBar";
 import { CoverageRing, CoverageBars } from "./OutputCharts";
 import { buildProcessBenefits } from "../../lib/process-designer";
+import { buildHtmlExport, downloadHtmlFile, artifactHtmlFileName } from "../../lib/export-html";
 
 /** Parse the high end of an effort string like "45-90 minutes" → 90. */
 function effortMinutes(effort: string): number {
@@ -61,7 +62,7 @@ function MoveCard({ move }: { move: ProcessMove }) {
         <h5 style={{ margin: 0, fontSize: 15, fontWeight: 500, color: "var(--ink)", letterSpacing: 0, lineHeight: 1.25 }}>
           {move.title}
         </h5>
-        <span className="mono" style={{ fontSize: 9, color: "var(--ink-muted)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+        <span className="mono" style={{ fontSize: 11, color: "var(--ink-muted)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
           {move.effort}
         </span>
       </div>
@@ -124,8 +125,17 @@ export function ProcessArtifactOutput({
   // The payoff: what the AI does once it's running this plan with you.
   const benefits = buildProcessBenefits(plan);
 
+  const exportRef = useRef<HTMLDivElement>(null);
+
+  function handleDownloadHtml() {
+    if (!exportRef.current) return;
+    const html = buildHtmlExport({ title: "ND Process", node: exportRef.current });
+    downloadHtmlFile(artifactHtmlFileName("process"), html);
+  }
+
   return (
     <div style={{ display: "grid", gap: 72, minWidth: 0, maxWidth: 720 }}>
+      <div ref={exportRef} style={{ display: "grid", gap: 72, minWidth: 0 }}>
       {/* LEAD — the bad-day guarantee + the ring, then the per-energy breakdown. */}
       <div style={{ display: "grid", gap: 32 }}>
         <div style={{ display: "flex", gap: 32, alignItems: "center", flexWrap: "wrap" }}>
@@ -279,18 +289,21 @@ export function ProcessArtifactOutput({
           </div>
         )}
 
-        <OutputActionBar
-          actions={[
-            { key: "download", label: "Download process", icon: <DownloadSimple size={14} />, onClick: onDownload, primary: true },
-            {
-              key: "copy",
-              label: copiedBrief ? "Copied" : "Copy instructions",
-              icon: copiedBrief ? <Check size={12} /> : <Copy size={12} />,
-              onClick: onCopyBrief,
-              color: copiedBrief ? "var(--teal-deep)" : undefined,
-            },
-          ]}
-        />
+        <div data-export-exclude style={{ display: "contents" }}>
+          <OutputActionBar
+            actions={[
+              { key: "download", label: "Download process", icon: <DownloadSimple size={14} />, onClick: onDownload, primary: true },
+              { key: "download-html", label: "Download page (HTML)", onClick: handleDownloadHtml },
+              {
+                key: "copy",
+                label: copiedBrief ? "Copied" : "Copy instructions",
+                icon: copiedBrief ? <Check size={12} /> : <Copy size={12} />,
+                onClick: onCopyBrief,
+                color: copiedBrief ? "var(--teal-deep)" : undefined,
+              },
+            ]}
+          />
+        </div>
 
         <div style={{ marginTop: 24, paddingTop: 22, borderTop: "1px solid rgba(91,138,138,0.25)" }}>
           <MetaLabel color="var(--teal)" style={{ marginBottom: 12 }}>How to use it</MetaLabel>
@@ -322,6 +335,8 @@ export function ProcessArtifactOutput({
             From then on it runs the plan with you, one fitting step at a time.
           </p>
         </div>
+      </div>
+
       </div>
 
       {/* Quiet footer — admin actions, out of the way. */}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { DownloadSimple, Copy, Check, ArrowRight } from "@phosphor-icons/react";
 import { MetaLabel } from "../ui";
 import type { NDProfile } from "../../types";
@@ -20,6 +20,12 @@ import {
 import { LeadTakeaway, QuietRow, SectionHeading } from "./OutputSection";
 import { OutputActionBar } from "./OutputActionBar";
 import { ProfileBars, BalanceMeter } from "./OutputCharts";
+import {
+  buildHtmlExport,
+  downloadHtmlFile,
+  artifactHtmlFileName,
+  artifactMarkdownFileName,
+} from "../../lib/export-html";
 
 function Pill({ label, tone = "default" }: { label: string; tone?: "default" | "teal" | "terracotta" }) {
   const styles: Record<string, React.CSSProperties> = {
@@ -111,6 +117,7 @@ export function ContextProfileOutput({
   onDownload?: () => void;
 }) {
   const [copied, setCopied] = useState(false);
+  const exportRef = useRef<HTMLDivElement>(null);
 
   const markdown = useMemo(() => buildNDProfileMarkdown(profile), [profile]);
   const context = useMemo(() => buildNDProfileContext(profile), [profile]);
@@ -168,9 +175,15 @@ export function ContextProfileOutput({
     const blob = new Blob([markdown], { type: "text/markdown" });
     const anchor = document.createElement("a");
     anchor.href = URL.createObjectURL(blob);
-    anchor.download = `nd-profile-${Date.now()}.md`;
+    anchor.download = artifactMarkdownFileName("profile");
     anchor.click();
     URL.revokeObjectURL(anchor.href);
+  }
+
+  function handleDownloadHtml() {
+    if (!exportRef.current) return;
+    const html = buildHtmlExport({ title: "ND Profile", node: exportRef.current });
+    downloadHtmlFile(artifactHtmlFileName("profile"), html);
   }
 
   async function handleCopyBrief() {
@@ -184,6 +197,7 @@ export function ContextProfileOutput({
       <OutputActionBar
         actions={[
           { key: "download", label: "Download profile", icon: <DownloadSimple size={14} />, onClick: handleDownload, primary: true },
+          { key: "download-html", label: "Download page (HTML)", onClick: handleDownloadHtml },
           {
             key: "copy-brief",
             label: copied ? "Copied" : "Copy AI instructions",
@@ -194,6 +208,8 @@ export function ContextProfileOutput({
           },
         ]}
       />
+
+      <div ref={exportRef} style={{ display: "grid", gap: 72, minWidth: 0 }}>
 
       {/* LEAD — the one thing to take away. */}
       {lead && <LeadTakeaway kind={lead.kind}>{lead.text}</LeadTakeaway>}
@@ -362,19 +378,22 @@ export function ContextProfileOutput({
             </div>
           )}
 
-          <OutputActionBar
-            actions={[
-              { key: "dl", label: "Download profile", icon: <DownloadSimple size={14} />, onClick: handleDownload, primary: true },
-              {
-                key: "copy",
-                label: copied ? "Copied" : "Copy AI instructions",
-                icon: copied ? <Check size={12} /> : <Copy size={12} />,
-                onClick: () => void handleCopyBrief(),
-                color: copied ? "var(--teal-deep)" : undefined,
-                disabled: !agentBrief,
-              },
-            ]}
-          />
+          <div data-export-exclude style={{ display: "contents" }}>
+            <OutputActionBar
+              actions={[
+                { key: "dl", label: "Download profile", icon: <DownloadSimple size={14} />, onClick: handleDownload, primary: true },
+                { key: "dl-html", label: "Download page (HTML)", onClick: handleDownloadHtml },
+                {
+                  key: "copy",
+                  label: copied ? "Copied" : "Copy AI instructions",
+                  icon: copied ? <Check size={12} /> : <Copy size={12} />,
+                  onClick: () => void handleCopyBrief(),
+                  color: copied ? "var(--teal-deep)" : undefined,
+                  disabled: !agentBrief,
+                },
+              ]}
+            />
+          </div>
 
           <div style={{ marginTop: 24, paddingTop: 22, borderTop: "1px solid rgba(91,138,138,0.25)" }}>
             <MetaLabel color="var(--teal)" style={{ marginBottom: 12 }}>How to use it</MetaLabel>
@@ -408,6 +427,7 @@ export function ContextProfileOutput({
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

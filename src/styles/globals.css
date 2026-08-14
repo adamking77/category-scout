@@ -3,6 +3,37 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Self-hosted fonts — no third-party CDN requests. Satoshi (ITF via
+   Fontshare) and JetBrains Mono (OFL) ship from /fonts/. */
+@font-face {
+  font-family: "Satoshi";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/satoshi-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Satoshi";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/satoshi-500.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Satoshi";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/satoshi-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono.woff2") format("woff2");
+}
+
 :root {
   --cream: #fdfbf7;
   --ink: #1a1a18;

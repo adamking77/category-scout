@@ -1,0 +1,12 @@
+Satoshi — license and attribution
+
+Typeface: Satoshi
+Foundry: Indian Type Foundry (ITF)
+Distributed via: Fontshare (https://www.fontshare.com)
+License: ITF Free Font License (FFL)
+License text: https://www.fontshare.com/licenses/itf-ffl
+
+This self-hosted copy is redistributed under the ITF Free Font License, which
+permits free commercial and personal use. Full terms at the URL above.
+
+Weights self-hosted here: 400, 500, 700.
