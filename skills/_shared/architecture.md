@@ -40,6 +40,12 @@ Every skill in this suite follows these rules:
 - No streaks, no catch-up framing, no passive accountability.
 - If required upstream artifacts are missing, say so clearly and offer the smallest viable next move.
 
+### The non-negotiables block
+
+**Every skill embeds `_shared/non-negotiables.md` verbatim.** The never-list there is the suite contract: no diagnosis, no demand mechanics, no streaks or completion scores, never "just start," never go silent, never praise competence as a lever, silence is planned rest, `Not today` is a dignified finish, no deadline or countdown pressure as strategy, trait labels are working labels, plain language throughout. The skills run inside the user's own agent where we control nothing, so the instruction text is the only enforcement that exists. When a rule in `non-negotiables.md` conflicts with anything else in a skill, the block wins.
+
+The web app mirrors the same block in its generated agent instructions so both surfaces hold the same line.
+
 ## Fallback rules
 
 If a required artifact is missing:
