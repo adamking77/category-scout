@@ -4,6 +4,13 @@
 
 **Execution status (2026-08-14, overnight):** Phases 0-3 landed on `main`. The canonical corpus (Lindsey Mackereth, 15+8 non-negotiables, three gates, changed-baseline) is vendored at `skills/_shared/corpus-source.md`; `non-negotiables.md` embeds the 15+8 verbatim; all four skills rewritten with the buyer-facing layer and safe-use READMEs; profile schema migrated to v2 with a lossless migration path and the two hard-no tensions reframed; the Context Builder opens on the gate probe; lanes/not-doing/baseline/invisible labor are collected and wired into the process artifact. Tests (13) and `astro build` pass. See commits after `c7ebb03`.
 
+**Follow-up (2026-08-15, Fiona + Nash, green-lit by Adam after full-team input):** trust + readability + export pass.
+- Privacy promise is now a first-class surface: front-door block ("Everything you type stays on this device. We can't see it. No cookies, no tracking, no account." + escape hatch + honest hosting footnote), footer line, Context Builder intro line. Fonts self-hosted (Satoshi + JetBrains Mono woff2 in `public/fonts/`) so no third party sees the visit.
+- Readability: locked rule (no informational text below 11px, none in `--ink-muted`); `MetaLabel` default 12px `--ink-light`; new `size="section"` variant (12px/600/ink, sentence-case) applied to all 23 intake section headings + SpineFinder section heads; effort tags 9→11px; hint text 13px `--ink-light`.
+- HTML visual export: `lib/export-html.ts` serializes the rendered artifact into a self-contained, print-ready HTML file (inline tokens, system fonts, no JS, no clinical language). Both outputs offer markdown (for the agent) + `Download page (HTML)` (for the person). Filenames date-stamped: `nd-profile-2026-08-14.md/.html`.
+- Uniformity: teal/teal-deep usage rule codified in DESIGN.md §2; tool descriptions unified to second person; Spine-Finder em-dash removed from public copy; nav/step language verified user-first across tools.
+- Bklit decision (recorded): keep the custom calm chart layer for NeuroDiv OS; Bklit stays on the IntelliZen side for internal analytics. No swap.
+
 **How to read this:** the tool is closer to done than it looks. Section 2 lists what must not be touched. Sections 3-7 are the gaps, ordered by leverage. Section 8 is the anti-pattern red-line list. Section 9 is the sequencing plan with owners.
 
 **Sources cited:**

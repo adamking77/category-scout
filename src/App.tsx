@@ -29,7 +29,8 @@ export default function App({
       </div>
 
       {!embedded ? (
-        <div style={{ maxWidth: 640, margin: "0 0 56px" }}>
+        <>
+          <div style={{ maxWidth: 640, margin: "0 0 56px" }}>
           <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
             AI is the most adaptive partner neurodivergent people have ever had access to. The problem is context: it doesn't know your activation patterns, what causes shutdown, when you have real capacity, or what produces action versus paralysis. That context is hard to articulate, so it almost never gets in. NeuroDiv OS helps you build that full context and hand it to your AI, so every tool and every session responds to how you actually work.
           </p>
@@ -45,6 +46,41 @@ export default function App({
             </a>
           </p>
         </div>
+
+        <div
+          style={{
+            maxWidth: 640,
+            margin: "0 0 40px",
+            border: "1px solid rgba(91,138,138,0.25)",
+            background: "rgba(91,138,138,0.06)",
+            padding: "18px 20px",
+          }}
+        >
+          <p
+            style={{
+              margin: "0 0 8px",
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              fontWeight: 500,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--teal-deep)",
+              lineHeight: 1,
+            }}
+          >
+            Your privacy
+          </p>
+          <p style={{ fontSize: 14, color: "var(--ink)", lineHeight: 1.7, margin: 0, fontWeight: 500 }}>
+            Everything you type stays on this device. We can't see it. No cookies, no tracking, no account.
+          </p>
+          <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "10px 0 0" }}>
+            Downloads are files you choose to save. Want it gone? Clear this site's data in your browser and it is gone.
+          </p>
+          <p style={{ fontSize: 12, color: "var(--ink-muted)", lineHeight: 1.6, margin: "12px 0 0" }}>
+            The site runs on standard hosting with basic security logs, like any website. Those logs never contain your answers.
+          </p>
+        </div>
+        </>
       ) : null}
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32, overflowX: "auto", paddingBottom: 2 }}>
@@ -83,7 +119,7 @@ export default function App({
       {activeTool === "context-builder" && (
         <ToolSection
           label="Context Builder"
-          description="A profile that tells any AI how you actually work: your activation patterns, shutdown triggers, and support conditions. Build it once. Every other tool reads from it."
+          description="You answer a few questions about how you actually work and get a profile that tells any AI what activates you, what shuts you down, and what helps. Build it once. Every other tool reads from it."
         >
           <NDContextBuilder />
         </ToolSection>
@@ -92,7 +128,7 @@ export default function App({
       {activeTool === "process-designer" && (
         <ToolSection
           label="Process Designer"
-          description="One goal, converted into a working process organized by energy state. Step menus for each working mode. Rescue steps for hard days."
+          description="You bring one goal and it becomes a working process organized by energy state. Step menus for each working mode. Rescue steps for hard days."
         >
           <NDProcessDesigner onOpenContextBuilder={() => window.location.assign(TOOL_ROUTES["context-builder"])} />
         </ToolSection>
@@ -102,7 +138,7 @@ export default function App({
       {activeTool === "spine-finder" && (
         <ToolSection
           label="Spine-Finder"
-          description="A small assist for finding your spine — a companion to Lindsey Mackereth's Compression Framework. You write, the tool does the part in between, you decide."
+          description="A small assist for finding your spine, a companion to Lindsey Mackereth's Compression Framework. You write, the tool does the part in between, you decide."
         >
           <SpineFinder />
         </ToolSection>
@@ -129,6 +165,7 @@ export default function App({
             GoKart Studio
           </a>
         </span>
+        <span>Your data never leaves this browser.</span>
       </footer>
     </div>
   );

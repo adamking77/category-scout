@@ -183,7 +183,7 @@ function RadioGroup<T extends string>({
 
 function FieldHint({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{ fontSize: 12, color: "var(--ink-muted)", margin: "6px 0 0", lineHeight: 1.6 }}>
+    <p style={{ fontSize: 13, color: "var(--ink-light)", margin: "6px 0 0", lineHeight: 1.6 }}>
       {children}
     </p>
   );
@@ -246,8 +246,11 @@ function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void;
           We updated your saved profile to the new format. Everything you had is still there; a few new sections are ready whenever you want to fill them.
         </p>
       )}
-      <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 36px" }}>
+      <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 10px" }}>
         10 to 15 minutes. Stop whenever. Skip anything you do not want to answer.
+      </p>
+      <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: "0 0 36px" }}>
+        Everything you answer stays in this browser, on this device. Nothing is uploaded or stored anywhere else.
       </p>
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         <PrimaryButton onClick={onBegin}>
@@ -302,7 +305,7 @@ function GateStep({
       </p>
 
       <Field>
-        <MetaLabel>How does today feel right now?</MetaLabel>
+        <MetaLabel size="section">How does today feel right now?</MetaLabel>
         <RadioGroup
           options={gateOptions}
           selected={profile.gates.today}
@@ -312,7 +315,7 @@ function GateStep({
       </Field>
 
       <Field>
-        <MetaLabel>What should we call you?</MetaLabel>
+        <MetaLabel size="section">What should we call you?</MetaLabel>
         <input
           type="text"
           value={profile.name}
@@ -379,13 +382,13 @@ function TraitsStep({
 
       {selected.length > 0 && (
         <div style={{ marginBottom: 32 }}>
-          <MetaLabel>How do these actually show up for you?</MetaLabel>
+          <MetaLabel size="section">How do these actually show up for you?</MetaLabel>
           <p style={{ fontSize: 13, color: "var(--ink-muted)", margin: "0 0 16px", lineHeight: 1.6 }}>
             Select what applies. These become the specific instructions in your profile.
           </p>
           {selected.map((trait) => (
             <div key={trait} style={{ marginBottom: 24 }}>
-              <p style={{ fontSize: 12, fontWeight: 500, color: "var(--teal-deep)", margin: "0 0 10px", fontFamily: "var(--font-mono)", letterSpacing: "0.06em" }}>
+              <p style={{ fontSize: 13, fontWeight: 600, color: "var(--teal-deep)", margin: "0 0 10px", fontFamily: "var(--font-mono)", letterSpacing: "0.06em" }}>
                 {TRAIT_LABELS[trait].toUpperCase()}
               </p>
               <CheckGroup
@@ -399,7 +402,7 @@ function TraitsStep({
       )}
 
       <Field>
-        <MetaLabel>Anything else about how these show up for you?</MetaLabel>
+        <MetaLabel size="section">Anything else about how these show up for you?</MetaLabel>
         <textarea
           value={profile.traits.notes}
           onChange={(e) => onChange({ notes: e.target.value })}
@@ -444,7 +447,7 @@ function ActivationStep({
       </p>
 
       <Field>
-        <MetaLabel>What pulls you in</MetaLabel>
+        <MetaLabel size="section">What pulls you in</MetaLabel>
         <CheckGroup options={activationOptions} selected={profile.activation.patterns} onChange={togglePattern} />
         {showOtherField && (
           <div style={{ marginTop: 12 }}>
@@ -460,7 +463,7 @@ function ActivationStep({
       </Field>
 
       <Field>
-        <MetaLabel>What does a good working session feel like?</MetaLabel>
+        <MetaLabel size="section">What does a good working session feel like?</MetaLabel>
         <textarea
           value={profile.activation.goodDayDescription}
           onChange={(e) => onChange({ goodDayDescription: e.target.value })}
@@ -511,7 +514,7 @@ function ShutdownStep({
       </p>
 
       <Field>
-        <MetaLabel>Task types that cause avoidance</MetaLabel>
+        <MetaLabel size="section">Task types that cause avoidance</MetaLabel>
         <CheckGroup options={shutdownOptions} selected={profile.shutdown.triggers} onChange={toggleTrigger} />
         {showOtherField && (
           <div style={{ marginTop: 12 }}>
@@ -527,7 +530,7 @@ function ShutdownStep({
       </Field>
 
       <Field>
-        <MetaLabel>What does shutdown or avoidance actually look like?</MetaLabel>
+        <MetaLabel size="section">What does shutdown or avoidance actually look like?</MetaLabel>
         <textarea
           value={profile.shutdown.shutdownDescription}
           onChange={(e) => onChange({ shutdownDescription: e.target.value })}
@@ -539,7 +542,7 @@ function ShutdownStep({
       </Field>
 
       <Field>
-        <MetaLabel>What are you not doing?</MetaLabel>
+        <MetaLabel size="section">What are you not doing?</MetaLabel>
         <textarea
           value={profile.notDoing}
           onChange={(e) => onNotDoingChange(e.target.value)}
@@ -551,7 +554,7 @@ function ShutdownStep({
       </Field>
 
       <Field>
-        <MetaLabel>What are you keeping in play right now?</MetaLabel>
+        <MetaLabel size="section">What are you keeping in play right now?</MetaLabel>
         <textarea
           value={profile.lanes.active.join("\n")}
           onChange={(e) => onLanesChange({ active: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })}
@@ -563,7 +566,7 @@ function ShutdownStep({
       </Field>
 
       <Field>
-        <MetaLabel>What are you closing the door on, for now?</MetaLabel>
+        <MetaLabel size="section">What are you closing the door on, for now?</MetaLabel>
         <textarea
           value={profile.lanes.closedDoors.join("\n")}
           onChange={(e) => onLanesChange({ closedDoors: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })}
@@ -574,7 +577,7 @@ function ShutdownStep({
       </Field>
 
       <Field>
-        <MetaLabel>What makes a space usable, and what breaks it?</MetaLabel>
+        <MetaLabel size="section">What makes a space usable, and what breaks it?</MetaLabel>
         <textarea
           value={profile.roomSafety}
           onChange={(e) => onRoomSafetyChange(e.target.value)}
@@ -621,7 +624,7 @@ function TimeStep({
       </p>
 
       <Field>
-        <MetaLabel>Which of these sound like you?</MetaLabel>
+        <MetaLabel size="section">Which of these sound like you?</MetaLabel>
         <CheckGroup options={timeOptions} selected={profile.timeEnergy.patterns} onChange={togglePattern} />
         {showOtherField && (
           <div style={{ marginTop: 12 }}>
@@ -637,7 +640,7 @@ function TimeStep({
       </Field>
 
       <Field>
-        <MetaLabel>When do you actually tend to sit down and work?</MetaLabel>
+        <MetaLabel size="section">When do you actually tend to sit down and work?</MetaLabel>
         <textarea
           value={profile.timeEnergy.activationWindows}
           onChange={(e) => onChange({ activationWindows: e.target.value })}
@@ -648,7 +651,7 @@ function TimeStep({
       </Field>
 
       <Field>
-        <MetaLabel>When do you know you'll be unavailable?</MetaLabel>
+        <MetaLabel size="section">When do you know you'll be unavailable?</MetaLabel>
         <textarea
           value={profile.timeEnergy.unavailablePeriods}
           onChange={(e) => onChange({ unavailablePeriods: e.target.value })}
@@ -660,7 +663,7 @@ function TimeStep({
       </Field>
 
       <Field>
-        <MetaLabel>What's different now than a year ago?</MetaLabel>
+        <MetaLabel size="section">What's different now than a year ago?</MetaLabel>
         <textarea
           value={profile.baseline.changedSinceYearAgo}
           onChange={(e) => onBaselineChange({ changedSinceYearAgo: e.target.value })}
@@ -697,7 +700,7 @@ function HistoryStep({
       </p>
 
       <Field>
-        <MetaLabel>What systems or approaches have you tried?</MetaLabel>
+        <MetaLabel size="section">What systems or approaches have you tried?</MetaLabel>
         <textarea
           value={profile.history.triedSystems}
           onChange={(e) => onChange({ triedSystems: e.target.value })}
@@ -708,7 +711,7 @@ function HistoryStep({
       </Field>
 
       <Field>
-        <MetaLabel>What worked, even partially?</MetaLabel>
+        <MetaLabel size="section">What worked, even partially?</MetaLabel>
         <textarea
           value={profile.history.whatWorked}
           onChange={(e) => onChange({ whatWorked: e.target.value })}
@@ -719,7 +722,7 @@ function HistoryStep({
       </Field>
 
       <Field>
-        <MetaLabel>What fell apart?</MetaLabel>
+        <MetaLabel size="section">What fell apart?</MetaLabel>
         <textarea
           value={profile.history.whatFailed}
           onChange={(e) => onChange({ whatFailed: e.target.value })}
@@ -730,7 +733,7 @@ function HistoryStep({
       </Field>
 
       <Field>
-        <MetaLabel>What did you notice and fix this week before anyone else did?</MetaLabel>
+        <MetaLabel size="section">What did you notice and fix this week before anyone else did?</MetaLabel>
         <textarea
           value={profile.invisibleLabor}
           onChange={(e) => onInvisibleLaborChange(e.target.value)}
@@ -786,7 +789,7 @@ function InfoStep({
       </p>
 
       <Field>
-        <MetaLabel>When taking in information, what works best?</MetaLabel>
+        <MetaLabel size="section">When taking in information, what works best?</MetaLabel>
         <RadioGroup
           options={densityOptions}
           selected={profile.infoConditions.density}
@@ -795,7 +798,7 @@ function InfoStep({
       </Field>
 
       <Field>
-        <MetaLabel>Format that works best for you</MetaLabel>
+        <MetaLabel size="section">Format that works best for you</MetaLabel>
         <CheckGroup options={formatOptions} selected={profile.infoConditions.formats} onChange={toggleFormat} />
         {showFormatOther && (
           <div style={{ marginTop: 12 }}>
@@ -811,7 +814,7 @@ function InfoStep({
       </Field>
 
       <Field>
-        <MetaLabel>What conditions help you actually work?</MetaLabel>
+        <MetaLabel size="section">What conditions help you actually work?</MetaLabel>
         <CheckGroup options={conditionOptions} selected={profile.infoConditions.supportConditions} onChange={toggleCondition} />
         {showConditionOther && (
           <div style={{ marginTop: 12 }}>

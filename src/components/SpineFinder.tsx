@@ -249,7 +249,7 @@ export function SpineFinder() {
       {/* Opening — eyebrow + lede, system scale (no oversized hero) */}
       <Reveal>
         <Card border="teal" padding="lg" background="rgba(91, 138, 138, 0.04)" style={{ maxWidth: 720 }}>
-          <MetaLabel color="var(--teal-deep)" marginBottom={12}>
+          <MetaLabel size="section" color="var(--teal-deep)" marginBottom={12}>
             A companion to the Compression Framework
           </MetaLabel>
           <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0, maxWidth: "60ch" }}>
@@ -270,7 +270,7 @@ export function SpineFinder() {
       >
         <Card padding="lg" style={{ maxWidth: 720, display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap", marginBottom: 16 }}>
           <div style={{ flex: 1, minWidth: 240 }}>
-            <MetaLabel marginBottom={8}>Start here · the source essay</MetaLabel>
+            <MetaLabel size="section" marginBottom={8}>Start here · the source essay</MetaLabel>
             <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
               <strong style={{ color: "var(--ink)", fontWeight: 500 }}>You&apos;re Constantly in Motion—and Nothing Is Taking Form</strong>, by Lindsey Mackereth. The full Compression Framework, in her words. Read it first so the rest of this page has somewhere to stand.
             </p>
@@ -281,7 +281,7 @@ export function SpineFinder() {
         </Card>
 
         <div style={{ maxWidth: 720 }}>
-          <MetaLabel marginBottom={14}>The step this helps with</MetaLabel>
+          <MetaLabel size="section" marginBottom={14}>The step this helps with</MetaLabel>
           <p style={bodyStyle}>
             Her first step asks you to write one messy paragraph about what keeps pulling at you, then let the spine <em>emerge through honest reflection.</em> That assumes you feel your way to the answer first and find the words after. For a lot of people, that&apos;s exactly how it works.
           </p>
@@ -356,7 +356,7 @@ export function SpineFinder() {
       >
         <Card padding="lg" style={{ maxWidth: 720, display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap", marginBottom: 16 }}>
           <div style={{ flex: 1, minWidth: 240 }}>
-            <MetaLabel marginBottom={8}>The skill file</MetaLabel>
+            <MetaLabel size="section" marginBottom={8}>The skill file</MetaLabel>
             <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
               <strong style={{ color: "var(--ink)", fontWeight: 500 }}>SKILL.md</strong>. The complete Spine-Finder process, self-contained. Works in any agent that accepts a skill or system file. No setup, no account.
             </p>
@@ -367,7 +367,7 @@ export function SpineFinder() {
         </Card>
 
         <Card padding="lg" style={{ maxWidth: 720 }}>
-          <MetaLabel marginBottom={16}>How to use it</MetaLabel>
+          <MetaLabel size="section" marginBottom={16}>How to use it</MetaLabel>
           <ol style={{ margin: 0, paddingLeft: 20, fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, listStyle: "decimal" }}>
             <li style={{ marginBottom: 10 }}>
               <strong style={{ color: "var(--ink)", fontWeight: 500 }}>Download</strong> the file above.

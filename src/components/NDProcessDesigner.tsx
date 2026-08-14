@@ -3,6 +3,7 @@ import { ArrowLeft, PencilSimple, Trash } from "@phosphor-icons/react";
 import { MetaLabel, PrimaryButton } from "./ui";
 import { ProcessArtifactOutput } from "./output/ProcessArtifactOutput";
 import type { NDProfileContext, ProcessDesignerInputs, ProcessPlan } from "../types";
+import { artifactMarkdownFileName } from "../lib/export-html";
 import { loadNDProfileContext } from "../lib/nd-profile";
 import {
   buildProcessMarkdown,
@@ -257,7 +258,7 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
             const blob = new Blob([markdown], { type: "text/markdown" });
             const anchor = document.createElement("a");
             anchor.href = URL.createObjectURL(blob);
-            anchor.download = `nd-process-${Date.now()}.md`;
+            anchor.download = artifactMarkdownFileName("process");
             anchor.click();
             URL.revokeObjectURL(anchor.href);
           }}
