@@ -16,6 +16,7 @@ const PUBLIC_SKILL_SLUG_SET = new Set<string>(PUBLIC_SKILL_SLUGS);
 const BUNDLE_SHARED_FILES = [
   "_shared/architecture.md",
   "_shared/artifact-contracts.md",
+  "_shared/non-negotiables.md",
   "_shared/surface-map.md",
   "_shared/github-distribution.md",
 ] as const;
@@ -28,6 +29,7 @@ const BUNDLE_DISPLAY_NAMES: Record<string, string> = {
 
 interface RawSkillFrontmatter {
   name?: string;
+  displayName?: string;
   description?: string;
   version?: string;
   tags?: string[];
@@ -38,6 +40,7 @@ interface RawSkillFrontmatter {
 export interface SkillEntry {
   slug: string;
   name: string;
+  displayName: string;
   description: string;
   version: string | null;
   tags: string[];
@@ -75,6 +78,7 @@ function parseSkillFrontmatter(raw: string) {
   return {
     attributes: {
       name: typeof data.name === "string" ? data.name.trim() : "",
+      displayName: typeof data.displayName === "string" ? data.displayName.trim() : "",
       description: typeof data.description === "string" ? data.description.trim() : "",
       version: typeof data.version === "string" ? data.version.trim() : "",
       tags: normalizeStringArray(data.tags),
@@ -117,6 +121,7 @@ export async function listSkills(): Promise<SkillEntry[]> {
     skills.push({
       slug: entry.name,
       name: parsed.attributes.name || entry.name,
+      displayName: parsed.attributes.displayName || BUNDLE_DISPLAY_NAMES[entry.name] || entry.name,
       description: parsed.attributes.description || "No description provided.",
       version: parsed.attributes.version || null,
       tags: parsed.attributes.tags,
