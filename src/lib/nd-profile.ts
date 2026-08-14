@@ -535,6 +535,11 @@ function buildAgentInstructions(profile: NDProfile): string {
   lines.push("**No deadline or countdown pressure.** Never recommend deadlines, urgency framing, or timers as a way to get moving. Pacing aids are theirs to choose, never yours to impose.");
   lines.push("");
 
+  if (profile.roomSafety.trim()) {
+    lines.push(`**Room safety matters per context.** ${profile.roomSafety.trim()} Calibrate demand and expectations to the room; some rooms are harder to be accurate in than others.`);
+    lines.push("");
+  }
+
   if (profile.gates.today) {
     const gateDescriptions: Record<Exclude<GateState, "clear">, string> = {
       bored: "the meaning gate is closed: nothing feels relevant",
@@ -682,6 +687,7 @@ export function buildNDProfileContext(profile: NDProfile): NDProfileContext {
     notDoing: profile.notDoing.trim(),
     baselineChangedSinceYearAgo: profile.baseline.changedSinceYearAgo.trim(),
     invisibleLabor: profile.invisibleLabor.trim(),
+    roomSafety: profile.roomSafety.trim(),
   };
 }
 

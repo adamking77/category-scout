@@ -479,6 +479,35 @@ function BoundariesStep({
         <FieldHint>Examples: no live calls, no daily posting, no giant setup project before starting.</FieldHint>
       </Field>
 
+      <Field>
+        <FieldLabel>Could, should, or want?</FieldLabel>
+        <p style={{ fontSize: 13, color: "var(--ink-muted)", margin: "0 0 12px", lineHeight: 1.6 }}>
+          The honest triangle for this goal. The want column is what the process protects; the should column is what burns people out.
+        </p>
+        <textarea
+          value={inputs.couldShouldWant?.could ?? ""}
+          onChange={(e) => onChange({ couldShouldWant: { could: e.target.value, should: inputs.couldShouldWant?.should ?? "", want: inputs.couldShouldWant?.want ?? "" } })}
+          placeholder="What could you do with this goal?"
+          rows={2}
+          style={{ fontSize: 13, marginBottom: 10 }}
+        />
+        <textarea
+          value={inputs.couldShouldWant?.should ?? ""}
+          onChange={(e) => onChange({ couldShouldWant: { could: inputs.couldShouldWant?.could ?? "", should: e.target.value, want: inputs.couldShouldWant?.want ?? "" } })}
+          placeholder="What should you do? (the obligation voice)"
+          rows={2}
+          style={{ fontSize: 13, marginBottom: 10 }}
+        />
+        <textarea
+          value={inputs.couldShouldWant?.want ?? ""}
+          onChange={(e) => onChange({ couldShouldWant: { could: inputs.couldShouldWant?.could ?? "", should: inputs.couldShouldWant?.should ?? "", want: e.target.value } })}
+          placeholder="What do you actually want? (the interest voice)"
+          rows={2}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>Interest beats obligation. If the want column is empty, that is worth noticing before the process gets built.</FieldHint>
+      </Field>
+
       <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Build my process" />
     </div>
   );

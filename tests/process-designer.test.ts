@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildNDProfileContext, createEmptyNDProfile } from "../src/lib/nd-profile";
-import { buildProcessMarkdown, buildProcessPlan } from "../src/lib/process-designer";
+import { buildProcessMarkdown, buildProcessPlan, createEmptyProcessDesignerInputs } from "../src/lib/process-designer";
 
 describe("process designer", () => {
   it("builds a profile-aware process plan", () => {
@@ -14,6 +14,7 @@ describe("process designer", () => {
 
     const plan = buildProcessPlan(
       {
+        ...createEmptyProcessDesignerInputs(),
         goal: "Turn scattered workshop notes into a usable offer",
         whyNow: "The material already exists and people keep asking for it.",
         successSignal: "One clean outline and one page I could show someone.",
@@ -35,6 +36,7 @@ describe("process designer", () => {
   it("exports markdown with move menu and not-today handling", () => {
     const plan = buildProcessPlan(
       {
+        ...createEmptyProcessDesignerInputs(),
         goal: "Ship the first draft of a workshop",
         whyNow: "",
         successSignal: "A draft exists in a form I can revisit.",
@@ -47,6 +49,7 @@ describe("process designer", () => {
 
     const markdown = buildProcessMarkdown(
       {
+        ...createEmptyProcessDesignerInputs(),
         goal: "Ship the first draft of a workshop",
         whyNow: "",
         successSignal: "A draft exists in a form I can revisit.",

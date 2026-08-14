@@ -482,6 +482,7 @@ function ShutdownStep({
   onChange,
   onNotDoingChange,
   onLanesChange,
+  onRoomSafetyChange,
   onBack,
   onContinue,
 }: {
@@ -489,6 +490,7 @@ function ShutdownStep({
   onChange: (update: Partial<NDProfile["shutdown"]>) => void;
   onNotDoingChange: (value: string) => void;
   onLanesChange: (update: Partial<NDProfile["lanes"]>) => void;
+  onRoomSafetyChange: (value: string) => void;
   onBack: () => void;
   onContinue: () => void;
 }) {
@@ -569,6 +571,18 @@ function ShutdownStep({
           rows={3}
           style={{ fontSize: 13 }}
         />
+      </Field>
+
+      <Field>
+        <MetaLabel>What makes a space usable, and what breaks it?</MetaLabel>
+        <textarea
+          value={profile.roomSafety}
+          onChange={(e) => onRoomSafetyChange(e.target.value)}
+          placeholder="Per context. Which rooms, people, or settings are safe to be accurate in? What turns a space unusable?"
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>Room safety is context, not character. Agents that read your profile calibrate expectations per room.</FieldHint>
       </Field>
 
       <StepNav onBack={onBack} onContinue={onContinue} />
@@ -923,6 +937,10 @@ export function NDContextBuilder() {
     setProfile((p) => ({ ...p, invisibleLabor }));
   }, []);
 
+  const updateRoomSafety = useCallback((roomSafety: string) => {
+    setProfile((p) => ({ ...p, roomSafety }));
+  }, []);
+
   const updateTimeEnergy = useCallback((update: Partial<NDProfile["timeEnergy"]>) => {
     setProfile((p) => ({ ...p, timeEnergy: { ...p.timeEnergy, ...update } }));
   }, []);
@@ -1029,7 +1047,7 @@ export function NDContextBuilder() {
         <ActivationStep profile={profile} onChange={updateActivation} onBack={back} onContinue={next} />
       )}
       {step === "shutdown" && (
-        <ShutdownStep profile={profile} onChange={updateShutdown} onNotDoingChange={updateNotDoing} onLanesChange={updateLanes} onBack={back} onContinue={next} />
+        <ShutdownStep profile={profile} onChange={updateShutdown} onNotDoingChange={updateNotDoing} onLanesChange={updateLanes} onRoomSafetyChange={updateRoomSafety} onBack={back} onContinue={next} />
       )}
       {step === "time" && (
         <TimeStep profile={profile} onChange={updateTimeEnergy} onBaselineChange={updateBaseline} onBack={back} onContinue={next} />

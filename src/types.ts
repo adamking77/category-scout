@@ -85,6 +85,7 @@ export interface NDProfileContext {
   notDoing: string;
   baselineChangedSinceYearAgo: string;
   invisibleLabor: string;
+  roomSafety: string;
 }
 
 export type StrategySectionKey =
@@ -457,6 +458,11 @@ export interface ProcessDesignerInputs {
   existingAssets: string;
   frictionPoints: string;
   notDoing: string;
+  couldShouldWant: {
+    could: string;
+    should: string;
+    want: string;
+  };
 }
 
 export interface ProcessMove {

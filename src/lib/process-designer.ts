@@ -33,6 +33,7 @@ export function createEmptyProcessDesignerInputs(): ProcessDesignerInputs {
     existingAssets: "",
     frictionPoints: "",
     notDoing: "",
+    couldShouldWant: { could: "", should: "", want: "" },
   };
 }
 
@@ -196,6 +197,7 @@ export function buildProcessPlan(
 
   const protectedConditions = unique([
     profileContext?.unavailablePeriods ? `Protected unavailable periods: ${profileContext.unavailablePeriods}` : "",
+    profileContext?.roomSafety ? `Room safety: ${profileContext.roomSafety}` : "",
     shutdownTriggers[0] ? `Avoidance triggers to respect: ${shutdownTriggers.slice(0, 4).join(", ")}` : "",
     frictionPoints ? `Known sticking points: ${frictionPoints}` : "",
   ]);
@@ -372,11 +374,21 @@ export function buildProcessMarkdown(inputs: ProcessDesignerInputs, plan: Proces
   const existingAssets = clean(inputs.existingAssets);
   const frictionPoints = clean(inputs.frictionPoints);
 
+  const could = clean(inputs.couldShouldWant?.could ?? "");
+  const should = clean(inputs.couldShouldWant?.should ?? "");
+  const want = clean(inputs.couldShouldWant?.want ?? "");
+
   lines.push("", "## Source notes", "");
   if (whyNow) lines.push(`- **Why now:** ${whyNow}`);
   if (successSignal) lines.push(`- **What counts as progress:** ${successSignal}`);
   if (existingAssets) lines.push(`- **Already available:** ${existingAssets}`);
   if (frictionPoints) lines.push(`- **Known sticking points:** ${frictionPoints}`);
+  if (could || should || want) {
+    lines.push("", "## Could / Should / Want", "");
+    if (could) lines.push(`- **Could:** ${could}`);
+    if (should) lines.push(`- **Should:** ${should}`);
+    if (want) lines.push(`- **Want:** ${want}`);
+  }
 
   return lines.join("\n");
 }
