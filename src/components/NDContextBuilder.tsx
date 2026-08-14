@@ -12,6 +12,7 @@ import type {
   InfoDensity,
   InfoFormat,
   SupportCondition,
+  GateState,
 } from "../types";
 import {
   createEmptyNDProfile,
@@ -29,12 +30,13 @@ import {
   SUPPORT_CONDITION_LABELS,
 } from "../lib/nd-profile";
 
-type StepId = "intro" | "traits" | "activation" | "shutdown" | "time" | "history" | "info" | "done";
+type StepId = "intro" | "gate" | "traits" | "activation" | "shutdown" | "time" | "history" | "info" | "done";
 
-const STEP_ORDER: StepId[] = ["intro", "traits", "activation", "shutdown", "time", "history", "info", "done"];
+const STEP_ORDER: StepId[] = ["intro", "gate", "traits", "activation", "shutdown", "time", "history", "info", "done"];
 
 const STEP_LABELS: Record<StepId, string> = {
   intro: "Context Builder",
+  gate: "How today feels",
   traits: "Your profile",
   activation: "What activates you",
   shutdown: "What to avoid",
@@ -230,7 +232,7 @@ function StepNav({
 }
 
 // Step: Intro
-function IntroStep({ onBegin, hasExisting }: { onBegin: () => void; hasExisting: boolean }) {
+function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void; hasExisting: boolean; wasMigrated: boolean }) {
   return (
     <div style={{ maxWidth: 600 }}>
       <p style={{ fontSize: 15, color: "var(--ink)", lineHeight: 1.75, margin: "0 0 20px" }}>
@@ -239,6 +241,11 @@ function IntroStep({ onBegin, hasExisting }: { onBegin: () => void; hasExisting:
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 20px" }}>
         Answer questions about what energizes you, what shuts you down, and how you take in information. You get a profile file. Paste it into any AI you use. That AI will then respond in ways that match how you work.
       </p>
+      {wasMigrated && (
+        <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: "0 0 20px" }}>
+          We updated your saved profile to the new format. Everything you had is still there; a few new sections are ready whenever you want to fill them.
+        </p>
+      )}
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 36px" }}>
         10 to 15 minutes. Stop whenever. Skip anything you do not want to answer.
       </p>
@@ -261,6 +268,62 @@ function IntroStep({ onBegin, hasExisting }: { onBegin: () => void; hasExisting:
           </button>
         )}
       </div>
+    </div>
+  );
+}
+
+// Step: Gate — the felt-level first gesture. The user is seen before they
+// volunteer anything. They do not type until they have chosen to type.
+function GateStep({
+  profile,
+  onChange,
+  onNameChange,
+  onBack,
+  onContinue,
+}: {
+  profile: NDProfile;
+  onChange: (update: Partial<NDProfile["gates"]>) => void;
+  onNameChange: (value: string) => void;
+  onBack: () => void;
+  onContinue: () => void;
+}) {
+  const gateOptions: { value: GateState; label: string }[] = [
+    { value: "bored", label: "Bored. Nothing here feels relevant right now" },
+    { value: "confused", label: "Confused. The shape of things is wrong or unclear" },
+    { value: "heavy", label: "Heavy. Everything costs more than it should" },
+    { value: "panicked", label: "Panicked. Too much is trying to happen at once" },
+    { value: "clear", label: "Clear. I'm fine, just here to set up" },
+  ];
+
+  return (
+    <div>
+      <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 32px", maxWidth: 560 }}>
+        Before we get to questions, one honest check. How does today actually feel? Not how it should feel. There's no wrong answer, and it won't be used against you.
+      </p>
+
+      <Field>
+        <MetaLabel>How does today feel right now?</MetaLabel>
+        <RadioGroup
+          options={gateOptions}
+          selected={profile.gates.today}
+          onChange={(v) => onChange({ today: v })}
+        />
+        <FieldHint>Whatever you pick, the profile and the agents that read it will work with it, not push through it.</FieldHint>
+      </Field>
+
+      <Field>
+        <MetaLabel>What should we call you?</MetaLabel>
+        <input
+          type="text"
+          value={profile.name}
+          onChange={(e) => onNameChange(e.target.value)}
+          placeholder="Your name, a nickname, or leave it blank"
+          style={{ fontSize: 13, padding: "9px 12px" }}
+        />
+        <FieldHint>This becomes the headline of your profile. It's your file, so it should feel like yours.</FieldHint>
+      </Field>
+
+      <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Continue" />
     </div>
   );
 }
@@ -417,11 +480,15 @@ function ActivationStep({
 function ShutdownStep({
   profile,
   onChange,
+  onNotDoingChange,
+  onLanesChange,
   onBack,
   onContinue,
 }: {
   profile: NDProfile;
   onChange: (update: Partial<NDProfile["shutdown"]>) => void;
+  onNotDoingChange: (value: string) => void;
+  onLanesChange: (update: Partial<NDProfile["lanes"]>) => void;
   onBack: () => void;
   onContinue: () => void;
 }) {
@@ -469,6 +536,41 @@ function ShutdownStep({
         <FieldHint>Optional but useful. The more specific you are, the more useful this becomes.</FieldHint>
       </Field>
 
+      <Field>
+        <MetaLabel>What are you not doing?</MetaLabel>
+        <textarea
+          value={profile.notDoing}
+          onChange={(e) => onNotDoingChange(e.target.value)}
+          placeholder="Real boundaries, not disclaimers. What you're deliberately keeping out of your life right now"
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>This becomes a first-class section of your profile. It's not a limitation list; it's what makes the yes possible.</FieldHint>
+      </Field>
+
+      <Field>
+        <MetaLabel>What are you keeping in play right now?</MetaLabel>
+        <textarea
+          value={profile.lanes.active.join("\n")}
+          onChange={(e) => onLanesChange({ active: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })}
+          placeholder="One to three lanes. The things you're actually committed to. One per line"
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>This person can do almost anything, so they commit to nothing. Naming one to three lanes defends the yes.</FieldHint>
+      </Field>
+
+      <Field>
+        <MetaLabel>What are you closing the door on, for now?</MetaLabel>
+        <textarea
+          value={profile.lanes.closedDoors.join("\n")}
+          onChange={(e) => onLanesChange({ closedDoors: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })}
+          placeholder="Named closed doors. It's okay for closing a door to hurt a little; that's the grief step"
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+      </Field>
+
       <StepNav onBack={onBack} onContinue={onContinue} />
     </div>
   );
@@ -478,11 +580,13 @@ function ShutdownStep({
 function TimeStep({
   profile,
   onChange,
+  onBaselineChange,
   onBack,
   onContinue,
 }: {
   profile: NDProfile;
   onChange: (update: Partial<NDProfile["timeEnergy"]>) => void;
+  onBaselineChange: (update: Partial<NDProfile["baseline"]>) => void;
   onBack: () => void;
   onContinue: () => void;
 }) {
@@ -541,6 +645,18 @@ function TimeStep({
         <FieldHint>These are protected zones. Any process built from your profile will treat silence here as planned rest, not drift.</FieldHint>
       </Field>
 
+      <Field>
+        <MetaLabel>What's different now than a year ago?</MetaLabel>
+        <textarea
+          value={profile.baseline.changedSinceYearAgo}
+          onChange={(e) => onBaselineChange({ changedSinceYearAgo: e.target.value })}
+          placeholder="What used to be automatic that now takes effort? What's shifted? Lost abilities are data, not failure"
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>The target is a new sustainable baseline, not getting back to normal. If rest doesn't restore like it used to, that's expected data.</FieldHint>
+      </Field>
+
       <StepNav onBack={onBack} onContinue={onContinue} />
     </div>
   );
@@ -550,11 +666,13 @@ function TimeStep({
 function HistoryStep({
   profile,
   onChange,
+  onInvisibleLaborChange,
   onBack,
   onContinue,
 }: {
   profile: NDProfile;
   onChange: (update: Partial<NDProfile["history"]>) => void;
+  onInvisibleLaborChange: (value: string) => void;
   onBack: () => void;
   onContinue: () => void;
 }) {
@@ -595,6 +713,18 @@ function HistoryStep({
           rows={3}
           style={{ fontSize: 13 }}
         />
+      </Field>
+
+      <Field>
+        <MetaLabel>What did you notice and fix this week before anyone else did?</MetaLabel>
+        <textarea
+          value={profile.invisibleLabor}
+          onChange={(e) => onInvisibleLaborChange(e.target.value)}
+          placeholder="The overfunctioning loop is real data, not a boast. It belongs in your profile"
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>People who can do almost anything end up doing everything nobody asked for. Naming it makes it visible instead of automatic.</FieldHint>
       </Field>
 
       <StepNav onBack={onBack} onContinue={onContinue} />
@@ -739,6 +869,16 @@ export function NDContextBuilder() {
   const [step, setStep] = useState<StepId>("intro");
   const [profile, setProfile] = useState<NDProfile>(() => loadNDProfile() ?? createEmptyNDProfile());
   const [hasExisting] = useState(() => loadNDProfile() !== null);
+  const [wasMigrated] = useState(() => {
+    try {
+      const raw = localStorage.getItem("nd-profile");
+      if (!raw) return false;
+      const parsed = JSON.parse(raw) as { version?: unknown };
+      return parsed && parsed.version === 1;
+    } catch {
+      return false;
+    }
+  });
 
   // Auto-save whenever profile changes (not on intro/done steps)
   useEffect(() => {
@@ -757,6 +897,30 @@ export function NDContextBuilder() {
 
   const updateShutdown = useCallback((update: Partial<NDProfile["shutdown"]>) => {
     setProfile((p) => ({ ...p, shutdown: { ...p.shutdown, ...update } }));
+  }, []);
+
+  const updateGates = useCallback((update: Partial<NDProfile["gates"]>) => {
+    setProfile((p) => ({ ...p, gates: { ...p.gates, ...update } }));
+  }, []);
+
+  const updateName = useCallback((name: string) => {
+    setProfile((p) => ({ ...p, name }));
+  }, []);
+
+  const updateNotDoing = useCallback((notDoing: string) => {
+    setProfile((p) => ({ ...p, notDoing }));
+  }, []);
+
+  const updateLanes = useCallback((update: Partial<NDProfile["lanes"]>) => {
+    setProfile((p) => ({ ...p, lanes: { ...p.lanes, ...update } }));
+  }, []);
+
+  const updateBaseline = useCallback((update: Partial<NDProfile["baseline"]>) => {
+    setProfile((p) => ({ ...p, baseline: { ...p.baseline, ...update } }));
+  }, []);
+
+  const updateInvisibleLabor = useCallback((invisibleLabor: string) => {
+    setProfile((p) => ({ ...p, invisibleLabor }));
   }, []);
 
   const updateTimeEnergy = useCallback((update: Partial<NDProfile["timeEnergy"]>) => {
@@ -853,7 +1017,10 @@ export function NDContextBuilder() {
       )}
 
       {step === "intro" && (
-        <IntroStep onBegin={() => goToStep("traits")} hasExisting={hasExisting} />
+        <IntroStep onBegin={() => goToStep("gate")} hasExisting={hasExisting} wasMigrated={wasMigrated} />
+      )}
+      {step === "gate" && (
+        <GateStep profile={profile} onChange={updateGates} onNameChange={updateName} onBack={back} onContinue={next} />
       )}
       {step === "traits" && (
         <TraitsStep profile={profile} onChange={updateTraits} onBack={back} onContinue={next} />
@@ -862,13 +1029,13 @@ export function NDContextBuilder() {
         <ActivationStep profile={profile} onChange={updateActivation} onBack={back} onContinue={next} />
       )}
       {step === "shutdown" && (
-        <ShutdownStep profile={profile} onChange={updateShutdown} onBack={back} onContinue={next} />
+        <ShutdownStep profile={profile} onChange={updateShutdown} onNotDoingChange={updateNotDoing} onLanesChange={updateLanes} onBack={back} onContinue={next} />
       )}
       {step === "time" && (
-        <TimeStep profile={profile} onChange={updateTimeEnergy} onBack={back} onContinue={next} />
+        <TimeStep profile={profile} onChange={updateTimeEnergy} onBaselineChange={updateBaseline} onBack={back} onContinue={next} />
       )}
       {step === "history" && (
-        <HistoryStep profile={profile} onChange={updateHistory} onBack={back} onContinue={next} />
+        <HistoryStep profile={profile} onChange={updateHistory} onInvisibleLaborChange={updateInvisibleLabor} onBack={back} onContinue={next} />
       )}
       {step === "info" && (
         <InfoStep profile={profile} onChange={updateInfoConditions} onBack={back} onContinue={next} />

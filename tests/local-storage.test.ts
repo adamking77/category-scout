@@ -72,7 +72,7 @@ describe("localStorage persistence contracts", () => {
     const raw = localStorage.getItem("nd-profile");
     expect(raw).not.toBeNull();
     expect(JSON.parse(raw as string)).toMatchObject({
-      version: 1,
+      version: 2,
       updatedAt: "2026-06-25T12:00:00.000Z",
       activation: {
         patterns: ["deep-interest", "clear-bounded"],
@@ -85,6 +85,36 @@ describe("localStorage persistence contracts", () => {
     });
 
     expect(loadNDProfileContext()).toEqual(buildNDProfileContext(profile));
+  });
+
+  it("migrates a v1 profile to v2 without loss and defaults new fields", () => {
+    const v1 = {
+      version: 1,
+      createdAt: "2026-01-01T00:00:00.000Z",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+      traits: { selected: ["adhd"], other: "", manifestations: ["adhd-hard-to-start"], notes: "" },
+      activation: { patterns: ["deep-interest"], patternOther: "", goodDayDescription: "Bounded work, visible finish." },
+      shutdown: { triggers: ["blank-page"], triggerOther: "", shutdownDescription: "" },
+      timeEnergy: { patterns: ["burst-worker"], patternOther: "", activationWindows: "Late morning.", unavailablePeriods: "Recovery days." },
+      history: { triedSystems: "", whatWorked: "", whatFailed: "Streak apps." },
+      infoConditions: { density: "brief", formats: ["bullets"], formatOther: "", supportConditions: ["low-stakes-start"], conditionOther: "" },
+    };
+    localStorage.setItem("nd-profile", JSON.stringify(v1));
+
+    const migrated = loadNDProfile();
+    expect(migrated).not.toBeNull();
+    expect(migrated!.version).toBe(2);
+    expect(migrated!.traits.selected).toEqual(["adhd"]);
+    expect(migrated!.traits.manifestations).toEqual(["adhd-hard-to-start"]);
+    expect(migrated!.timeEnergy.unavailablePeriods).toBe("Recovery days.");
+    expect(migrated!.gates.today).toBeNull();
+    expect(migrated!.lanes.active).toEqual([]);
+    expect(migrated!.notDoing).toBe("");
+    expect(migrated!.baseline.changedSinceYearAgo).toBe("");
+    expect(migrated!.name).toBe("");
+
+    // Old v1 payload is not overwritten on read; nothing is wiped.
+    expect(JSON.parse(localStorage.getItem("nd-profile") as string).version).toBe(1);
   });
 
   it("preserves process draft, artifacts, and current-artifact keys", () => {

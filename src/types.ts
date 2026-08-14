@@ -63,6 +63,7 @@ export interface StrategyInputs extends FounderConstraints {
 
 export interface NDProfileContext {
   summary: string;
+  name: string;
   traitLabels: string[];
   manifestationLabels: string[];
   activationPatterns: string[];
@@ -78,6 +79,12 @@ export interface NDProfileContext {
   infoFormats: string[];
   supportConditions: string[];
   agentGuidance: string;
+  gatesToday: string;
+  lanesActive: string[];
+  lanesClosedDoors: string[];
+  notDoing: string;
+  baselineChangedSinceYearAgo: string;
+  invisibleLabor: string;
 }
 
 export type StrategySectionKey =
@@ -379,10 +386,13 @@ export type SupportCondition =
   | "low-stakes-start"
   | "other";
 
+export type GateState = "bored" | "confused" | "heavy" | "panicked" | "clear";
+
 export interface NDProfile {
-  version: 1;
+  version: 2;
   createdAt: string;
   updatedAt: string;
+  name: string;
   traits: {
     selected: NDTrait[];
     other: string;
@@ -417,6 +427,27 @@ export interface NDProfile {
     supportConditions: SupportCondition[];
     conditionOther: string;
   };
+  baseline: {
+    changedSinceYearAgo: string;
+    expectedData: string;
+  };
+  gates: {
+    today: GateState | null;
+    notes: string;
+  };
+  lanes: {
+    active: string[];
+    closedDoors: string[];
+  };
+  roomSafety: string;
+  notDoing: string;
+  invisibleLabor: string;
+  couldShouldWant: {
+    could: string;
+    should: string;
+    want: string;
+  };
+  regenerationDate: string;
 }
 
 export interface ProcessDesignerInputs {
@@ -456,6 +487,10 @@ export interface ProcessPlan {
   thesis: string;
   workingWith: string[];
   protectedConditions: string[];
+  lanes?: {
+    active: string[];
+    closedDoors: string[];
+  };
   notDoing: string[];
   measures: string[];
   weeklyQuestion: string;

@@ -202,6 +202,7 @@ export function buildProcessPlan(
 
   const notDoing = unique([
     ...splitList(inputs.notDoing),
+    ...splitList(profileContext?.notDoing ?? ""),
     ...shutdownTriggers.map((item) => `Not using ${item.toLowerCase()}`),
   ]).slice(0, 8);
 
@@ -249,6 +250,10 @@ export function buildProcessPlan(
           "Avoid open-ended work with no visible done signal.",
           "Do not interpret a quiet patch as failure or abandonment.",
         ],
+    lanes: {
+      active: unique(profileContext?.lanesActive ?? []),
+      closedDoors: unique(profileContext?.lanesClosedDoors ?? []),
+    },
     notDoing,
     measures: [
       `Of the times you sat down to work on ${goal}, how often did you actually get going?`,
@@ -305,6 +310,20 @@ export function buildProcessMarkdown(inputs: ProcessDesignerInputs, plan: Proces
     ...plan.protectedConditions.map((item) => `- ${item}`),
   ];
 
+  if (plan.lanes && (plan.lanes.active.length > 0 || plan.lanes.closedDoors.length > 0)) {
+    lines.push("", "## Lanes", "");
+    if (plan.lanes.active.length > 0) {
+      lines.push("**Active lanes (what this process defends):**");
+      lines.push(...plan.lanes.active.map((item) => `- ${item}`));
+    }
+    if (plan.lanes.closedDoors.length > 0) {
+      lines.push("**Closed doors (named, with the grief step):**");
+      lines.push(...plan.lanes.closedDoors.map((item) => `- ${item}`));
+    }
+  }
+
+  lines.push("", "## Seasons, not sprints", "", "This process has a regeneration date; it is designed to be redesigned. Returning to the old load is never a designed outcome. The target is a new sustainable baseline, and rest is planned, not owed.");
+
   if (plan.notDoing.length > 0) {
     lines.push("", "## What you're not doing", "", ...plan.notDoing.map((item) => `- ${item}`));
   }
@@ -313,6 +332,10 @@ export function buildProcessMarkdown(inputs: ProcessDesignerInputs, plan: Proces
   for (const mode of plan.checkInModes) {
     lines.push(`- **${mode.label}:** ${mode.guidance}`);
   }
+  lines.push(
+    "",
+    "**If you're stuck:** bored means the meaning is closed (find relevance), confused means the shape is wrong (break it down), heavy means the timing is wrong (wait or shift phase), panicked means the gates are fighting (reduce scope). Never just start.",
+  );
 
   lines.push("", "## Step menu", "");
   for (const block of plan.blocks) {

@@ -9,6 +9,7 @@ import type {
   InfoDensity,
   InfoFormat,
   SupportCondition,
+  GateState,
 } from "../types";
 
 const ND_PROFILE_KEY = "nd-profile";
@@ -17,7 +18,7 @@ export function loadNDProfile(): NDProfile | null {
   try {
     const raw = localStorage.getItem(ND_PROFILE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as NDProfile;
+    return migrateNDProfile(JSON.parse(raw));
   } catch {
     return null;
   }
@@ -40,16 +41,109 @@ export function clearNDProfile(): void {
 export function createEmptyNDProfile(): NDProfile {
   const now = new Date().toISOString();
   return {
-    version: 1,
+    version: 2,
     createdAt: now,
     updatedAt: now,
+    name: "",
     traits: { selected: [], other: "", manifestations: [], notes: "" },
     activation: { patterns: [], patternOther: "", goodDayDescription: "" },
     shutdown: { triggers: [], triggerOther: "", shutdownDescription: "" },
     timeEnergy: { patterns: [], patternOther: "", activationWindows: "", unavailablePeriods: "" },
     history: { triedSystems: "", whatWorked: "", whatFailed: "" },
     infoConditions: { density: null, formats: [], formatOther: "", supportConditions: [], conditionOther: "" },
+    baseline: { changedSinceYearAgo: "", expectedData: "" },
+    gates: { today: null, notes: "" },
+    lanes: { active: [], closedDoors: [] },
+    roomSafety: "",
+    notDoing: "",
+    invisibleLabor: "",
+    couldShouldWant: { could: "", should: "", want: "" },
+    regenerationDate: "",
   };
+}
+
+/**
+ * Migration v1 → v2: trait-label spine becomes working labels under state
+ * sections; new fields default to "not captured yet" (empty). Old profiles
+ * keep loading; nothing is wiped and nothing is forced. The user gets a
+ * gentle "want to refresh this?" nudge, never a demand to start over.
+ */
+export function migrateNDProfile(raw: unknown): NDProfile {
+  const fallback = createEmptyNDProfile();
+
+  if (!raw || typeof raw !== "object") return fallback;
+  const candidate = raw as Partial<NDProfile> & { version?: unknown };
+
+  const obj = (value: unknown): Record<string, unknown> =>
+    value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+
+  const str = (value: unknown): string => (typeof value === "string" ? value : "");
+  const strArr = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+
+  const base: NDProfile = {
+    version: 2,
+    createdAt: str(candidate.createdAt) || fallback.createdAt,
+    updatedAt: str(candidate.updatedAt) || fallback.updatedAt,
+    name: str(candidate.name),
+    traits: {
+      selected: (obj(candidate.traits).selected as NDTrait[] | undefined) ?? [],
+      other: str(obj(candidate.traits).other),
+      manifestations: (obj(candidate.traits).manifestations as NDTraitManifestation[] | undefined) ?? [],
+      notes: str(obj(candidate.traits).notes),
+    },
+    activation: {
+      patterns: (obj(candidate.activation).patterns as ActivationPattern[] | undefined) ?? [],
+      patternOther: str(obj(candidate.activation).patternOther),
+      goodDayDescription: str(obj(candidate.activation).goodDayDescription),
+    },
+    shutdown: {
+      triggers: (obj(candidate.shutdown).triggers as ShutdownTrigger[] | undefined) ?? [],
+      triggerOther: str(obj(candidate.shutdown).triggerOther),
+      shutdownDescription: str(obj(candidate.shutdown).shutdownDescription),
+    },
+    timeEnergy: {
+      patterns: (obj(candidate.timeEnergy).patterns as TimePattern[] | undefined) ?? [],
+      patternOther: str(obj(candidate.timeEnergy).patternOther),
+      activationWindows: str(obj(candidate.timeEnergy).activationWindows),
+      unavailablePeriods: str(obj(candidate.timeEnergy).unavailablePeriods),
+    },
+    history: {
+      triedSystems: str(obj(candidate.history).triedSystems),
+      whatWorked: str(obj(candidate.history).whatWorked),
+      whatFailed: str(obj(candidate.history).whatFailed),
+    },
+    infoConditions: {
+      density: (obj(candidate.infoConditions).density as InfoDensity | null | undefined) ?? null,
+      formats: (obj(candidate.infoConditions).formats as InfoFormat[] | undefined) ?? [],
+      formatOther: str(obj(candidate.infoConditions).formatOther),
+      supportConditions: (obj(candidate.infoConditions).supportConditions as SupportCondition[] | undefined) ?? [],
+      conditionOther: str(obj(candidate.infoConditions).conditionOther),
+    },
+    baseline: {
+      changedSinceYearAgo: str(obj(candidate.baseline).changedSinceYearAgo),
+      expectedData: str(obj(candidate.baseline).expectedData),
+    },
+    gates: {
+      today: (obj(candidate.gates).today as GateState | null | undefined) ?? null,
+      notes: str(obj(candidate.gates).notes),
+    },
+    lanes: {
+      active: strArr(obj(candidate.lanes).active),
+      closedDoors: strArr(obj(candidate.lanes).closedDoors),
+    },
+    roomSafety: str(candidate.roomSafety),
+    notDoing: str(candidate.notDoing),
+    invisibleLabor: str(candidate.invisibleLabor),
+    couldShouldWant: {
+      could: str(obj(candidate.couldShouldWant).could),
+      should: str(obj(candidate.couldShouldWant).should),
+      want: str(obj(candidate.couldShouldWant).want),
+    },
+    regenerationDate: str(candidate.regenerationDate),
+  };
+
+  return base;
 }
 
 // Label maps for display and markdown output
@@ -69,7 +163,7 @@ export const MANIFESTATION_LABELS: Record<NDTraitManifestation, string> = {
   "adhd-hyperfocus": "Hyperfocus: when I'm interested I can lose hours",
   "adhd-transition-hard": "Switching between tasks takes real effort",
   "adhd-needs-movement": "I think better when I'm moving or have background stimulation",
-  "adhd-deadline-engine": "Deadlines are my main motivation engine",
+  "adhd-deadline-engine": "Deadlines are the main thing that gets me moving, and I'd like to rely on that less",
   "adhd-fast-thoughts": "Thoughts come faster than I can capture them",
   "autism-clear-expectations": "I need clear expectations: vague is genuinely stressful",
   "autism-sensory": "Sensory sensitivities affect where and how I can work",
@@ -103,8 +197,8 @@ export const MANIFESTATIONS_BY_TRAIT: Record<NDTrait, NDTraitManifestation[]> = 
 
 export const ACTIVATION_LABELS: Record<ActivationPattern, string> = {
   novelty: "Novel problems or ideas I haven't seen before",
-  deadline: "A real deadline with actual consequences",
-  urgency: "High stakes or urgency: something that actually matters now",
+  deadline: "A real deadline with actual consequences (and I'd like to need that less)",
+  urgency: "High stakes or urgency: something that actually matters now (I'd like to unwind this)",
   "deep-interest": "Deep interest or passion: I care about the topic",
   challenge: "A genuine challenge or puzzle",
   collaboration: "Someone else is counting on me, or we're doing it together",
@@ -127,7 +221,7 @@ export const SHUTDOWN_LABELS: Record<ShutdownTrigger, string> = {
 
 export const TIME_PATTERN_LABELS: Record<TimePattern, string> = {
   "time-blindness": "I lose track of time easily: hours pass without me noticing",
-  "deadline-engine": "Deadlines are my main engine: I come alive near the wire",
+  "deadline-engine": "Deadlines are the main thing that gets me moving (I'd like to unwind that)",
   "burst-worker": "I work in bursts, not sustained daily blocks",
   "needs-external-structure": "Without external structure I tend to drift",
   "no-time-pressure": "I do better without time pressure",
@@ -156,7 +250,7 @@ export const SUPPORT_CONDITION_LABELS: Record<SupportCondition, string> = {
   "background-sound": "Background music or ambient sound",
   silence: "Silence",
   "body-doubling": "Someone else present, even just on a call (body doubling)",
-  timers: "Timers (Pomodoro, countdowns, time limits)",
+  timers: "Pacing aids I choose myself (timers I set, music, movement breaks)",
   movement: "Movement (walking, pacing, fidgeting)",
   routine: "A consistent starting ritual or routine",
   "low-stakes-start": "Starting with something easy or low-stakes to build momentum",
@@ -181,7 +275,8 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
 
   const parts: string[] = [];
 
-  parts.push(`# ND Profile\n\n*Created: ${date}*`);
+  const headline = profile.name.trim() ? `${profile.name.trim()} · ` : "";
+  parts.push(`# ND Profile\n\n${headline}*Created: ${date}*`);
   parts.push("---");
 
   // Traits
@@ -190,6 +285,8 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   if (selectedTraits.length > 0) {
     const traitNames = selectedTraits.map((t) => TRAIT_LABELS[t]).join(", ");
     traitLines.push(traitNames);
+    traitLines.push("");
+    traitLines.push("*These are working labels I chose, not a diagnosis. Could be this, or that, or both.*");
     traitLines.push("");
     const mfLines = profile.traits.manifestations
       .filter((m) => {
@@ -279,6 +376,72 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   const timeSection = section("My Relationship With Time and Energy", timeLines.join("\n"));
   if (timeSection) parts.push(timeSection);
 
+  // Changed baseline
+  const baselineLines: string[] = [];
+  if (profile.baseline.changedSinceYearAgo.trim()) {
+    baselineLines.push("**What's different now than a year ago:**");
+    baselineLines.push(profile.baseline.changedSinceYearAgo.trim());
+  }
+  if (profile.baseline.expectedData.trim()) {
+    baselineLines.push("**Expected data, not failure:**");
+    baselineLines.push(profile.baseline.expectedData.trim());
+  }
+  const baselineSection = section("What's Different Now Than a Year Ago", baselineLines.join("\n"));
+  if (baselineSection) parts.push(baselineSection);
+
+  // Three gates
+  const GATE_DESCRIPTIONS: Record<Exclude<GateState, "clear">, string> = {
+    bored: "Meaning gate closed: nothing here feels relevant",
+    confused: "Coherence gate closed: the shape is wrong or unclear",
+    heavy: "Timing gate closed: the phase is wrong",
+    panicked: "Gates in conflict: too much is trying to happen at once",
+  };
+  const gateLines: string[] = [];
+  if (profile.gates.today) {
+    const today = profile.gates.today;
+    gateLines.push(`**Today's gate:** ${today === "clear" ? "clear" : GATE_DESCRIPTIONS[today]}`);
+    gateLines.push("Unlock, never \"just start\": meaning finds relevance, coherence clarifies the shape, timing waits or shifts phase, panic reduces scope.");
+  }
+  if (profile.gates.notes.trim()) {
+    gateLines.push("");
+    gateLines.push(profile.gates.notes.trim());
+  }
+  const gatesSection = section("The Three Gates", gateLines.join("\n"));
+  if (gatesSection) parts.push(gatesSection);
+
+  // Lanes and closed doors
+  const laneLines: string[] = [];
+  if (profile.lanes.active.length > 0) {
+    laneLines.push("**Active lanes (what I'm keeping in play):**");
+    laneLines.push(...profile.lanes.active.map((lane) => `- ${lane}`));
+  }
+  if (profile.lanes.closedDoors.length > 0) {
+    laneLines.push("**Closed doors (named, with the grief step):**");
+    laneLines.push(...profile.lanes.closedDoors.map((door) => `- ${door}`));
+  }
+  const lanesSection = section("Lanes and Closed Doors", laneLines.join("\n"));
+  if (lanesSection) parts.push(lanesSection);
+
+  // Room safety
+  if (profile.roomSafety.trim()) parts.push(section("Room Safety", profile.roomSafety.trim()));
+
+  // Not doing
+  if (profile.notDoing.trim()) parts.push(section("What I'm Not Doing", profile.notDoing.trim()));
+
+  // Invisible labor
+  if (profile.invisibleLabor.trim()) parts.push(section("Invisible Labor", profile.invisibleLabor.trim()));
+
+  // Could / should / want
+  const cswLines: string[] = [];
+  if (profile.couldShouldWant.could.trim()) cswLines.push(`**Could:** ${profile.couldShouldWant.could.trim()}`);
+  if (profile.couldShouldWant.should.trim()) cswLines.push(`**Should:** ${profile.couldShouldWant.should.trim()}`);
+  if (profile.couldShouldWant.want.trim()) cswLines.push(`**Want:** ${profile.couldShouldWant.want.trim()}`);
+  const cswSection = section("Could / Should / Want", cswLines.join("\n"));
+  if (cswSection) parts.push(cswSection);
+
+  // Regeneration date
+  if (profile.regenerationDate.trim()) parts.push(section("Regeneration Date", profile.regenerationDate.trim()));
+
   // History
   const historyLines: string[] = [];
   if (profile.history.triedSystems.trim()) {
@@ -351,7 +514,7 @@ function buildAgentInstructions(profile: NDProfile): string {
       ...traits.map((t) => TRAIT_LABELS[t]),
       ...(profile.traits.other.trim() ? [profile.traits.other.trim()] : []),
     ];
-    lines.push(`You're working with someone with ${allTraits.join(", ")}.`);
+    lines.push(`You're working with someone who identifies with ${allTraits.join(", ")}. These are working labels they chose, not verdicts. Hold multi-engine uncertainty: could be this, or that, or both. Never answer identity questions; describe experience instead.`);
     lines.push("");
   }
 
@@ -363,16 +526,34 @@ function buildAgentInstructions(profile: NDProfile): string {
   lines.push("**One thing at a time.** Surface one relevant option. Wait until it's closed or declined before offering another.");
   lines.push("");
 
+  lines.push("**Never go silent.** Keep frequent, low-effort touchpoints. If there's a gap, explain it. This person reads silence as evidence, not neutrality.");
+  lines.push("");
+
+  lines.push("**Never use competence as a lever.** Don't praise their capability to get them moving; competence is often the loop that froze them. Acknowledge effort and choice, never capability.");
+  lines.push("");
+
+  lines.push("**No deadline or countdown pressure.** Never recommend deadlines, urgency framing, or timers as a way to get moving. Pacing aids are theirs to choose, never yours to impose.");
+  lines.push("");
+
+  if (profile.gates.today) {
+    const gateDescriptions: Record<Exclude<GateState, "clear">, string> = {
+      bored: "the meaning gate is closed: nothing feels relevant",
+      confused: "the coherence gate is closed: the shape is wrong or unclear",
+      heavy: "the timing gate is closed: the phase is wrong",
+      panicked: "the gates are in conflict: too much is trying to happen at once",
+    };
+    const today = profile.gates.today;
+    lines.push(`**Today's gate:** ${today === "clear" ? "clear" : gateDescriptions[today]}. Match the unlock: find relevance, clarify the shape, wait or shift phase, or reduce scope. Never "just start."`);
+    lines.push("");
+  }
+
   if (hasADHD || profile.timeEnergy.patterns.includes("burst-worker")) {
     lines.push("**Bursts over schedules.** This person works in focused bursts, not sustained daily blocks. Don't build plans around daily consistency. Build around conditions: when interest is high, when energy is available, when urgency is real.");
     lines.push("");
   }
 
-  const hasRecovery = profile.timeEnergy.patterns.includes("recovery-non-negotiable");
-  if (hasRecovery) {
-    lines.push("**Silence is planned rest, not failure.** If they go quiet for a while, don't treat it as abandonment or flag it as the process going stale. Recovery time is deliberate.");
-    lines.push("");
-  }
+  lines.push("**Silence is planned rest, not failure.** If they go quiet for a while, don't treat it as abandonment or flag it as the process going stale. Quiet is \"planned, not a signal.\" Rest is deliberate, never owed.");
+  lines.push("");
 
   if (traits.includes("autism") || profile.traits.manifestations.includes("autism-needs-why")) {
     lines.push("**The why matters before the what.** Include rationale before instructions, not after. This person needs to understand why something is worth doing before they can engage with how.");
@@ -454,16 +635,32 @@ export function buildNDProfileContext(profile: NDProfile): NDProfileContext {
   ];
 
   const summaryParts = [
-    traitLabels.length > 0 ? `Neurotype context: ${traitLabels.join(", ")}.` : "",
+    traitLabels.length > 0 ? `Neurotype context: ${traitLabels.join(", ")} (working labels, not verdicts).` : "",
     activationPatterns.length > 0 ? `What tends to activate them: ${activationPatterns.slice(0, 4).join("; ")}.` : "",
     shutdownTriggers.length > 0 ? `What tends to trigger avoidance or shutdown: ${shutdownTriggers.slice(0, 4).join("; ")}.` : "",
     profile.timeEnergy.activationWindows.trim() ? `Natural working windows: ${profile.timeEnergy.activationWindows.trim()}.` : "",
     profile.timeEnergy.unavailablePeriods.trim() ? `Protected unavailable periods: ${profile.timeEnergy.unavailablePeriods.trim()}.` : "",
     profile.infoConditions.density ? `Preferred information density: ${INFO_DENSITY_LABELS[profile.infoConditions.density]}.` : "",
+    profile.notDoing.trim() ? `What they're not doing: ${profile.notDoing.trim()}.` : "",
+    profile.lanes.active.length > 0 ? `Active lanes: ${profile.lanes.active.join("; ")}.` : "",
   ].filter(Boolean);
+
+  const gatesToday =
+    profile.gates.today === "bored"
+      ? "bored (meaning gate closed)"
+      : profile.gates.today === "confused"
+      ? "confused (coherence gate closed)"
+      : profile.gates.today === "heavy"
+      ? "heavy (timing gate closed)"
+      : profile.gates.today === "panicked"
+      ? "panicked (gates in conflict)"
+      : profile.gates.today === "clear"
+      ? "clear"
+      : "";
 
   return {
     summary: summaryParts.join(" "),
+    name: profile.name.trim(),
     traitLabels,
     manifestationLabels,
     activationPatterns,
@@ -479,6 +676,12 @@ export function buildNDProfileContext(profile: NDProfile): NDProfileContext {
     infoFormats,
     supportConditions,
     agentGuidance: buildAgentInstructions(profile),
+    gatesToday,
+    lanesActive: [...profile.lanes.active],
+    lanesClosedDoors: [...profile.lanes.closedDoors],
+    notDoing: profile.notDoing.trim(),
+    baselineChangedSinceYearAgo: profile.baseline.changedSinceYearAgo.trim(),
+    invisibleLabor: profile.invisibleLabor.trim(),
   };
 }
 

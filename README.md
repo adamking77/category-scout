@@ -31,8 +31,8 @@ Category Scout and Distribution Strategy now live in the standalone local projec
 
 ## Stack
 
-- **Frontend**: Next.js 15 App Router, React 19, TypeScript, Tailwind CSS v4, HeroUI v3, Framer Motion
-- **Deployment**: Vercel
+- **Frontend**: Astro 7 with React 19 islands, TypeScript, Tailwind CSS v4, Framer Motion
+- **Deployment**: Vercel (serverless functions via @astrojs/vercel)
 
 ## Setup
 

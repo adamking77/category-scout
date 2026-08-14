@@ -152,6 +152,12 @@ export function ProcessArtifactOutput({
           <BoundaryGroup label="What you've got" items={plan.workingWith} />
           <BoundaryGroup label="Protect" items={plan.protectedConditions} accent="var(--teal-deep)" />
           <BoundaryGroup label="Skip" items={notDoing} accent="var(--terracotta)" />
+          {plan.lanes && (plan.lanes.active.length > 0 || plan.lanes.closedDoors.length > 0) && (
+            <>
+              <BoundaryGroup label="Keep in play" items={plan.lanes.active} accent="var(--teal-deep)" />
+              <BoundaryGroup label="Closed doors" items={plan.lanes.closedDoors} accent="var(--ink-muted)" />
+            </>
+          )}
         </div>
       </div>
 
@@ -164,6 +170,9 @@ export function ProcessArtifactOutput({
               <p style={{ margin: 0, fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7 }}>{mode.guidance}</p>
             </div>
           ))}
+          <p style={{ margin: 0, fontSize: 14, color: "var(--ink-muted)", lineHeight: 1.6 }}>
+            If you're stuck: bored means the meaning is closed (find relevance), confused means the shape is wrong (break it down), heavy means the timing is wrong (wait or shift phase), panicked means the gates are fighting (reduce scope). Never just start.
+          </p>
         </div>
       </OutputSection>
 

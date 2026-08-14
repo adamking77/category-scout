@@ -2,6 +2,8 @@
 
 **Status:** Green-lit by Adam (2026-08-14). Consensus across all three review lanes (Nash/engineering, Isla/creative, Otto/general) was unanimous: proceed, as a **gap-list, not a redesign**.
 
+**Execution status (2026-08-14, overnight):** Phases 0-3 landed on `main`. The canonical corpus (Lindsey Mackereth, 15+8 non-negotiables, three gates, changed-baseline) is vendored at `skills/_shared/corpus-source.md`; `non-negotiables.md` embeds the 15+8 verbatim; all four skills rewritten with the buyer-facing layer and safe-use READMEs; profile schema migrated to v2 with a lossless migration path and the two hard-no tensions reframed; the Context Builder opens on the gate probe; lanes/not-doing/baseline/invisible labor are collected and wired into the process artifact. Tests (13) and `astro build` pass. See commits after `c7ebb03`.
+
 **How to read this:** the tool is closer to done than it looks. Section 2 lists what must not be touched. Sections 3-7 are the gaps, ordered by leverage. Section 8 is the anti-pattern red-line list. Section 9 is the sequencing plan with owners.
 
 **Sources cited:**
