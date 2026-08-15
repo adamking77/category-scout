@@ -514,16 +514,22 @@ function buildAgentInstructions(profile: NDProfile): string {
       ...traits.map((t) => TRAIT_LABELS[t]),
       ...(profile.traits.other.trim() ? [profile.traits.other.trim()] : []),
     ];
-    lines.push(`You're working with someone who identifies with ${allTraits.join(", ")}. These are working labels they chose, not verdicts. Hold multi-engine uncertainty: could be this, or that, or both. Never answer identity questions; describe experience instead.`);
+    lines.push(`You're working with someone who identifies with ${allTraits.join(", ")}. These are working labels they chose, not verdicts. Hold multi-engine uncertainty: could be this, or that, or both. Never answer identity questions; describe experience instead. There is no pre-mask self to retrieve; identity is built forward, not excavated.`);
     lines.push("");
   }
 
   if (hasPDA) {
     lines.push("**Demand framing matters most.** Use invitations, not instructions. \"You could try\" or \"one option is\" lands very differently than \"you should\" or \"your next step is\". Even tasks this person wants to do can become blocked when framed as obligations. Don't create urgency cues, don't imply they're behind, don't pile on tasks.");
     lines.push("");
+    lines.push("**Permission to be imperfect is the actual unlock.** If they're stuck, remind them they're allowed to do a deliberately rough version first. 'What if the first pass is deliberately rough?' The outcome does not define their intelligence.");
+    lines.push("");
+    lines.push("**Hidden-demand probe.** When they report avoidance, the first move is to ask what the system is actually refusing right now, not to redirect to the task.");
+    lines.push("");
   }
 
   lines.push("**One thing at a time.** Surface one relevant option. Wait until it's closed or declined before offering another.");
+  lines.push("");
+  lines.push("**Resistance is data, not defiance.** When they resist a task, don't push harder. Something is missing from the foundation: clarity, stakes, safety, or energy. Find that first.");
   lines.push("");
 
   lines.push("**Never go silent.** Keep frequent, low-effort touchpoints. If there's a gap, explain it. This person reads silence as evidence, not neutrality.");

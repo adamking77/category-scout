@@ -330,7 +330,7 @@ function GateStep({
   return (
     <div>
       <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 32px", maxWidth: 560 }}>
-        Before we get to questions, one honest check. How does today actually feel? Not how it should feel. There's no wrong answer, and it won't be used against you.
+        Before we get to questions, one honest check. How does today actually feel? Not how it should feel. There's no wrong answer, and it won't be used against you. If today is a cocktail of uncertainty, pick whichever fits closest.
       </p>
 
       <Field>
@@ -565,6 +565,7 @@ function ShutdownStep({
           rows={4}
           style={{ fontSize: 13 }}
         />
+        <FieldHint>Some people describe it as pressing the gas and the brake at the same time: wanting to move and being unable. When you freeze, it's rarely about the task on the surface. Something underneath the task is what your system is refusing.</FieldHint>
         <FieldHint>Optional. The more specific you are, the more useful to the agents that read it.</FieldHint>
       </Field>
 
@@ -726,6 +727,7 @@ function TimeStep({
           rows={3}
           style={{ fontSize: 13 }}
         />
+        <FieldHint>If the honest answer is 'it just hits me, I can't plan for it', that is a complete answer.</FieldHint>
       </Field>
 
       <Field>
@@ -737,6 +739,7 @@ function TimeStep({
           rows={3}
           style={{ fontSize: 13 }}
         />
+        <FieldHint>If the honest answer is 'it just hits me, I can't plan for it', that is a complete answer.</FieldHint>
         <FieldHint>These are protected. Any process built from your profile will treat silence here as planned rest.</FieldHint>
       </Field>
 
@@ -749,6 +752,7 @@ function TimeStep({
           rows={3}
           style={{ fontSize: 13 }}
         />
+        <FieldHint>Lost abilities are data, not failure. The cocktail of uncertainty is normal. You're not unreliable. You're navigating.</FieldHint>
         <FieldHint>The target is a new baseline, not getting back to the old one. If rest doesn't restore the way it used to, that's expected.</FieldHint>
       </Field>
 
@@ -793,7 +797,7 @@ function HistoryStep({
         <textarea
           value={profile.history.whatWorked}
           onChange={(e) => onChange({ whatWorked: e.target.value })}
-          placeholder="It doesn't have to have been sustainable. Just anything that helped for a while"
+          placeholder="Anything that helped for a while. It's a valid answer to write 'nothing has stuck.'"
           rows={3}
           style={{ fontSize: 13 }}
         />
@@ -808,6 +812,7 @@ function HistoryStep({
           rows={3}
           style={{ fontSize: 13 }}
         />
+        <FieldHint>If what you've tried has mostly failed, this step is for naming the pattern, not for blaming yourself. Did the system fail you, or did your capacity to maintain it fail? Those are different patterns with different fixes.</FieldHint>
       </Field>
 
       <Field>

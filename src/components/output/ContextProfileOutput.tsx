@@ -422,7 +422,7 @@ export function ContextProfileOutput({
               ))}
             </ol>
             <p style={{ margin: "14px 0 0", fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, maxWidth: 600 }}>
-              From then on it responds to how you actually work, with no re-explaining.
+              From then on it responds to how you actually work, with no re-explaining. It stays consistent even when other people can't: it picks up where you left off, every time.
             </p>
           </div>
         </div>
