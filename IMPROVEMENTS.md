@@ -39,7 +39,7 @@
   - Shutdown step split into two: "What to avoid" (triggers, shutdown description, not-doing) + "Where you're focused" (lanes, closed doors, room safety). Data model unchanged; the lanes typing fix moved intact.
   - Context Builder time estimate updated to "15 to 20 minutes" (the form grew).
   - Nav now separates STEPS (Context Builder, Process Designer) from OPTIONS (Spine-Finder, Skills) with a hairline divider, so options don't read as steps 3 and 4.
-- Open: the new Focus step intro line is live pending Isla's optional pass (one-line swap); the missing-tool candidates (Not-Today, Let-Go/Regeneration, Work-Fit, first-step, Forward-Builder) remain considerations, not builds; Session Loop still exists only as a skill, not a web page.
+- Open: the missing-tool candidates (Not-Today, Let-Go/Regeneration, Work-Fit, first-step, Forward-Builder) remain considerations, not builds; Session Loop still exists only as a skill, not a web page. (The Focus step intro line was passed by Isla on 2026-08-15 — kept as written.)
 - Verified each round: tsc clean, 22/22 tests, astro build, deploy confirmed serving the new build live.
 
 **How to read this:** the tool is closer to done than it looks. Section 2 lists what must not be touched. Sections 3-7 are the gaps, ordered by leverage. Section 8 is the anti-pattern red-line list. Section 9 is the sequencing plan with owners.
