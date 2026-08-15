@@ -27,7 +27,7 @@ export function SuiteOrder() {
       style={{
         border: "1px solid rgba(91, 138, 138, 0.25)",
         background: "rgba(91, 138, 138, 0.06)",
-        borderRadius: 12,
+        borderRadius: 0,
         padding: "18px 20px",
         margin: "0 0 20px",
       }}
@@ -83,7 +83,7 @@ export function SuiteOrder() {
           borderTop: "1px solid rgba(91, 138, 138, 0.2)",
         }}
       >
-        A process built without your profile is built from guesses. The profile is the part that makes the plan yours.
+        The profile is what makes the plan yours. Without one, this tool asks a few extra questions to cover the basics.
       </p>
     </div>
   );

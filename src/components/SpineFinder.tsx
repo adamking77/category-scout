@@ -272,7 +272,7 @@ export function SpineFinder() {
           <div style={{ flex: 1, minWidth: 240 }}>
             <MetaLabel size="section" marginBottom={8}>Start here · the source essay</MetaLabel>
             <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
-              <strong style={{ color: "var(--ink)", fontWeight: 500 }}>You&apos;re Constantly in Motion—and Nothing Is Taking Form</strong>, by Lindsey Mackereth. The full Compression Framework, in her words. Read it first so the rest of this page has somewhere to stand.
+              <strong style={{ color: "var(--ink)", fontWeight: 500 }}>&ldquo;You&apos;re Constantly in Motion—and Nothing Is Taking Form&rdquo;</strong>, by Lindsey Mackereth. The full Compression Framework, in her words. Read it first so the rest of this page has somewhere to stand.
             </p>
           </div>
           <a className="cta-pill" href={ESSAY_URL} target="_blank" rel="noopener" aria-label="Read the essay by Lindsey Mackereth (opens in a new tab)">

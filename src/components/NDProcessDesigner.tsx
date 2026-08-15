@@ -332,7 +332,7 @@ function IntroStep({
           style={{
             border: "1px solid rgba(91, 138, 138, 0.3)",
             background: "rgba(91, 138, 138, 0.06)",
-            borderRadius: 12,
+            borderRadius: 0,
             padding: "18px 20px",
             margin: "0 0 36px",
           }}
@@ -526,9 +526,10 @@ function BoundariesStep({
 
       <Field>
         <FieldLabel>Could, should, or want?</FieldLabel>
-        <p style={{ fontSize: 13, color: "var(--ink-muted)", margin: "0 0 12px", lineHeight: 1.6 }}>
+        <p style={{ fontSize: 13, color: "var(--ink-light)", margin: "0 0 12px", lineHeight: 1.6 }}>
           The honest triangle for this goal. The want column is what the process protects; the should column is what burns people out.
         </p>
+        <MetaLabel size="section" style={{ marginBottom: 6 }}>Could</MetaLabel>
         <textarea
           value={inputs.couldShouldWant?.could ?? ""}
           onChange={(e) => onChange({ couldShouldWant: { could: e.target.value, should: inputs.couldShouldWant?.should ?? "", want: inputs.couldShouldWant?.want ?? "" } })}
@@ -536,6 +537,7 @@ function BoundariesStep({
           rows={2}
           style={{ fontSize: 13, marginBottom: 10 }}
         />
+        <MetaLabel size="section" style={{ marginBottom: 6 }}>Should</MetaLabel>
         <textarea
           value={inputs.couldShouldWant?.should ?? ""}
           onChange={(e) => onChange({ couldShouldWant: { could: inputs.couldShouldWant?.could ?? "", should: e.target.value, want: inputs.couldShouldWant?.want ?? "" } })}
@@ -543,6 +545,7 @@ function BoundariesStep({
           rows={2}
           style={{ fontSize: 13, marginBottom: 10 }}
         />
+        <MetaLabel size="section" style={{ marginBottom: 6 }}>Want</MetaLabel>
         <textarea
           value={inputs.couldShouldWant?.want ?? ""}
           onChange={(e) => onChange({ couldShouldWant: { could: inputs.couldShouldWant?.could ?? "", should: inputs.couldShouldWant?.should ?? "", want: e.target.value } })}
@@ -553,7 +556,7 @@ function BoundariesStep({
         <FieldHint>Interest beats obligation. If the want column is empty, that is worth noticing before the process gets built.</FieldHint>
       </Field>
 
-      <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Build my process" />
+      <StepNav onBack={onBack} onContinue={onContinue} continueLabel="See my process" />
     </div>
   );
 }
@@ -682,7 +685,7 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 
 function FieldHint({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{ fontSize: 12, color: "var(--ink-muted)", margin: "6px 0 0", lineHeight: 1.6 }}>
+    <p style={{ fontSize: 13, color: "var(--ink-light)", margin: "6px 0 0", lineHeight: 1.6 }}>
       {children}
     </p>
   );

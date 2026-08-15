@@ -76,7 +76,7 @@ export default function App({
           <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "10px 0 0" }}>
             Downloads are files you choose to save. Want it gone? Clear this site's data in your browser and it is gone.
           </p>
-          <p style={{ fontSize: 12, color: "var(--ink-muted)", lineHeight: 1.6, margin: "12px 0 0" }}>
+          <p style={{ fontSize: 12, color: "var(--ink-light)", lineHeight: 1.6, margin: "12px 0 0" }}>
             The site runs on standard hosting with basic security logs, like any website. Those logs never contain your answers.
           </p>
         </div>
