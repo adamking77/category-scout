@@ -35,7 +35,7 @@ export default function App({
               You start by building a context profile that names how you actually work. Then you design a process shaped around that profile, organized by how you feel on a given day.
             </p>
             <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "12px 0 0" }}>
-              Both tools live on this site. You can also download them as files from the{" "}
+              You can also download them as files from the{" "}
               <a href={TOOL_ROUTES.skills} style={{ color: "var(--teal-deep)", textDecoration: "none" }}>
                 Skill Suite
               </a>{" "}
