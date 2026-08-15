@@ -19,7 +19,7 @@ const SKILLS: SkillCard[] = [
     slug: "nd-context-builder",
     status: "Available",
     summary:
-      "Install this in your AI and run it there. It walks you through the same intake: activation patterns, shutdown triggers, energy rhythms, support conditions. Then it produces the same profile natively in your AI. Every conversation after that already knows how you work.",
+      "Install this in your AI and run it there. It walks you through the same intake: activation patterns, shutdown triggers, energy rhythms, support conditions. Then it produces the same working profile, a document that tells your AI how you work, natively in your environment. Every conversation after that already knows you.",
     includesAgent: true,
   },
   {
@@ -27,7 +27,7 @@ const SKILLS: SkillCard[] = [
     slug: "nd-process-designer",
     status: "Available",
     summary:
-      "With your profile already loaded, give it one goal. It builds a working process organized by energy state: step menus for each working mode, rescue steps for when you hit a wall.",
+      "Give it one goal and the profile from the Context Builder. It builds a working process organized by energy state: step menus for each working mode, rescue steps for when you hit a wall.",
     includesAgent: true,
   },
   {

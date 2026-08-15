@@ -378,7 +378,7 @@ function IntroStep({
         Planning systems break the same way every time. You build the plan on a sharp day, and the plan assumes tomorrow will be sharp too. When your energy shifts, the plan stops working and you're left managing the gap between what you wrote and what you can actually do.
       </p>
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 20px" }}>
-        This tool takes one goal and your profile and builds a working process organized by energy state. Instead of a single sequence that needs a good day, you get step menus for each working mode, rescue moves for hard days, and a check-in for what's actually available today. The output is a document any AI can read and run, so the process keeps working when you're low, not only when you're sharp.
+        This tool takes one goal and the profile you built in step one, a short document that describes how you work, and builds a working process organized by energy state. Instead of a single sequence that needs a good day, you get step menus for each working mode, rescue moves for hard days, and a check-in for what's actually available today. The output is a document any AI can read and run, so the process keeps working when you're low, not only when you're sharp.
       </p>
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 12px" }}>
         About 5 minutes. Stop whenever.
@@ -386,7 +386,7 @@ function IntroStep({
       <SuiteOrder />
       {hasProfile ? (
         <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 36px", maxWidth: 560 }}>
-          Your profile is loaded. The process will be shaped around how you actually work.
+          The profile you built in the Context Builder is loaded. The process will be shaped around how you actually work.
         </p>
       ) : (
         <div
@@ -399,10 +399,10 @@ function IntroStep({
           }}
         >
           <p style={{ fontSize: 15, fontWeight: 500, color: "var(--ink)", lineHeight: 1.4, margin: "0 0 6px" }}>
-            Start with your profile
+            Start with the Context Builder
           </p>
           <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: 0, maxWidth: 560 }}>
-            The process works best when it knows how you work. Build your profile first, then come straight back. The tool still works without one.
+            The process works best when it knows how you work. The Context Builder (step one) asks a few questions and produces a short profile the process reads from. Build it first, then come straight back. This tool still works without one.
           </p>
         </div>
       )}
@@ -413,16 +413,16 @@ function IntroStep({
               {hasExisting ? "Continue where I left off" : "Begin"}
             </PrimaryButton>
             <button onClick={onOpenContextBuilder} className="btn-text" style={{ fontSize: 14, color: "var(--ink)" }}>
-              Update profile
+              Update your profile
             </button>
           </>
         ) : (
           <>
             <PrimaryButton onClick={onOpenContextBuilder}>
-              Build your profile first
+              Open the Context Builder
             </PrimaryButton>
             <button onClick={onBegin} className="btn-text" style={{ fontSize: 14, color: "var(--ink)" }}>
-              Begin without a profile
+              Begin without one
             </button>
           </>
         )}

@@ -80,7 +80,7 @@ export function SuiteOrder() {
           borderTop: "1px solid rgba(91, 138, 138, 0.2)",
         }}
       >
-        Your profile is what makes the process fit. Without one, the tool gathers what it needs by asking a few extra questions.
+        The profile from step one is what makes the process fit. Without one, the tool gathers what it needs by asking a few extra questions.
       </p>
     </div>
   );

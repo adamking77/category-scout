@@ -32,7 +32,7 @@ export default function App({
               AI is the most adaptive partner neurodivergent people have ever had access to. But it doesn't know what activates you, what causes shutdown, or what produces action versus paralysis. That context is hard to articulate, so it almost never gets in.
             </p>
             <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "12px 0 0" }}>
-              You start by building a context profile that names how you actually work. Then you design a process shaped around that profile, organized by how you feel on a given day.
+              You start by building a working profile that names how you actually work. Then you design a process shaped around that profile, organized by how you feel on a given day.
             </p>
             <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "12px 0 0" }}>
               You can also download them as files from the{" "}
@@ -78,13 +78,13 @@ export default function App({
             Your privacy
           </p>
           <p style={{ fontSize: 14, color: "var(--ink)", lineHeight: 1.7, margin: 0, fontWeight: 500 }}>
-            Everything you type stays on this device. We can't see it. No cookies, no tracking, no account.
+            Everything you enter stays on this device. No data is sent to a server, and nothing requires an account, cookies, or tracking.
           </p>
           <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "10px 0 0" }}>
-            Downloads are files you choose to save. Want it gone? Clear this site's data in your browser and it is gone.
+            Downloaded files are ones you choose to save. To remove everything, clear this site's data in your browser settings.
           </p>
           <p style={{ fontSize: 12, color: "var(--ink-light)", lineHeight: 1.6, margin: "12px 0 0" }}>
-            The site runs on standard hosting with basic security logs, like any website. Those logs never contain your answers.
+            Standard hosting logs record page requests but never contain your answers.
           </p>
         </div>
         </>
@@ -137,7 +137,7 @@ export default function App({
       {activeTool === "context-builder" && (
         <ToolSection
           label="Context Builder"
-          description="Step one. You answer a few questions about how you actually work, and get a profile that tells any AI how to work with you. The other tools read from it."
+          description="Step one. You answer questions about how you work. Energy, focus, activation, shutdown. It becomes a profile. Any AI that reads it starts with your context."
         >
           <NDContextBuilder />
         </ToolSection>
@@ -146,7 +146,7 @@ export default function App({
       {activeTool === "process-designer" && (
         <ToolSection
           label="Process Designer"
-          description="Step two. You bring one goal and your profile. It becomes a working process organized by energy state. Step menus for each working mode. Rescue steps for hard days."
+          description="Step two. You bring one goal and the profile you built in step one. It becomes a working process organized by energy state. Step menus for each working mode. Rescue steps for hard days."
         >
           <NDProcessDesigner onOpenContextBuilder={() => window.location.assign(TOOL_ROUTES["context-builder"])} />
         </ToolSection>
@@ -183,7 +183,7 @@ export default function App({
             GoKart Studio
           </a>
         </span>
-        <span>Your data never leaves this browser.</span>
+        <span>Your data stays in this browser. Nothing is sent elsewhere.</span>
       </footer>
     </div>
   );

@@ -271,7 +271,7 @@ function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void;
         15 to 20 minutes. You can stop whenever you want and pick up where you left off. Skip anything you don't want to answer.
       </p>
       <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: "0 0 36px" }}>
-        Everything you answer stays in this browser, on this device. Nothing is uploaded or stored anywhere else.
+        Everything you answer stays in this browser, on this device. Nothing is sent or stored elsewhere.
       </p>
       <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
         <PrimaryButton onClick={onBegin}>
