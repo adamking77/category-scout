@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, PencilSimple, Trash } from "@phosphor-icons/react";
-import { MetaLabel, PrimaryButton } from "./ui";
+import { MetaLabel, PrimaryButton, SuiteOrder, SkillsCallout } from "./ui";
 import { ProcessArtifactOutput } from "./output/ProcessArtifactOutput";
 import type { NDProfileContext, ProcessDesignerInputs, ProcessPlan } from "../types";
 import { artifactMarkdownFileName } from "../lib/export-html";
@@ -322,6 +322,7 @@ function IntroStep({
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 12px" }}>
         About 5 minutes. Stop whenever.
       </p>
+      <SuiteOrder />
       {hasProfile ? (
         <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 36px", maxWidth: 560 }}>
           Your profile is loaded, so the process will match how you work.
@@ -340,7 +341,7 @@ function IntroStep({
             Start with your profile
           </p>
           <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: 0, maxWidth: 560 }}>
-            The process is shaped around how you actually work. Build your profile first, then come straight back here. Without it, this tool asks a few extra questions to fill the gap.
+            The process is shaped around how you actually work. Build your profile first, then come straight back here. Without one, this tool asks a few extra questions to cover the basics.
           </p>
         </div>
       )}
@@ -370,6 +371,7 @@ function IntroStep({
           </button>
         )}
       </div>
+      <SkillsCallout />
 
       {hasSavedProcesses && (
         <SavedProcessesSection

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft } from "@phosphor-icons/react";
-import { MetaLabel, PrimaryButton } from "./ui";
+import { MetaLabel, PrimaryButton, SuiteOrder, SkillsCallout } from "./ui";
 import { ContextProfileOutput } from "./output/ContextProfileOutput";
 import type {
   NDProfile,
@@ -241,6 +241,7 @@ function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void;
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 20px" }}>
         Answer questions about what energizes you, what shuts you down, and how you take in information. You get a profile file. Paste it into any AI you use. That AI will then respond in ways that match how you work.
       </p>
+      <SuiteOrder />
       {wasMigrated && (
         <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: "0 0 20px" }}>
           We updated your saved profile to the new format. Everything you had is still there; a few new sections are ready whenever you want to fill them.
@@ -271,6 +272,7 @@ function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void;
           </button>
         )}
       </div>
+      <SkillsCallout />
     </div>
   );
 }

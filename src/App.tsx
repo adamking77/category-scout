@@ -119,7 +119,7 @@ export default function App({
       {activeTool === "context-builder" && (
         <ToolSection
           label="Context Builder"
-          description="You answer a few questions about how you actually work and get a profile that tells any AI what activates you, what shuts you down, and what helps. Build it once. Every other tool reads from it."
+          description="Step one. You answer a few questions about how you actually work, and get a profile that tells any AI what activates you, what shuts you down, and what helps. The other tools read from it."
         >
           <NDContextBuilder />
         </ToolSection>
@@ -128,7 +128,7 @@ export default function App({
       {activeTool === "process-designer" && (
         <ToolSection
           label="Process Designer"
-          description="You bring one goal and it becomes a working process organized by energy state. Step menus for each working mode. Rescue steps for hard days."
+          description="Step two. You bring one goal and your profile. It becomes a working process organized by energy state. Step menus for each working mode. Rescue steps for hard days."
         >
           <NDProcessDesigner onOpenContextBuilder={() => window.location.assign(TOOL_ROUTES["context-builder"])} />
         </ToolSection>
@@ -147,7 +147,7 @@ export default function App({
       {activeTool === "skills" && (
         <ToolSection
           label="Skill Suite"
-          description="You built your context here. These skills carry it into the AI you already use every day. Use any skill as often as you need, natively in your own agentic environment."
+          description="The same tools, packaged as skills you can install in your own AI. The Context Builder, the Process Designer, and the Session Loop, each one downloadable as a skill file."
         >
           <SkillsLibrary />
         </ToolSection>

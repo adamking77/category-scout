@@ -107,7 +107,7 @@ export function ToolSection({
               </span>
               {statusChip && <span style={{ flexShrink: 0 }}>{statusChip}</span>}
             </div>
-            <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: 13, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
               {description}
             </p>
           </div>
