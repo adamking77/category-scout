@@ -137,10 +137,10 @@ export function buildProfileRadar(profile: NDProfile): ProfileAxis[] {
   return [
     { key: "drive", label: "Drive", value: drive },
     { key: "focus", label: "Focus", value: focus },
-    { key: "structure", label: "Structure need", value: structure },
-    { key: "sensory", label: "Sensory load", value: sensory },
+    { key: "structure", label: "Structure I need", value: structure },
+    { key: "sensory", label: "Sensory cost", value: sensory },
     { key: "social", label: "Social cost", value: socialCost },
-    { key: "recovery", label: "Recovery need", value: recovery },
+    { key: "recovery", label: "Recovery that works", value: recovery },
   ];
 }
 

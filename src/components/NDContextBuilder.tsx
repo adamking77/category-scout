@@ -548,7 +548,7 @@ function ActivationStep({
       </Field>
 
       <Field>
-        <MetaLabel size="section">What does your pattern recognition cost you socially?</MetaLabel>
+        <MetaLabel size="section">What does your sharpness cost you socially?</MetaLabel>
         <textarea
           value={profile.activation.patternCost}
           onChange={(e) => onChange({ patternCost: e.target.value })}

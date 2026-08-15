@@ -2,7 +2,7 @@
 name: spine-finder
 displayName: Find your through-line
 description: Use when a structure-first or neurocomplex person has done Lindsey Mackereth's Compression Framework step 1 (the messy paragraph) and frozen — or expects to — because "reflect until the spine emerges" gives no method. Trigger when someone wants help finding their integrating spine (a central question or problem-space), says they can't feel their way to an answer from a blank page, or has raw self-analysis they need turned into recognizable candidate orientations. Assists one step of the Compression Framework; does not replace it.
-version: 2.0.0
+version: 2.0.1
 tags:
   - neurodivergent
   - orientation
@@ -219,6 +219,10 @@ Triggers: "none" · "zero" · "cold" · "this is dumb" · "too much" · "not me"
 
 Response — choose the smallest applicable path, no extra explanation:
 > *Got it. That set failed — I'm not going to defend it. Smallest useful next step: keep only what still feels solid, re-cut from there, or pause and save where we are.*
+
+**Resistance is data about missing foundation.** When the user resists, something is missing: clarity, stakes, safety, or energy. The response is a lighter, more structured move, never more narrative.
+
+**Futility awareness.** If the user's material names paths they have tried so many times that even thinking about them feels pointless, do not build spine candidates that assume those paths are alive. The dead paths are data about what to build away from.
 
 ## Over-narration guard
 

@@ -2,7 +2,7 @@
 name: nd-context-builder
 displayName: Build your context profile
 description: Use when a user needs to create or refresh a persistent ND profile artifact for Claude, Codex, or another LLM. Trigger when the user wants structured intake around traits, activation patterns, shutdown triggers, time and energy patterns, prior systems, information preferences, or agent working instructions.
-version: 2.0.0
+version: 2.1.0
 tags:
   - intake
   - profile
@@ -17,7 +17,7 @@ relatedSkills:
 
 ## What this is for
 
-This skill interviews you about how your neurodivergence actually shows up in your work, then writes a profile file you own. You paste that file into any AI you use, and the AI responds in ways that match how you actually work. It is for people who are tired of re-explaining themselves every session. It will not diagnose you, label you, or turn you into a project.
+This is where you build the profile. You answer questions about how you actually work, and the skill turns your answers into a file you own. Paste that file into any AI you use, and the AI responds in ways that match how you actually work. It is for people who are tired of re-explaining themselves every session. It will not diagnose you, label you, or turn you into a project.
 
 ## What this will not do
 
@@ -70,6 +70,11 @@ Every skill in the suite embeds this block verbatim from `_shared/non-negotiable
 7. Build for permanence — systems are designed for expected obsolescence, regenerated every 1–2 years.
 8. Store identity as a fixed label — identity is context-dependent state.
 
+### Additional agent rules (from webapp agent instructions)
+
+- **Never recommend from the futility list.** If the user has catalogued paths as dead, recommending them reads as not listening. Do not suggest them, even framed as "maybe try again differently."
+- **Resistance is data, not defiance.** When the user resists a task, do not push harder. Something is missing from the foundation: clarity, stakes, safety, or energy. Find that first.
+
 ### The three gates (energy is access, not battery)
 
 Blocked access, not depletion. Bored means the meaning gate is closed (find relevance or fascination). Confused means the coherence gate is closed (clarify, structure, break into intuitive steps). Heavy means the timing gate is closed (wait or shift phase). Panicked means the gates are in conflict (reduce scope). Never "just start."
@@ -104,19 +109,27 @@ Interview in three movements. Ask about situations, not labels.
 - What actually gets you started? Not what should motivate you. What actually does.
 - What did you notice and fix this week before anyone else did? (Invisible labor: the overfunctioning loop. This is real data, not a boast.)
 - What used to be automatic that now takes effort? (Changed baseline. What is different now than a year ago? Lost abilities are data, not failure.)
+- What is your wiring unusually good at? (Strengths: pattern recognition, structural perception, deep-dive, blunt honesty, or something else. The tool collects triggers and hard days; this is the other side.)
+- What does your pattern recognition cost you socially? (Optional. The same sharpness that does the work is also what isolates. Name it once.)
+- What are you allowed to do and not do, right now? (Sovereignty. The real version, not the aspirational one. Everything else in the profile sits on top of this.)
 
 ### Movement 2 — What blocks you
 
 - Ask as situations, not labels: "Do you ever feel bored and unable to start? Confused and stuck? Heavy, like the timing is wrong? Panicked, like the gates are fighting?"
-- What makes you want to disappear? Task types, environments, social demands. The specific pattern matters more than the category.
+- What makes you want to disappear? Task types, environments, social demands. The specific pattern matters more than the category. Include "not being believed" and "my own goals or internal deadlines triggering avoidance" as options when asking about shutdown triggers.
+- What does shutdown or avoidance actually look like? Not what causes it. What happens when you are in it. (Some people describe it as pressing the gas and the brake at the same time.)
+- What demand is your nervous system actually refusing, one you might not see on the surface? (Hidden demand. Optional. The tax form is not about taxes. It is about being judged for being behind. The user may not see it yet; that is fine.)
+- What standard do you hold yourself to that you would never hold another person to? (Inner tyrant. The voice that demands a flawless performance. Naming it lets you hear it before it runs the show.)
 - When you go quiet for a while, is it rest, recovery, or something else? (Silence is planned rest by default.)
+- What have you tried so many times that even thinking about it feels pointless now? (Futility. The paths that do not just feel hard anymore. The ones that feel dead. Record these separately from ordinary avoidances; the agent needs to know never to recommend them.)
 
 ### Movement 3 — What helps you
 
-- Dead zones: when do you know you'll be unavailable? Those are protected; nothing gets scheduled there.
-- What support conditions help? Pacing aids the user chooses themselves (music, movement, timers they set). Never imposed countdowns.
+- Dead zones: when do you know you will be unavailable? Those are protected; nothing gets scheduled there. If the honest answer is "it just hits me, I cannot plan for it," that is a complete answer.
+- Which of your abilities are unreliable day to day? (Variable capacities. Not what is permanently gone. What is there some days and missing others. Naming them makes them data, not failure.)
+- What support conditions help? Pacing aids the user chooses themselves (music, movement, timers they set). Include delegation (another person handles the outward-facing parts) as an option. Never imposed countdowns.
 - Room safety: what makes a space usable, what breaks it? Per context, not just globally.
-- One to three active lanes: what is this person actually keeping in play right now? Everything else is a closed door, and closing a door deserves the grief step: "It is okay to be sad that this is not happening right now."
+- One to three active lanes: what is this person actually keeping in play right now? Everything else is a closed door (things you are choosing not to do this season), and closing a door deserves the grief step: "It is okay to be sad that this is not happening right now."
 
 ### Trait labels (working labels, not verdicts)
 
@@ -127,6 +140,13 @@ Interview in three movements. Ask about situations, not labels.
 ### Could / should / want
 
 For each goal or direction that surfaces: separate what you could do, what you should do, and what you actually want. The "want" column is the one that carries interest; the "should" column is the one that burns people out. Record all three without judging.
+
+### Voice guidance for new fields
+
+- **Permission to be imperfect.** If the user is stuck, remind them they are allowed to do a deliberately rough version first. "What if the first pass is deliberately rough?" The outcome does not define their intelligence.
+- **Hidden-demand probe.** When the user reports avoidance, the first move is to ask what the system is actually refusing right now, not to redirect to the task.
+- **Resistance is data.** When the user resists a task, do not push harder. Something is missing from the foundation: clarity, stakes, safety, or energy. Find that first.
+- **"It just hits me" is a complete answer.** When asking about activation windows or unavailable periods, accept unpredictability as valid data. Do not push for a schedule.
 
 ## Question format rules
 
@@ -142,7 +162,11 @@ For each goal or direction that surfaces: separate what you could do, what you s
 - Preserve the user's own language where it adds specificity.
 - The final section must be written to the receiving agent, not the user.
 - If the user already has a profile, update it rather than rewriting it from scratch unless they explicitly ask to restart.
-- Include the not-doing list, the changed-baseline section, the three gates, lanes and closed doors, room safety, invisible labor, and a regeneration date (1-2 year horizon).
+- Include the not-doing list, the changed-baseline section (including variable capacities), the three gates, lanes and closed doors (label closed doors as "things you are choosing not to do this season"), room safety, invisible labor, strengths ("What My Wiring Is Good At"), sovereignty, and a regeneration date (1-2 year horizon).
+- Include shutdown's hidden demand ("What it might be refusing") and inner tyrant ("The standard it holds") when captured.
+- Include activation's pattern cost ("What the sharpness costs") when captured.
+- Include futility as "Paths that are dead for you" in the history section, separate from ordinary avoidances.
+- In the agent instructions section, include: the strengths summary, permission-to-be-imperfect (if PDA), hidden-demand probe (if PDA), resistance-is-data, and never-recommend-from-futility-list.
 
 ## Guardrails
 

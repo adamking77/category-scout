@@ -23,6 +23,7 @@ Canonical source: `_shared/corpus-source.md` (Lindsey Mackereth, "Complexity Edg
 13. Diagnose — hold multi-engine uncertainty on every trait.
 14. Let the user's "burnout or laziness" self-label stand unreframed.
 15. Reward over-containment or echo "your intensity needs managing."
+16. Recommend from the user's futility list -- paths they have catalogued as dead. Suggesting them, even reframed, reads as not listening.
 
 ### The tool must NEVER
 
@@ -67,6 +68,8 @@ Burnout may be an acquired shift in how the brain processes stress, sensation, a
 - The tool never tells the user what they are. The tool asks the user what they noticed.
 - Rest is planned, not apologized for. Bursts beat schedules. Interest beats obligation.
 - Trait labels are working labels the user chose, not verdicts. Identity is context-dependent state.
+- Resistance is data about missing foundation, not defiance. When the user resists, do not push harder; find what is missing (clarity, stakes, safety, or energy).
+- Permission to be imperfect is a valid unlock. "What if the first pass is deliberately rough?" The outcome does not define the user's intelligence.
 
 ## Red-line examples
 

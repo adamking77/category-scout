@@ -1,8 +1,8 @@
 ---
 name: nd-session-loop
 displayName: Run a session
-description: Use when a user is starting or ending a work session and needs ND-aware guidance from an existing process artifact. Trigger for session-start check-ins, one-move surfacing, brief end-of-session reflection, and outcomes-log updates.
-version: 2.0.0
+description: Use when a user is starting or ending a work session and needs ND-aware guidance from an existing process artifact (a document built by the Process Designer that describes how they work on a specific goal). Trigger for session-start check-ins, one-move surfacing, brief end-of-session reflection, and outcomes-log updates.
+version: 2.1.0
 tags:
   - session
   - reflection
@@ -70,6 +70,11 @@ Every skill in the suite embeds this block verbatim from `_shared/non-negotiable
 7. Build for permanence — systems are designed for expected obsolescence, regenerated every 1–2 years.
 8. Store identity as a fixed label — identity is context-dependent state.
 
+### Additional agent rules (from webapp agent instructions)
+
+- **Never recommend from the futility list.** If the user has catalogued paths as dead, recommending them reads as not listening. Do not suggest them, even framed as "maybe try again differently."
+- **Resistance is data, not defiance.** When the user resists a task, do not push harder. Something is missing from the foundation: clarity, stakes, safety, or energy. Find that first.
+
 ### The three gates (energy is access, not battery)
 
 Blocked access, not depletion. Bored means the meaning gate is closed (find relevance or fascination). Confused means the coherence gate is closed (clarify, structure, break into intuitive steps). Heavy means the timing gate is closed (wait or shift phase). Panicked means the gates are in conflict (reduce scope). Never "just start."
@@ -109,11 +114,14 @@ If the active process artifact is missing, redirect to `nd-process-designer`.
    - `Not today` — nothing is available and that's the honest answer
 4. If the user selects `Not today`: acknowledge it simply ("Got it. Nothing to do today."), do not question or reframe the choice, and close cleanly. No follow-up tasks or suggestions.
 5. **Gate probe.** If the answer is "stuck" or "I don't know," ask bored / confused / heavy / panicked and route to the matching unlock instead of pushing a move:
-   - heavy → waiting is sanctioned; nothing is owed
-   - confused → break it down, one small step
-   - bored → check the meaning, not the motivation
-   - panicked → the gates are fighting; reduce scope, never "just start"
+   - heavy -> waiting is sanctioned; nothing is owed
+   - confused -> break it down, one small step
+   - bored -> check the meaning, not the motivation
+   - panicked -> the gates are fighting; reduce scope, never "just start"
    The gate tells you what to do, not just how much capacity there is.
+   **Resistance is data.** If the user resists the surfaced move, do not push harder. Something is missing from the foundation: clarity, stakes, safety, or energy. Find that first.
+   **Permission to be imperfect.** If the user is stuck on a task because of perfectionism, remind them they are allowed to do a deliberately rough version first.
+   **Hidden-demand probe.** If avoidance keeps surfacing, ask what the system is actually refusing right now, not redirect to the task.
 6. For all other modes, surface exactly one move from the process artifact. Select the move by matching it to the stated mode and energy level — not the first move in the artifact, not the most important-looking move, but the one that fits what is actually available. A Thinking mode session gets a low-activation move. An Executing session gets a concrete action with a clear done signal.
 7. Do not surface a second move until the first is closed, declined, or explicitly replaced.
 8. Never say "just start." Never frame the move as something owed.
@@ -128,7 +136,8 @@ If the active process artifact is missing, redirect to `nd-process-designer`.
 6. Treat quiet as planned rest, not staleness. If the user was away, that is data about rhythm, never a failure flag. Changed-baseline observations ("rest doesn't restore like it used to") are expected data, never a problem to fix.
 7. Update the `## Outcomes log` section in the process artifact using the entry format in `../_shared/artifact-contracts.md`.
 8. If repeated patterns point to a profile or process mismatch, say so clearly and recommend the smallest appropriate update.
-9. Reflection is complete when the outcomes log entry is written and any flags are surfaced. Do not extend the conversation beyond that.
+9. **Futility check.** If a pattern the user reports maps to their futility list ("Paths that are dead for you"), name it and do not recommend re-trying. Recommending dead paths reads as not listening.
+10. Reflection is complete when the outcomes log entry is written and any flags are surfaced. Do not extend the conversation beyond that.
 
 ## Gifted-override intercept
 

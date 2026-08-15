@@ -332,7 +332,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     traitLines.push("");
     traitLines.push(profile.traits.notes.trim());
   }
-  const traitsSection = section("My Neurodivergent Profile", traitLines.join("\n"));
+  const traitsSection = section("Your neurotype", traitLines.join("\n"));
   if (traitsSection) parts.push(traitsSection);
 
   // Strengths
@@ -347,7 +347,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   if (profile.strengths.other.trim()) {
     strengthLines.push(`- ${profile.strengths.other.trim()}`);
   }
-  const strengthsSection = section("What My Wiring Is Good At", strengthLines.join("\n"));
+  const strengthsSection = section("What your wiring is unusually good at", strengthLines.join("\n"));
   if (strengthsSection) parts.push(strengthsSection);
 
   // Sovereignty
@@ -361,7 +361,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     .filter((p) => p !== "other")
     .map((p) => `- ${ACTIVATION_LABELS[p]}`);
   if (activationPatterns.length > 0) {
-    activationLines.push("**What pulls me in:**");
+    activationLines.push("**What pulls you in:**");
     activationLines.push(...activationPatterns);
   }
   if (profile.activation.patternOther.trim()) {
@@ -377,7 +377,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     activationLines.push("**What the sharpness costs:**");
     activationLines.push(profile.activation.patternCost.trim());
   }
-  const activationSection = section("What Activates Me", activationLines.join("\n"));
+  const activationSection = section("What pulls you in", activationLines.join("\n"));
   if (activationSection) parts.push(activationSection);
 
   // Shutdown
@@ -386,7 +386,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     .filter((t) => t !== "other")
     .map((t) => `- ${SHUTDOWN_LABELS[t]}`);
   if (shutdownTriggers.length > 0) {
-    shutdownLines.push("**What I tend to avoid:**");
+    shutdownLines.push("**What you tend to avoid:**");
     shutdownLines.push(...shutdownTriggers);
   }
   if (profile.shutdown.triggerOther.trim()) {
@@ -394,7 +394,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   }
   if (profile.shutdown.shutdownDescription.trim()) {
     if (shutdownLines.length > 0) shutdownLines.push("");
-    shutdownLines.push("**What shutdown or avoidance actually looks like for me:**");
+    shutdownLines.push("**What shutdown or avoidance actually looks like:**");
     shutdownLines.push(profile.shutdown.shutdownDescription.trim());
   }
   if (profile.shutdown.hiddenDemand.trim()) {
@@ -407,7 +407,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     shutdownLines.push("**The standard it holds:**");
     shutdownLines.push(profile.shutdown.innerTyrant.trim());
   }
-  const shutdownSection = section("What Causes Shutdown or Avoidance", shutdownLines.join("\n"));
+  const shutdownSection = section("What you tend to avoid", shutdownLines.join("\n"));
   if (shutdownSection) parts.push(shutdownSection);
 
   // Time and energy
@@ -424,15 +424,15 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   }
   if (profile.timeEnergy.activationWindows.trim()) {
     if (timeLines.length > 0) timeLines.push("");
-    timeLines.push("**When I actually tend to work:**");
+    timeLines.push("**When you actually tend to work:**");
     timeLines.push(profile.timeEnergy.activationWindows.trim());
   }
   if (profile.timeEnergy.unavailablePeriods.trim()) {
     if (timeLines.length > 0) timeLines.push("");
-    timeLines.push("**When I'll be unavailable:**");
+    timeLines.push("**When you'll be unavailable:**");
     timeLines.push(profile.timeEnergy.unavailablePeriods.trim());
   }
-  const timeSection = section("My Relationship With Time and Energy", timeLines.join("\n"));
+  const timeSection = section("Time and energy", timeLines.join("\n"));
   if (timeSection) parts.push(timeSection);
 
   // Changed baseline
@@ -449,7 +449,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     baselineLines.push("**Unreliable day to day:**");
     baselineLines.push(profile.baseline.variableCapacities.trim());
   }
-  const baselineSection = section("What's Different Now Than a Year Ago", baselineLines.join("\n"));
+  const baselineSection = section("What's different now than a year ago", baselineLines.join("\n"));
   if (baselineSection) parts.push(baselineSection);
 
   // Three gates
@@ -469,51 +469,58 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     gateLines.push("");
     gateLines.push(profile.gates.notes.trim());
   }
-  const gatesSection = section("The Three Gates", gateLines.join("\n"));
+  const gatesSection = section("Today's gate", gateLines.join("\n"));
   if (gatesSection) parts.push(gatesSection);
 
   // Lanes and closed doors
   const laneLines: string[] = [];
   if (profile.lanes.active.length > 0) {
-    laneLines.push("**Active lanes (what I'm actively working on):**");
+    laneLines.push("**What you're working on:**");
     laneLines.push(...profile.lanes.active.map((lane) => `- ${lane}`));
   }
   if (profile.lanes.closedDoors.length > 0) {
-    laneLines.push("**Closed doors (things you're choosing not to do this season):**");
+    laneLines.push("**What you're setting aside, for now:**");
     laneLines.push(...profile.lanes.closedDoors.map((door) => `- ${door}`));
   }
-  const lanesSection = section("Lanes and Closed Doors", laneLines.join("\n"));
+  const lanesSection = section("What you're actively working on", laneLines.join("\n"));
   if (lanesSection) parts.push(lanesSection);
 
   // Room safety
-  if (profile.roomSafety.trim()) parts.push(section("Room Safety", profile.roomSafety.trim()));
+  if (profile.roomSafety.trim()) parts.push(section("Rooms where you can be accurate", profile.roomSafety.trim()));
 
   // Not doing
-  if (profile.notDoing.trim()) parts.push(section("What I'm Not Doing", profile.notDoing.trim()));
+  if (profile.notDoing.trim()) parts.push(section("What you're keeping out right now", profile.notDoing.trim()));
 
   // Invisible labor
-  if (profile.invisibleLabor.trim()) parts.push(section("Invisible Labor", profile.invisibleLabor.trim()));
+  if (profile.invisibleLabor.trim()) parts.push(section("What you noticed and fixed without being asked", profile.invisibleLabor.trim()));
 
   // Could / should / want
   const cswLines: string[] = [];
   if (profile.couldShouldWant.could.trim()) cswLines.push(`**Could:** ${profile.couldShouldWant.could.trim()}`);
   if (profile.couldShouldWant.should.trim()) cswLines.push(`**Should:** ${profile.couldShouldWant.should.trim()}`);
   if (profile.couldShouldWant.want.trim()) cswLines.push(`**Want:** ${profile.couldShouldWant.want.trim()}`);
-  const cswSection = section("Could / Should / Want", cswLines.join("\n"));
+  const cswSection = section("What you could / should / want", cswLines.join("\n"));
   if (cswSection) parts.push(cswSection);
 
   // Regeneration date
-  if (profile.regenerationDate.trim()) parts.push(section("Regeneration Date", profile.regenerationDate.trim()));
+  if (profile.regenerationDate.trim()) {
+    parts.push(
+      section(
+        `This profile is designed to be redesigned. By ${profile.regenerationDate.trim()}.`,
+        "*Profiles are designed to be redesigned every 1-2 years. The system gets a new shape; the picture stays yours.*"
+      )
+    );
+  }
 
   // History
   const historyLines: string[] = [];
   if (profile.history.triedSystems.trim()) {
-    historyLines.push("**What I've tried:**");
+    historyLines.push("**What you've tried:**");
     historyLines.push(profile.history.triedSystems.trim());
   }
   if (profile.history.whatWorked.trim()) {
     if (historyLines.length > 0) historyLines.push("");
-    historyLines.push("**What worked (even partially):**");
+    historyLines.push("**What worked, even partially:**");
     historyLines.push(profile.history.whatWorked.trim());
   }
   if (profile.history.whatFailed.trim()) {
@@ -526,7 +533,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     historyLines.push("**Paths that are dead for you:**");
     historyLines.push(profile.history.futility.trim());
   }
-  const historySection = section("Systems I've Tried", historyLines.join("\n"));
+  const historySection = section("What you've tried", historyLines.join("\n"));
   if (historySection) parts.push(historySection);
 
   // Info and conditions
@@ -543,7 +550,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   if (profile.infoConditions.formatOther.trim()) {
     infoLines.push(`**Also:** ${profile.infoConditions.formatOther.trim()}`);
   }
-  const infoSection = section("How I Prefer to Receive Information", infoLines.join("\n"));
+  const infoSection = section("How you take in information", infoLines.join("\n"));
   if (infoSection) parts.push(infoSection);
 
   // Support conditions
@@ -557,14 +564,14 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   if (profile.infoConditions.conditionOther.trim()) {
     conditionLines.push(`- ${profile.infoConditions.conditionOther.trim()}`);
   }
-  const conditionSection = section("What Helps Me Work", conditionLines.join("\n"));
+  const conditionSection = section("What helps you work", conditionLines.join("\n"));
   if (conditionSection) parts.push(conditionSection);
 
   // Agent instructions
   const agentLines = buildAgentInstructions(profile);
   if (agentLines) {
     parts.push("---");
-    parts.push(section("For Any Agent Working With Me", agentLines));
+    parts.push(section("For any agent working with you", agentLines));
   }
 
   return parts.filter(Boolean).join("\n\n");

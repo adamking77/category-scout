@@ -15,22 +15,24 @@ Recommended file name: `nd-profile.md`
 Required sections:
 
 - `# ND Profile`
-- `## My Neurodivergent Profile` (traits as **working labels the user chose, not verdicts**)
-- `## What Activates Me`
-- `## What Causes Shutdown or Avoidance`
-- `## My Relationship With Time and Energy`
-- `## What's Different Now Than a Year Ago` (changed baseline: current baseline, explicitly not "normal"; lost abilities recorded as data, not failure; "rest doesn't restore like it used to" is expected data)
-- `## The Three Gates` (bored / confused / heavy / panicked, what each means, what helps)
-- `## Could / Should / Want` (what I could do, what I should do, what I actually want)
-- `## Lanes and Closed Doors` (1-3 active lanes the process defends; named closed doors, never a hard block)
-- `## Room Safety` (per-context safety; what makes a space usable, what breaks it; RSD flag phrases)
-- `## What I'm Not Doing` (the not-doing list, first-class)
-- `## Invisible Labor` (what I notice and fix before anyone else does)
-- `## Systems I've Tried`
-- `## How I Prefer to Receive Information`
-- `## What Helps Me Work`
-- `## For Any Agent Working With Me`
-- `## Regeneration Date` (the "systems are designed to be redesigned" date, 1-2 year horizon)
+- `## Your neurotype` (traits as **working labels the user chose, not verdicts**)
+- `## What your wiring is unusually good at` (strengths: what the user's wiring is unusually good at)
+- `## Sovereignty` (what the user is allowed and not allowed to do right now)
+- `## What pulls you in` (includes sub-section: "What the sharpness costs" for pattern cost)
+- `## What you tend to avoid` (includes sub-sections: "What it might be refusing" for hidden demand, "The standard it holds" for inner tyrant)
+- `## Time and energy`
+- `## What's different now than a year ago` (changed baseline: current baseline, explicitly not "normal"; lost abilities recorded as data, not failure; "rest doesn't restore like it used to" is expected data; includes sub-section: "Unreliable day to day" for variable capacities)
+- `## Today's gate` (bored / confused / heavy / panicked, what each means, what helps)
+- `## What you could / should / want` (what I could do, what I should do, what I actually want)
+- `## What you're actively working on` (1-3 active lanes the process defends; named closed doors as "what you're setting aside, for now", never a hard block)
+- `## Rooms where you can be accurate` (per-context safety; what makes a space usable, what breaks it; RSD flag phrases)
+- `## What you're keeping out right now` (the not-doing list, first-class)
+- `## What you noticed and fixed without being asked` (what I notice and fix before anyone else does)
+- `## What you've tried` (includes sub-section: "Paths that are dead for you" for futility -- recorded separately from ordinary avoidances; agent must never recommend from this list)
+- `## How you take in information`
+- `## What helps you work`
+- `## For any agent working with you`
+- `## This profile is designed to be redesigned` (the "systems are designed to be redesigned" date, 1-2 year horizon)
 
 Rules:
 
@@ -53,8 +55,8 @@ Required sections:
 - `## Seasons, not sprints` (horizon framing; "return to the old load is never a designed outcome"; an obsolescence / regeneration date on the process)
 - `## What you're not doing`
 - `## Session start` (gate check-in; never "just start")
-- `## Move menu`
-- `## Rescue moves`
+- `## Step menu`
+- `## Rescue steps`
 - `## Measurement`
 - `## Agent brief` (includes a contact ritual: expected-time touchpoints, frequency over depth)
 - `## Source notes`

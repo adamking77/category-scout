@@ -340,12 +340,12 @@ export function ContextProfileOutput({
             )}
             {profile.timeEnergy.activationWindows.trim() && (
               <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: "0 0 6px" }}>
-                <strong style={{ color: "var(--ink)" }}>When you work:</strong> {profile.timeEnergy.activationWindows.trim()}
+                <strong style={{ color: "var(--ink)" }}>When you actually tend to work:</strong> {profile.timeEnergy.activationWindows.trim()}
               </p>
             )}
             {profile.timeEnergy.unavailablePeriods.trim() && (
               <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
-                <strong style={{ color: "var(--ink)" }}>Protected downtime:</strong> {profile.timeEnergy.unavailablePeriods.trim()}
+                <strong style={{ color: "var(--ink)" }}>When you'll be unavailable:</strong> {profile.timeEnergy.unavailablePeriods.trim()}
               </p>
             )}
             {profile.baseline.variableCapacities.trim() && (
@@ -355,6 +355,90 @@ export function ContextProfileOutput({
             )}
           </QuietRow>
         )}
+
+        <QuietRow label="What you're actively working on">
+          {profile.lanes.active.length > 0 || profile.lanes.closedDoors.length > 0 ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {profile.lanes.active.length > 0 && (
+                <div>
+                  <p style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 500, color: "var(--ink)", lineHeight: 1.4 }}>
+                    What you're working on:
+                  </p>
+                  <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 6 }}>
+                    {profile.lanes.active.map((lane) => (
+                      <li key={lane} style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.55 }}>• {lane}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {profile.lanes.closedDoors.length > 0 && (
+                <div>
+                  <p style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 500, color: "var(--ink)", lineHeight: 1.4 }}>
+                    What you're setting aside:
+                  </p>
+                  <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 6 }}>
+                    {profile.lanes.closedDoors.map((door) => (
+                      <li key={door} style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.55 }}>• {door}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : (
+            <p style={{ fontSize: 15, color: "var(--ink-muted)", margin: 0 }}>No lanes set.</p>
+          )}
+        </QuietRow>
+
+        <QuietRow label="Rooms where you can be accurate">
+          {profile.roomSafety.trim() ? (
+            <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>{profile.roomSafety.trim()}</p>
+          ) : (
+            <p style={{ fontSize: 15, color: "var(--ink-muted)", margin: 0 }}>No rooms set.</p>
+          )}
+        </QuietRow>
+
+        <QuietRow label="What you're keeping out right now">
+          {profile.notDoing.trim() ? (
+            <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>{profile.notDoing.trim()}</p>
+          ) : (
+            <p style={{ fontSize: 15, color: "var(--ink-muted)", margin: 0 }}>No not-doing list set.</p>
+          )}
+        </QuietRow>
+
+        <QuietRow label="What you noticed and fixed without being asked">
+          {profile.invisibleLabor.trim() ? (
+            <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>{profile.invisibleLabor.trim()}</p>
+          ) : (
+            <p style={{ fontSize: 15, color: "var(--ink-muted)", margin: 0 }}>No invisible labor noted.</p>
+          )}
+        </QuietRow>
+
+        <QuietRow label="What you could / should / want">
+          {profile.couldShouldWant.could.trim() || profile.couldShouldWant.should.trim() || profile.couldShouldWant.want.trim() ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {profile.couldShouldWant.could.trim() && (
+                <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
+                  <span className="mono" style={{ fontSize: 11, color: "var(--teal-deep)", letterSpacing: "0.08em", marginRight: 8 }}>COULD</span>
+                  {profile.couldShouldWant.could.trim()}
+                </p>
+              )}
+              {profile.couldShouldWant.should.trim() && (
+                <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
+                  <span className="mono" style={{ fontSize: 11, color: "var(--terracotta)", letterSpacing: "0.08em", marginRight: 8 }}>SHOULD</span>
+                  {profile.couldShouldWant.should.trim()}
+                </p>
+              )}
+              {profile.couldShouldWant.want.trim() && (
+                <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
+                  <span className="mono" style={{ fontSize: 11, color: "var(--ink)", letterSpacing: "0.08em", marginRight: 8 }}>WANT</span>
+                  {profile.couldShouldWant.want.trim()}
+                </p>
+              )}
+            </div>
+          ) : (
+            <p style={{ fontSize: 15, color: "var(--ink-muted)", margin: 0 }}>No could / should / want set.</p>
+          )}
+        </QuietRow>
 
         <QuietRow label="How you take in information">
           {profile.infoConditions.density && (

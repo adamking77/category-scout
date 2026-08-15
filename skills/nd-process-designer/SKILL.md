@@ -1,8 +1,8 @@
 ---
 name: nd-process-designer
 displayName: Design a process for one goal
-description: Use when a user has an ND profile and a specific goal and needs a trigger-based process artifact instead of a schedule or task system. Trigger when the user wants one goal turned into a move menu, not-doing list, measurement system, and agent brief.
-version: 2.0.0
+description: Use when a user has an ND profile (a short document describing how they work, built in the Context Builder) and a specific goal and needs a trigger-based process artifact instead of a schedule or task system. Trigger when the user wants one goal turned into a move menu, not-doing list, measurement system, and agent brief.
+version: 2.1.0
 tags:
   - process
   - planning
@@ -17,7 +17,7 @@ relatedSkills:
 
 ## What this is for
 
-This skill takes one goal and your ND profile and builds a working process organized by how you actually feel, not by a calendar. It is for people who want to move something forward without building another obligation machine. It will not make you a schedule, a streak, or a to-do list. It will not tell you to just start.
+Planning systems break the same way every time. You build the plan on a sharp day, and the plan assumes tomorrow will be sharp too. When your energy shifts, the plan stops working and you are left managing the gap between what you wrote and what you can actually do. This skill takes one goal and the profile you built in the Context Builder (a short document that describes how you work) and builds a working process organized by how you actually feel, not by a calendar. It will not make you a schedule, a streak, or a to-do list. It will not tell you to just start.
 
 ## What this will not do
 
@@ -70,6 +70,11 @@ Every skill in the suite embeds this block verbatim from `_shared/non-negotiable
 7. Build for permanence — systems are designed for expected obsolescence, regenerated every 1–2 years.
 8. Store identity as a fixed label — identity is context-dependent state.
 
+### Additional agent rules (from webapp agent instructions)
+
+- **Never recommend from the futility list.** If the user has catalogued paths as dead, recommending them reads as not listening. Do not suggest them, even framed as "maybe try again differently."
+- **Resistance is data, not defiance.** When the user resists a task, do not push harder. Something is missing from the foundation: clarity, stakes, safety, or energy. Find that first.
+
 ### The three gates (energy is access, not battery)
 
 Blocked access, not depletion. Bored means the meaning gate is closed (find relevance or fascination). Confused means the coherence gate is closed (clarify, structure, break into intuitive steps). Heavy means the timing gate is closed (wait or shift phase). Panicked means the gates are in conflict (reduce scope). Never "just start."
@@ -92,9 +97,9 @@ Rest is necessary but not sufficient; meaningful re-stabilization can take 1-3 y
 2. Open by confirming the goal the user wants to work on. If the goal is vague or large ("grow my business", "get more clients", "finish my project"), ask one grounding question before proceeding: "What would count as real, visible progress on this — something you could point to and say it happened?" Do not write a process for an ungrounded goal. Once the goal is concrete, ask one clarifying question at a time: success signal, existing assets, likely friction points, and explicit not-doing boundaries.
 3. Ask the interest half-life question early: "What will carry this past the point where novelty runs out?" Then keep a proceed-anyway path. This question is information, never a gate. The user can proceed without answering it.
 4. Separate could / should / want for the goal. The "want" column is what the process protects; the "should" column is what burns people out. Build moves that serve "want" first.
-5. If the ND profile is missing, run a short fallback intake. Ask these questions one at a time — do not group them:
+5. If the ND profile is missing, run a short fallback intake. Ask these questions one at a time -- do not group them:
    - "What tends to get you started on something like this?"
-   - "What usually causes you to stop or avoid it?"
+   - "What usually causes you to stop or avoid it?" (Include "not being believed" and "my own goals triggering avoidance" as possibilities if relevant.)
    - "Tell me about a recent time you got stuck on this kind of work. What happened?"
    State what is missing and recommend building a full profile with `nd-context-builder` afterward. Do not pretend you have a full profile when you do not.
 6. Write the process artifact using the contract in `../_shared/artifact-contracts.md` (contract v2) once the goal and key constraints are clear. Do not continue clarifying after the artifact is drafted.
@@ -107,10 +112,14 @@ Rest is necessary but not sufficient; meaningful re-stabilization can take 1-3 y
 - Protected conditions, including dead zones: unavailable periods are "planned, not a signal," hard-protected, nothing ever scheduled there
 - **Lanes:** one to three active lanes the process defends. Work outside them gets a named closed door plus the grief step ("it is okay to be sad that this is not happening right now") — never a hard block
 - **Seasons, not sprints:** horizon framing; "return to the old load is never a designed outcome"; an obsolescence / regeneration date on the process
+- **Futility awareness:** if the profile contains "Paths that are dead for you," the process must never recommend actions from that list, even reframed. Recommending them reads as not listening.
 - A visible not-doing list
 - Session-start guidance with the gate check-in
 - Trigger-based move groups
 - Rescue moves
+- **Permission-to-be-imperfect rescue move:** if the user has PDA traits, include a rescue move that reminds them they are allowed to do a deliberately rough version first: "What if the first pass is deliberately rough?"
+- **Hidden-demand probe:** when the user reports avoidance within a session, the first move is to ask what the system is actually refusing right now, not to redirect to the task.
+- **Resistance is data:** when the user resists a move, do not push harder. Something is missing from the foundation: clarity, stakes, safety, or energy. Find that first.
 - Measurement that does not reduce to completion rates
 - A contact ritual in the agent brief: expected-time touchpoints, frequency over depth
 - An agent brief
