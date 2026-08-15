@@ -226,7 +226,7 @@ export const TIME_PATTERN_LABELS: Record<TimePattern, string> = {
   "needs-external-structure": "Without external structure I tend to drift",
   "no-time-pressure": "I do better without time pressure",
   "peak-windows": "I have one or two peak working windows; everything else is harder",
-  "recovery-non-negotiable": "Recovery time is non-negotiable: I can't just push through",
+  "recovery-non-negotiable": "Recovery time is non-negotiable: I need rest to function",
   other: "Something else",
 };
 
