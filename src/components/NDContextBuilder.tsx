@@ -30,9 +30,9 @@ import {
   SUPPORT_CONDITION_LABELS,
 } from "../lib/nd-profile";
 
-type StepId = "intro" | "gate" | "traits" | "activation" | "shutdown" | "time" | "history" | "info" | "done";
+type StepId = "intro" | "gate" | "traits" | "activation" | "shutdown" | "focus" | "time" | "history" | "info" | "done";
 
-const STEP_ORDER: StepId[] = ["intro", "gate", "traits", "activation", "shutdown", "time", "history", "info", "done"];
+const STEP_ORDER: StepId[] = ["intro", "gate", "traits", "activation", "shutdown", "focus", "time", "history", "info", "done"];
 
 const STEP_LABELS: Record<StepId, string> = {
   intro: "Context Builder",
@@ -40,6 +40,7 @@ const STEP_LABELS: Record<StepId, string> = {
   traits: "Your profile",
   activation: "What activates you",
   shutdown: "What to avoid",
+  focus: "Where you're focused",
   time: "Time and energy",
   history: "What you've tried",
   info: "How you take in information",
@@ -248,7 +249,7 @@ function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void;
         </p>
       )}
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 10px" }}>
-        10 to 15 minutes. Stop whenever. Skip anything you do not want to answer.
+        15 to 20 minutes. Stop whenever. Skip anything you do not want to answer.
       </p>
       <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: "0 0 36px" }}>
         Everything you answer stays in this browser, on this device. Nothing is uploaded or stored anywhere else.
@@ -481,46 +482,24 @@ function ActivationStep({
   );
 }
 
-// Step: Shutdown
+// Step: Shutdown — what to avoid. Split from the old six-field ShutdownStep
+// so the emotionally heavy fields get their own screen; lanes and rooms moved
+// to FocusStep.
 function ShutdownStep({
   profile,
   onChange,
   onNotDoingChange,
-  onLanesChange,
-  onRoomSafetyChange,
   onBack,
   onContinue,
 }: {
   profile: NDProfile;
   onChange: (update: Partial<NDProfile["shutdown"]>) => void;
   onNotDoingChange: (value: string) => void;
-  onLanesChange: (update: Partial<NDProfile["lanes"]>) => void;
-  onRoomSafetyChange: (value: string) => void;
   onBack: () => void;
   onContinue: () => void;
 }) {
   const shutdownOptions = (Object.entries(SHUTDOWN_LABELS) as [ShutdownTrigger, string][]).map(([value, label]) => ({ value, label }));
   const showOtherField = profile.shutdown.triggers.includes("other");
-
-  // Lanes are parsed on blur or continue, never on every keystroke. Parsing on
-  // change trims a trailing space out of state, so the space vanishes until
-  // the next letter makes it internal. The raw text stays in draft state while
-  // typing; the clean array is committed when the field is left.
-  const [draftActive, setDraftActive] = useState(() => profile.lanes.active.join("\n"));
-  const [draftClosed, setDraftClosed] = useState(() => profile.lanes.closedDoors.join("\n"));
-
-  function parseLanes(raw: string): string[] {
-    return raw.split("\n").map((s) => s.trim()).filter(Boolean);
-  }
-
-  function commitLanes() {
-    onLanesChange({ active: parseLanes(draftActive), closedDoors: parseLanes(draftClosed) });
-  }
-
-  function handleContinue() {
-    commitLanes();
-    onContinue();
-  }
 
   function toggleTrigger(t: ShutdownTrigger, checked: boolean) {
     const next = checked
@@ -574,6 +553,54 @@ function ShutdownStep({
         />
         <FieldHint>Not a limitation list. Naming the no's is what makes the rest possible.</FieldHint>
       </Field>
+
+      <StepNav onBack={onBack} onContinue={onContinue} />
+    </div>
+  );
+}
+
+// Step: Focus — where attention goes on purpose. Carries the lanes draft-state
+// logic unchanged: raw text stays in draft state while typing, parsing happens
+// on blur or continue, never on keystroke. That keeps the space-after-
+// punctuation fix intact.
+function FocusStep({
+  profile,
+  onLanesChange,
+  onRoomSafetyChange,
+  onBack,
+  onContinue,
+}: {
+  profile: NDProfile;
+  onLanesChange: (update: Partial<NDProfile["lanes"]>) => void;
+  onRoomSafetyChange: (value: string) => void;
+  onBack: () => void;
+  onContinue: () => void;
+}) {
+  // Lanes are parsed on blur or continue, never on every keystroke. Parsing on
+  // change trims a trailing space out of state, so the space vanishes until
+  // the next letter makes it internal. The raw text stays in draft state while
+  // typing; the clean array is committed when the field is left.
+  const [draftActive, setDraftActive] = useState(() => profile.lanes.active.join("\n"));
+  const [draftClosed, setDraftClosed] = useState(() => profile.lanes.closedDoors.join("\n"));
+
+  function parseLanes(raw: string): string[] {
+    return raw.split("\n").map((s) => s.trim()).filter(Boolean);
+  }
+
+  function commitLanes() {
+    onLanesChange({ active: parseLanes(draftActive), closedDoors: parseLanes(draftClosed) });
+  }
+
+  function handleContinue() {
+    commitLanes();
+    onContinue();
+  }
+
+  return (
+    <div>
+      <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 32px", maxWidth: 560 }}>
+        What are you focused on, on purpose? Knowing what you're protecting is as useful as knowing what you're avoiding.
+      </p>
 
       <Field>
         <MetaLabel size="section">What are you actively working on right now?</MetaLabel>
@@ -1087,7 +1114,10 @@ export function NDContextBuilder() {
         <ActivationStep profile={profile} onChange={updateActivation} onBack={back} onContinue={next} />
       )}
       {step === "shutdown" && (
-        <ShutdownStep profile={profile} onChange={updateShutdown} onNotDoingChange={updateNotDoing} onLanesChange={updateLanes} onRoomSafetyChange={updateRoomSafety} onBack={back} onContinue={next} />
+        <ShutdownStep profile={profile} onChange={updateShutdown} onNotDoingChange={updateNotDoing} onBack={back} onContinue={next} />
+      )}
+      {step === "focus" && (
+        <FocusStep profile={profile} onLanesChange={updateLanes} onRoomSafetyChange={updateRoomSafety} onBack={back} onContinue={next} />
       )}
       {step === "time" && (
         <TimeStep profile={profile} onChange={updateTimeEnergy} onBaselineChange={updateBaseline} onBack={back} onContinue={next} />
