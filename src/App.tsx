@@ -29,17 +29,17 @@ export default function App({
         <>
           <div style={{ maxWidth: 640, margin: "0 0 56px" }}>
             <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
-              AI is the most adaptive partner neurodivergent people have ever had access to. But it doesn't know your activation patterns, what causes shutdown, or what produces action versus paralysis. That context is hard to articulate, so it almost never gets in.
+              AI is the most adaptive partner neurodivergent people have ever had access to. But it doesn't know what activates you, what causes shutdown, or what produces action versus paralysis. That context is hard to articulate, so it almost never gets in.
             </p>
             <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "12px 0 0" }}>
-              NeuroDiv OS is two steps. Build a context profile that names how you work. Design a process shaped around that profile, organized by how you actually feel on a given day.
+              You start by building a context profile that names how you actually work. Then you design a process shaped around that profile, organized by how you feel on a given day.
             </p>
             <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "12px 0 0" }}>
-              Both steps happen here. The{" "}
+              Both tools live on this site. You can also download them as files from the{" "}
               <a href={TOOL_ROUTES.skills} style={{ color: "var(--teal-deep)", textDecoration: "none" }}>
                 Skill Suite
               </a>{" "}
-              is the same tools as downloadable files that run inside your own AI, so every conversation starts with the context you already built.
+              and run them inside your own AI, so every conversation you have starts with the context you already built.
             </p>
             <p style={{ fontSize: 14, color: "var(--ink-muted)", lineHeight: 1.7, margin: "12px 0 0" }}>
               A tool for neurodivs by the neurodivs at{" "}

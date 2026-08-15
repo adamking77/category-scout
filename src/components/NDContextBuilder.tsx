@@ -254,10 +254,10 @@ function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void;
   return (
     <div style={{ maxWidth: 600 }}>
       <p style={{ fontSize: 15, color: "var(--ink)", lineHeight: 1.75, margin: "0 0 20px" }}>
-        Most AI tools treat everyone the same. This one treats you like you.
+        This is where you build the profile. You answer questions about how you work, and the tool turns your answers into a file.
       </p>
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 20px" }}>
-        Answer questions about what energizes you, what shuts you down, and how you take in information. You get a profile file. Paste it into any AI you use. That AI will then respond in ways that match how you work.
+        Paste that file into any AI you use. It stops guessing how to help you and starts with what you already told it.
       </p>
       <SuiteOrder />
       {wasMigrated && (
@@ -266,7 +266,7 @@ function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void;
         </p>
       )}
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 10px" }}>
-        15 to 20 minutes. Stop whenever. Skip anything you do not want to answer.
+        15 to 20 minutes. You can stop whenever you want and pick up where you left off. Skip anything you don't want to answer.
       </p>
       <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: "0 0 36px" }}>
         Everything you answer stays in this browser, on this device. Nothing is uploaded or stored anywhere else.

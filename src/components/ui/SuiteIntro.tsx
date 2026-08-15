@@ -4,7 +4,7 @@ import { MetaLabel } from "./MetaLabel";
 const ORDER_STEPS = [
   {
     title: "Build context profile.",
-    body: "Names what activates you, what shuts you down, how you take in information.",
+    body: "Names how you work so your AI doesn't have to guess.",
   },
   {
     title: "Design a process.",
