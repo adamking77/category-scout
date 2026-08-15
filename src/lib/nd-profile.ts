@@ -3,6 +3,7 @@ import type {
   NDProfile,
   NDTrait,
   NDTraitManifestation,
+  NDStrength,
   ActivationPattern,
   ShutdownTrigger,
   TimePattern,
@@ -45,13 +46,15 @@ export function createEmptyNDProfile(): NDProfile {
     createdAt: now,
     updatedAt: now,
     name: "",
+    strengths: { selected: [], other: "" },
+    sovereignty: "",
     traits: { selected: [], other: "", manifestations: [], notes: "" },
-    activation: { patterns: [], patternOther: "", goodDayDescription: "" },
-    shutdown: { triggers: [], triggerOther: "", shutdownDescription: "" },
+    activation: { patterns: [], patternOther: "", goodDayDescription: "", patternCost: "" },
+    shutdown: { triggers: [], triggerOther: "", shutdownDescription: "", hiddenDemand: "", innerTyrant: "" },
     timeEnergy: { patterns: [], patternOther: "", activationWindows: "", unavailablePeriods: "" },
-    history: { triedSystems: "", whatWorked: "", whatFailed: "" },
+    history: { triedSystems: "", whatWorked: "", whatFailed: "", futility: "" },
     infoConditions: { density: null, formats: [], formatOther: "", supportConditions: [], conditionOther: "" },
-    baseline: { changedSinceYearAgo: "", expectedData: "" },
+    baseline: { changedSinceYearAgo: "", expectedData: "", variableCapacities: "" },
     gates: { today: null, notes: "" },
     lanes: { active: [], closedDoors: [] },
     roomSafety: "",
@@ -86,6 +89,11 @@ export function migrateNDProfile(raw: unknown): NDProfile {
     createdAt: str(candidate.createdAt) || fallback.createdAt,
     updatedAt: str(candidate.updatedAt) || fallback.updatedAt,
     name: str(candidate.name),
+    strengths: {
+      selected: (obj(candidate.strengths).selected as NDStrength[] | undefined) ?? [],
+      other: str(obj(candidate.strengths).other),
+    },
+    sovereignty: str(candidate.sovereignty),
     traits: {
       selected: (obj(candidate.traits).selected as NDTrait[] | undefined) ?? [],
       other: str(obj(candidate.traits).other),
@@ -96,11 +104,14 @@ export function migrateNDProfile(raw: unknown): NDProfile {
       patterns: (obj(candidate.activation).patterns as ActivationPattern[] | undefined) ?? [],
       patternOther: str(obj(candidate.activation).patternOther),
       goodDayDescription: str(obj(candidate.activation).goodDayDescription),
+      patternCost: str(obj(candidate.activation).patternCost),
     },
     shutdown: {
       triggers: (obj(candidate.shutdown).triggers as ShutdownTrigger[] | undefined) ?? [],
       triggerOther: str(obj(candidate.shutdown).triggerOther),
       shutdownDescription: str(obj(candidate.shutdown).shutdownDescription),
+      hiddenDemand: str(obj(candidate.shutdown).hiddenDemand),
+      innerTyrant: str(obj(candidate.shutdown).innerTyrant),
     },
     timeEnergy: {
       patterns: (obj(candidate.timeEnergy).patterns as TimePattern[] | undefined) ?? [],
@@ -112,6 +123,7 @@ export function migrateNDProfile(raw: unknown): NDProfile {
       triedSystems: str(obj(candidate.history).triedSystems),
       whatWorked: str(obj(candidate.history).whatWorked),
       whatFailed: str(obj(candidate.history).whatFailed),
+      futility: str(obj(candidate.history).futility),
     },
     infoConditions: {
       density: (obj(candidate.infoConditions).density as InfoDensity | null | undefined) ?? null,
@@ -123,6 +135,7 @@ export function migrateNDProfile(raw: unknown): NDProfile {
     baseline: {
       changedSinceYearAgo: str(obj(candidate.baseline).changedSinceYearAgo),
       expectedData: str(obj(candidate.baseline).expectedData),
+      variableCapacities: str(obj(candidate.baseline).variableCapacities),
     },
     gates: {
       today: (obj(candidate.gates).today as GateState | null | undefined) ?? null,
@@ -155,6 +168,14 @@ export const TRAIT_LABELS: Record<NDTrait, string> = {
   dyslexia: "Dyslexia",
   dyscalculia: "Dyscalculia",
   sensory: "Sensory processing differences",
+};
+
+export const STRENGTH_LABELS: Record<NDStrength, string> = {
+  "pattern-recognition": "I see patterns other people miss",
+  "structural-perception": "I can read people and systems structurally",
+  "deep-dive": "I go deeper than almost anyone on what interests me",
+  "blunt-honesty": "I'm honest in a way that unsettles people but is true",
+  other: "Something else",
 };
 
 export const MANIFESTATION_LABELS: Record<NDTraitManifestation, string> = {
@@ -521,6 +542,15 @@ function buildAgentInstructions(profile: NDProfile): string {
     lines.push("");
   }
 
+  const strengthLabels = profile.strengths.selected
+    .filter((s) => s !== "other")
+    .map((s) => STRENGTH_LABELS[s]);
+  if (profile.strengths.other.trim()) strengthLabels.push(profile.strengths.other.trim());
+  if (strengthLabels.length > 0) {
+    lines.push(`**Where their wiring helps:**\n${listItems(strengthLabels)}`);
+    lines.push("");
+  }
+
   if (hasPDA) {
     lines.push("**Demand framing matters most.** Use invitations, not instructions. \"You could try\" or \"one option is\" lands very differently than \"you should\" or \"your next step is\". Even tasks this person wants to do can become blocked when framed as obligations. Don't create urgency cues, don't imply they're behind, don't pile on tasks.");
     lines.push("");
@@ -591,6 +621,11 @@ function buildAgentInstructions(profile: NDProfile): string {
   if (profile.shutdown.triggerOther.trim()) shutdownTriggers.push(profile.shutdown.triggerOther.trim());
   if (shutdownTriggers.length > 0) {
     lines.push(`**What to avoid recommending:**\n${listItems(shutdownTriggers)}`);
+    lines.push("");
+  }
+
+  if (profile.history.futility.trim()) {
+    lines.push(`**Never recommend from the futility list.** This person has catalogued these paths as dead: ${profile.history.futility.trim()} Recommending them reads as not listening. Do not suggest them, even framed as 'maybe try again differently'.`);
     lines.push("");
   }
 

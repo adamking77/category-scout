@@ -6,6 +6,7 @@ import {
   buildNDProfileMarkdown,
   buildNDProfileContext,
   TRAIT_LABELS,
+  STRENGTH_LABELS,
   TIME_PATTERN_LABELS,
   INFO_DENSITY_LABELS,
   INFO_FORMAT_LABELS,
@@ -129,6 +130,10 @@ export function ContextProfileOutput({
     ...profile.traits.selected.map((t) => TRAIT_LABELS[t]),
     ...(profile.traits.other.trim() ? [profile.traits.other.trim()] : []),
   ];
+  const strengthLabels = [
+    ...profile.strengths.selected.filter((s) => s !== "other").map((s) => STRENGTH_LABELS[s]),
+    ...(profile.strengths.other.trim() ? [profile.strengths.other.trim()] : []),
+  ];
   const timePatterns = [
     ...profile.timeEnergy.patterns.filter((p) => p !== "other").map((p) => TIME_PATTERN_LABELS[p]),
     ...(profile.timeEnergy.patternOther.trim() ? [profile.timeEnergy.patternOther.trim()] : []),
@@ -145,7 +150,8 @@ export function ContextProfileOutput({
   const hasHistory =
     profile.history.triedSystems.trim() ||
     profile.history.whatWorked.trim() ||
-    profile.history.whatFailed.trim();
+    profile.history.whatFailed.trim() ||
+    profile.history.futility.trim();
 
   const agentBrief = context.agentGuidance.trim();
 
@@ -214,6 +220,24 @@ export function ContextProfileOutput({
       {/* LEAD — the one thing to take away. */}
       {lead && <LeadTakeaway kind={lead.kind}>{lead.text}</LeadTakeaway>}
 
+      {strengthLabels.length > 0 && (
+        <div>
+          <MetaLabel style={{ marginBottom: 12 }}>What your wiring is unusually good at</MetaLabel>
+          <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
+            {strengthLabels.join(", ")}
+          </p>
+        </div>
+      )}
+
+      {profile.sovereignty.trim() && (
+        <div>
+          <MetaLabel style={{ marginBottom: 12 }}>Sovereignty</MetaLabel>
+          <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
+            {profile.sovereignty.trim()}
+          </p>
+        </div>
+      )}
+
       {/* SHAPE — the radar of how they're wired. */}
       <div>
         <SectionHeading marginBottom={8}>How you're wired</SectionHeading>
@@ -222,6 +246,15 @@ export function ContextProfileOutput({
         </p>
         <ProfileBars axes={radar} />
       </div>
+
+      {profile.activation.patternCost.trim() && (
+        <div>
+          <MetaLabel style={{ marginBottom: 12 }}>What the sharpness costs</MetaLabel>
+          <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
+            {profile.activation.patternCost.trim()}
+          </p>
+        </div>
+      )}
 
       {/* SUPPORTING INSIGHTS — stacked, even, breathing room. */}
       {supporting.length > 0 && (
@@ -260,6 +293,27 @@ export function ContextProfileOutput({
         </div>
       )}
 
+      {(profile.shutdown.hiddenDemand.trim() || profile.shutdown.innerTyrant.trim()) && (
+        <div style={{ display: "grid", gap: 32 }}>
+          {profile.shutdown.hiddenDemand.trim() && (
+            <div>
+              <MetaLabel style={{ marginBottom: 12 }}>What it might be refusing</MetaLabel>
+              <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
+                {profile.shutdown.hiddenDemand.trim()}
+              </p>
+            </div>
+          )}
+          {profile.shutdown.innerTyrant.trim() && (
+            <div>
+              <MetaLabel style={{ marginBottom: 12 }}>The standard it holds</MetaLabel>
+              <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
+                {profile.shutdown.innerTyrant.trim()}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* REFERENCE — quiet, secondary, stacked. Set apart by space alone. */}
       <div style={{ display: "grid", gap: 32 }}>
         <QuietRow label="Your neurotype">
@@ -276,7 +330,8 @@ export function ContextProfileOutput({
 
         {(timePatterns.length > 0 ||
           profile.timeEnergy.activationWindows.trim() ||
-          profile.timeEnergy.unavailablePeriods.trim()) && (
+          profile.timeEnergy.unavailablePeriods.trim() ||
+          profile.baseline.variableCapacities.trim()) && (
           <QuietRow label="Time and energy">
             {timePatterns.length > 0 && (
               <div style={{ marginBottom: 12 }}>
@@ -291,6 +346,11 @@ export function ContextProfileOutput({
             {profile.timeEnergy.unavailablePeriods.trim() && (
               <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
                 <strong style={{ color: "var(--ink)" }}>Protected downtime:</strong> {profile.timeEnergy.unavailablePeriods.trim()}
+              </p>
+            )}
+            {profile.baseline.variableCapacities.trim() && (
+              <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
+                <strong style={{ color: "var(--ink)" }}>Unreliable day to day:</strong> {profile.baseline.variableCapacities.trim()}
               </p>
             )}
           </QuietRow>
@@ -332,6 +392,11 @@ export function ContextProfileOutput({
               {profile.history.whatFailed.trim() && (
                 <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
                   <strong style={{ color: "var(--ink)" }}>Fell apart:</strong> {profile.history.whatFailed.trim()}
+                </p>
+              )}
+              {profile.history.futility.trim() && (
+                <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
+                  <strong style={{ color: "var(--ink)" }}>Futility history:</strong> {profile.history.futility.trim()}
                 </p>
               )}
             </div>

@@ -335,6 +335,8 @@ export type NDTraitManifestation =
   | "sensory-light"
   | "sensory-environment";
 
+export type NDStrength = "pattern-recognition" | "structural-perception" | "deep-dive" | "blunt-honesty" | "other";
+
 export type ActivationPattern =
   | "novelty"
   | "deadline"
@@ -397,6 +399,11 @@ export interface NDProfile {
   createdAt: string;
   updatedAt: string;
   name: string;
+  strengths: {
+    selected: NDStrength[];
+    other: string;
+  };
+  sovereignty: string;
   traits: {
     selected: NDTrait[];
     other: string;
@@ -407,11 +414,14 @@ export interface NDProfile {
     patterns: ActivationPattern[];
     patternOther: string;
     goodDayDescription: string;
+    patternCost: string;
   };
   shutdown: {
     triggers: ShutdownTrigger[];
     triggerOther: string;
     shutdownDescription: string;
+    hiddenDemand: string;
+    innerTyrant: string;
   };
   timeEnergy: {
     patterns: TimePattern[];
@@ -423,6 +433,7 @@ export interface NDProfile {
     triedSystems: string;
     whatWorked: string;
     whatFailed: string;
+    futility: string;
   };
   infoConditions: {
     density: InfoDensity | null;
@@ -434,6 +445,7 @@ export interface NDProfile {
   baseline: {
     changedSinceYearAgo: string;
     expectedData: string;
+    variableCapacities: string;
   };
   gates: {
     today: GateState | null;

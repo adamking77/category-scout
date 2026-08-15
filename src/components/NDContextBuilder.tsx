@@ -7,6 +7,7 @@ import type {
   NDProfile,
   NDTrait,
   NDTraitManifestation,
+  NDStrength,
   ActivationPattern,
   ShutdownTrigger,
   TimePattern,
@@ -21,6 +22,7 @@ import {
   saveNDProfile,
   clearNDProfile,
   TRAIT_LABELS,
+  STRENGTH_LABELS,
   MANIFESTATION_LABELS,
   MANIFESTATIONS_BY_TRAIT,
   ACTIVATION_LABELS,
@@ -310,12 +312,14 @@ function GateStep({
   profile,
   onChange,
   onNameChange,
+  onSovereigntyChange,
   onBack,
   onContinue,
 }: {
   profile: NDProfile;
   onChange: (update: Partial<NDProfile["gates"]>) => void;
   onNameChange: (value: string) => void;
+  onSovereigntyChange: (value: string) => void;
   onBack: () => void;
   onContinue: () => void;
 }) {
@@ -355,6 +359,18 @@ function GateStep({
         <FieldHint>This is what shows at the top of your profile. Use whatever name you want here.</FieldHint>
       </Field>
 
+      <Field>
+        <MetaLabel size="section">What does sovereignty look like for you, right now?</MetaLabel>
+        <textarea
+          value={profile.sovereignty}
+          onChange={(e) => onSovereigntyChange(e.target.value)}
+          placeholder="Not the answer you wish were true. The honest one. A week, a season, a year."
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>The shape of I am allowed to do this and not that, in your own words. Everything else in the profile sits on top of it.</FieldHint>
+      </Field>
+
       <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Continue" />
     </div>
   );
@@ -364,16 +380,20 @@ function GateStep({
 function TraitsStep({
   profile,
   onChange,
+  onStrengthsChange,
   onBack,
   onContinue,
 }: {
   profile: NDProfile;
   onChange: (update: Partial<NDProfile["traits"]>) => void;
+  onStrengthsChange: (update: Partial<NDProfile["strengths"]>) => void;
   onBack: () => void;
   onContinue: () => void;
 }) {
   const traitOptions = (Object.entries(TRAIT_LABELS) as [NDTrait, string][]).map(([value, label]) => ({ value, label }));
   const selected = profile.traits.selected;
+  const strengthOptions = (Object.entries(STRENGTH_LABELS) as [NDStrength, string][]).map(([value, label]) => ({ value, label }));
+  const showStrengthOther = profile.strengths.selected.includes("other");
 
   function toggleTrait(trait: NDTrait, checked: boolean) {
     const next = checked ? [...selected, trait] : selected.filter((t) => t !== trait);
@@ -384,6 +404,12 @@ function TraitsStep({
     const current = profile.traits.manifestations;
     const next = checked ? [...current, m] : current.filter((x) => x !== m);
     onChange({ manifestations: next });
+  }
+
+  function toggleStrength(s: NDStrength, checked: boolean) {
+    const current = profile.strengths.selected;
+    const next = checked ? [...current, s] : current.filter((x) => x !== s);
+    onStrengthsChange({ selected: next });
   }
 
   return (
@@ -429,6 +455,23 @@ function TraitsStep({
           ))}
         </div>
       )}
+
+      <Field>
+        <MetaLabel size="section">What is your wiring unusually good at?</MetaLabel>
+        <CheckGroup options={strengthOptions} selected={profile.strengths.selected} onChange={toggleStrength} />
+        {showStrengthOther && (
+          <div style={{ marginTop: 12 }}>
+            <input
+              type="text"
+              value={profile.strengths.other}
+              onChange={(e) => onStrengthsChange({ other: e.target.value })}
+              placeholder="Something else you're good at"
+              style={{ fontSize: 13, padding: "9px 12px" }}
+            />
+          </div>
+        )}
+        <FieldHint>The tool collects your triggers and your hard days. This is the other side: what your brain is built for. It changes how the profile reads.</FieldHint>
+      </Field>
 
       <Field>
         <MetaLabel size="section">Anything else about how these show up for you?</MetaLabel>
@@ -503,6 +546,18 @@ function ActivationStep({
         <FieldHint>Describe what it actually looks like when work is going well. Not the ideal version; the real one.</FieldHint>
       </Field>
 
+      <Field>
+        <MetaLabel size="section">What does your pattern recognition cost you socially?</MetaLabel>
+        <textarea
+          value={profile.activation.patternCost}
+          onChange={(e) => onChange({ patternCost: e.target.value })}
+          placeholder="The same sharpness that does the work is also what isolates. Name it once."
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>Optional. This is the field that names the specific loneliness. It's allowed to be honest here.</FieldHint>
+      </Field>
+
       <StepNav onBack={onBack} onContinue={onContinue} />
     </div>
   );
@@ -567,6 +622,30 @@ function ShutdownStep({
         />
         <FieldHint>Some people describe it as pressing the gas and the brake at the same time: wanting to move and being unable. When you freeze, it's rarely about the task on the surface. Something underneath the task is what your system is refusing.</FieldHint>
         <FieldHint>Optional. The more specific you are, the more useful to the agents that read it.</FieldHint>
+      </Field>
+
+      <Field>
+        <MetaLabel size="section">What demand is the system actually refusing, one you might not see on the surface?</MetaLabel>
+        <textarea
+          value={profile.shutdown.hiddenDemand}
+          onChange={(e) => onChange({ hiddenDemand: e.target.value })}
+          placeholder="Often the visible thing is not the thing. The email looks like the email. The demand is what the email implies."
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>Optional. You may not see it yet. That's fine. Notice what you can.</FieldHint>
+      </Field>
+
+      <Field>
+        <MetaLabel size="section">What standard do you hold yourself to that you would never hold another person to?</MetaLabel>
+        <textarea
+          value={profile.shutdown.innerTyrant}
+          onChange={(e) => onChange({ innerTyrant: e.target.value })}
+          placeholder="The one that runs in the background. The one that calls a flawed outcome inferior."
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>This is the voice that demands a flawless performance. Naming it lets you hear it before it runs the show.</FieldHint>
       </Field>
 
       <Field>
@@ -756,6 +835,18 @@ function TimeStep({
         <FieldHint>The target is a new baseline, not getting back to the old one. If rest doesn't restore the way it used to, that's expected.</FieldHint>
       </Field>
 
+      <Field>
+        <MetaLabel size="section">Which of your abilities are unreliable day to day?</MetaLabel>
+        <textarea
+          value={profile.baseline.variableCapacities}
+          onChange={(e) => onBaselineChange({ variableCapacities: e.target.value })}
+          placeholder="Focus, words, physical skills, memory, energy. What's there some days and missing others?"
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>Not what's permanently gone. What's there some days and missing others. Naming them makes them data, not failure.</FieldHint>
+      </Field>
+
       <StepNav onBack={onBack} onContinue={onContinue} />
     </div>
   );
@@ -813,6 +904,18 @@ function HistoryStep({
           style={{ fontSize: 13 }}
         />
         <FieldHint>If what you've tried has mostly failed, this step is for naming the pattern, not for blaming yourself. Did the system fail you, or did your capacity to maintain it fail? Those are different patterns with different fixes.</FieldHint>
+      </Field>
+
+      <Field>
+        <MetaLabel size="section">What have you tried so many times that even thinking about it feels pointless now?</MetaLabel>
+        <textarea
+          value={profile.history.futility}
+          onChange={(e) => onChange({ futility: e.target.value })}
+          placeholder="The paths that don't just feel hard anymore. The ones that feel dead."
+          rows={3}
+          style={{ fontSize: 13 }}
+        />
+        <FieldHint>These get recorded separately from ordinary avoidances. The agent needs to know never to recommend them.</FieldHint>
       </Field>
 
       <Field>
@@ -1043,6 +1146,14 @@ export function NDContextBuilder() {
     setProfile((p) => ({ ...p, notDoing }));
   }, []);
 
+  const updateStrengths = useCallback((update: Partial<NDProfile["strengths"]>) => {
+    setProfile((p) => ({ ...p, strengths: { ...p.strengths, ...update } }));
+  }, []);
+
+  const updateSovereignty = useCallback((sovereignty: string) => {
+    setProfile((p) => ({ ...p, sovereignty }));
+  }, []);
+
   const updateLanes = useCallback((update: Partial<NDProfile["lanes"]>) => {
     setProfile((p) => ({ ...p, lanes: { ...p.lanes, ...update } }));
   }, []);
@@ -1185,12 +1296,12 @@ export function NDContextBuilder() {
         )}
         {step === "gate" && (
           <motion.div key="gate" {...stepMotion}>
-            <GateStep profile={profile} onChange={updateGates} onNameChange={updateName} onBack={back} onContinue={next} />
+            <GateStep profile={profile} onChange={updateGates} onNameChange={updateName} onSovereigntyChange={updateSovereignty} onBack={back} onContinue={next} />
           </motion.div>
         )}
         {step === "traits" && (
           <motion.div key="traits" {...stepMotion}>
-            <TraitsStep profile={profile} onChange={updateTraits} onBack={back} onContinue={next} />
+            <TraitsStep profile={profile} onChange={updateTraits} onStrengthsChange={updateStrengths} onBack={back} onContinue={next} />
           </motion.div>
         )}
         {step === "activation" && (
