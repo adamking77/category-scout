@@ -355,6 +355,8 @@ export type ShutdownTrigger =
   | "social-posting"
   | "blank-page"
   | "waiting"
+  | "not-believed"
+  | "self-imposed-demands"
   | "other";
 
 export type TimePattern =
@@ -385,6 +387,7 @@ export type SupportCondition =
   | "movement"
   | "routine"
   | "low-stakes-start"
+  | "delegation"
   | "other";
 
 export type GateState = "bored" | "confused" | "heavy" | "panicked" | "clear";

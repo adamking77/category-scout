@@ -216,6 +216,8 @@ export const SHUTDOWN_LABELS: Record<ShutdownTrigger, string> = {
   "social-posting": "Posting on social media",
   "blank-page": "Starting from a completely blank page",
   "waiting": "Waiting for someone else to respond before I can proceed",
+  "not-believed": "Not being believed: having to argue for my own perception or experience",
+  "self-imposed-demands": "My own goals or internal deadlines: even things I want to do can get blocked when they feel demanded",
   other: "Something else",
 };
 
@@ -254,6 +256,7 @@ export const SUPPORT_CONDITION_LABELS: Record<SupportCondition, string> = {
   movement: "Movement (walking, pacing, fidgeting)",
   routine: "A consistent starting ritual or routine",
   "low-stakes-start": "Starting with something easy or low-stakes to build momentum",
+  delegation: "Another person handles the outward-facing parts (outreach, follow-up, relationship maintenance)",
   other: "Something else",
 };
 
