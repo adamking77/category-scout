@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, type Transition } from "framer-motion";
 import { PencilSimple, Plus, Trash, X } from "@phosphor-icons/react";
 import { MetaLabel, SectionNumber } from "./ui";
 
@@ -151,6 +151,11 @@ export function ProjectDrawer({
   editName: string;
   onEditNameChange: (value: string) => void;
 }) {
+  const prefersReduced = useReducedMotion();
+  const drawerTransition: Transition = prefersReduced
+    ? { duration: 0.01 }
+    : { type: "spring", stiffness: 300, damping: 28 };
+
   return (
     <AnimatePresence>
       {open && (
@@ -159,7 +164,7 @@ export function ProjectDrawer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: prefersReduced ? 0.01 : 0.15 }}
             onClick={onClose}
             style={{
               position: "fixed",
@@ -172,7 +177,7 @@ export function ProjectDrawer({
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 300, damping: 28 }}
+            transition={drawerTransition}
             style={{
               position: "fixed",
               top: 0,

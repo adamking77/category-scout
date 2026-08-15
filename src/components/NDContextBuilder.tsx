@@ -998,6 +998,15 @@ export function NDContextBuilder() {
   const prefersReduced = useReducedMotion();
   const stepFade = prefersReduced ? 0.01 : 0.2;
 
+  // Shared motion props for the per-step keyed wrappers. Opacity only, no
+  // translate or stagger — a slide would fight the scroll-into-view.
+  const stepMotion = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: stepFade },
+  };
+
   // Auto-save whenever profile changes (not on intro/done steps)
   useEffect(() => {
     if (step !== "intro") {
@@ -1164,44 +1173,56 @@ export function NDContextBuilder() {
       )}
 
       <AnimatePresence mode="wait">
-        <motion.div
-          key={step}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: stepFade }}
-        >
-          {step === "intro" && (
+        {step === "intro" && (
+          <motion.div key="intro" {...stepMotion}>
             <IntroStep onBegin={() => goToStep("gate")} hasExisting={hasExisting} wasMigrated={wasMigrated} />
-          )}
-      {step === "gate" && (
-        <GateStep profile={profile} onChange={updateGates} onNameChange={updateName} onBack={back} onContinue={next} />
-      )}
-      {step === "traits" && (
-        <TraitsStep profile={profile} onChange={updateTraits} onBack={back} onContinue={next} />
-      )}
-      {step === "activation" && (
-        <ActivationStep profile={profile} onChange={updateActivation} onBack={back} onContinue={next} />
-      )}
-      {step === "shutdown" && (
-        <ShutdownStep profile={profile} onChange={updateShutdown} onNotDoingChange={updateNotDoing} onBack={back} onContinue={next} />
-      )}
-      {step === "focus" && (
-        <FocusStep profile={profile} onLanesChange={updateLanes} onRoomSafetyChange={updateRoomSafety} onBack={back} onContinue={next} />
-      )}
-      {step === "time" && (
-        <TimeStep profile={profile} onChange={updateTimeEnergy} onBaselineChange={updateBaseline} onBack={back} onContinue={next} />
-      )}
-      {step === "history" && (
-        <HistoryStep profile={profile} onChange={updateHistory} onInvisibleLaborChange={updateInvisibleLabor} onBack={back} onContinue={next} />
-      )}
-      {step === "info" && (
-        <InfoStep profile={profile} onChange={updateInfoConditions} onBack={back} onContinue={next} />
-      )}
-      {step === "done" && (
-        <DoneStep profile={profile} onRestart={handleRestart} onCancelRestart={() => setRestartArmed(false)} restartArmed={restartArmed} onBack={back} />
-      )}
-        </motion.div>
+          </motion.div>
+        )}
+        {step === "gate" && (
+          <motion.div key="gate" {...stepMotion}>
+            <GateStep profile={profile} onChange={updateGates} onNameChange={updateName} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "traits" && (
+          <motion.div key="traits" {...stepMotion}>
+            <TraitsStep profile={profile} onChange={updateTraits} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "activation" && (
+          <motion.div key="activation" {...stepMotion}>
+            <ActivationStep profile={profile} onChange={updateActivation} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "shutdown" && (
+          <motion.div key="shutdown" {...stepMotion}>
+            <ShutdownStep profile={profile} onChange={updateShutdown} onNotDoingChange={updateNotDoing} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "focus" && (
+          <motion.div key="focus" {...stepMotion}>
+            <FocusStep profile={profile} onLanesChange={updateLanes} onRoomSafetyChange={updateRoomSafety} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "time" && (
+          <motion.div key="time" {...stepMotion}>
+            <TimeStep profile={profile} onChange={updateTimeEnergy} onBaselineChange={updateBaseline} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "history" && (
+          <motion.div key="history" {...stepMotion}>
+            <HistoryStep profile={profile} onChange={updateHistory} onInvisibleLaborChange={updateInvisibleLabor} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "info" && (
+          <motion.div key="info" {...stepMotion}>
+            <InfoStep profile={profile} onChange={updateInfoConditions} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "done" && (
+          <motion.div key="done" {...stepMotion}>
+            <DoneStep profile={profile} onRestart={handleRestart} onCancelRestart={() => setRestartArmed(false)} restartArmed={restartArmed} onBack={back} />
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );

@@ -82,6 +82,15 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
   const prefersReduced = useReducedMotion();
   const stepFade = prefersReduced ? 0.01 : 0.2;
 
+  // Shared motion props for the per-step keyed wrappers. Opacity only, no
+  // translate or stagger — a slide would fight the scroll-into-view.
+  const stepMotion = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: stepFade },
+  };
+
   // The tool sits below site chrome, so an absolute scroll-to-top lands the
   // user on the page header, not the form. Scroll the step content to the top
   // of the viewport instead, so the next step appears in place.
@@ -255,14 +264,8 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
       )}
 
       <AnimatePresence mode="wait">
-        <motion.div
-          key={step}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: stepFade }}
-        >
-          {step === "intro" && (
+        {step === "intro" && (
+          <motion.div key="intro" {...stepMotion}>
             <IntroStep
               onBegin={() => goToStep("goal")}
               onStartFresh={handleStartFresh}
@@ -275,48 +278,56 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
               onRenameArtifact={handleRenameArtifact}
               onDeleteArtifact={handleDeleteArtifact}
             />
-          )}
-      {step === "goal" && (
-        <GoalStep inputs={inputs} onChange={updateInputs} onBack={back} onContinue={next} />
-      )}
-      {step === "context" && (
-        <ContextStep
-          inputs={inputs}
-          onChange={updateInputs}
-          onBack={back}
-          onContinue={next}
-          profileContext={profileContext}
-        />
-      )}
-      {step === "boundaries" && (
-        <BoundariesStep inputs={inputs} onChange={updateInputs} onBack={back} onContinue={finish} />
-      )}
-      {step === "done" && (
-        <DoneStep
-          plan={plan}
-          copiedBrief={copiedBrief}
-          onCopyBrief={handleCopyBrief}
-          onDownload={() => {
-            const blob = new Blob([markdown], { type: "text/markdown" });
-            const anchor = document.createElement("a");
-            anchor.href = URL.createObjectURL(blob);
-            anchor.download = artifactMarkdownFileName("process");
-            anchor.click();
-            URL.revokeObjectURL(anchor.href);
-          }}
-          onSaveAsNew={handleSaveAsNew}
-          onRestart={handleRestart}
-          restartArmed={restartArmed}
-          onCancelRestart={() => setRestartArmed(false)}
-          onBack={back}
-          artifacts={artifacts}
-          currentArtifactId={currentArtifactId}
-          onOpenArtifact={handleOpenArtifact}
-          onRenameArtifact={handleRenameArtifact}
-          onDeleteArtifact={handleDeleteArtifact}
-        />
-      )}
-        </motion.div>
+          </motion.div>
+        )}
+        {step === "goal" && (
+          <motion.div key="goal" {...stepMotion}>
+            <GoalStep inputs={inputs} onChange={updateInputs} onBack={back} onContinue={next} />
+          </motion.div>
+        )}
+        {step === "context" && (
+          <motion.div key="context" {...stepMotion}>
+            <ContextStep
+              inputs={inputs}
+              onChange={updateInputs}
+              onBack={back}
+              onContinue={next}
+              profileContext={profileContext}
+            />
+          </motion.div>
+        )}
+        {step === "boundaries" && (
+          <motion.div key="boundaries" {...stepMotion}>
+            <BoundariesStep inputs={inputs} onChange={updateInputs} onBack={back} onContinue={finish} />
+          </motion.div>
+        )}
+        {step === "done" && (
+          <motion.div key="done" {...stepMotion}>
+            <DoneStep
+              plan={plan}
+              copiedBrief={copiedBrief}
+              onCopyBrief={handleCopyBrief}
+              onDownload={() => {
+                const blob = new Blob([markdown], { type: "text/markdown" });
+                const anchor = document.createElement("a");
+                anchor.href = URL.createObjectURL(blob);
+                anchor.download = artifactMarkdownFileName("process");
+                anchor.click();
+                URL.revokeObjectURL(anchor.href);
+              }}
+              onSaveAsNew={handleSaveAsNew}
+              onRestart={handleRestart}
+              restartArmed={restartArmed}
+              onCancelRestart={() => setRestartArmed(false)}
+              onBack={back}
+              artifacts={artifacts}
+              currentArtifactId={currentArtifactId}
+              onOpenArtifact={handleOpenArtifact}
+              onRenameArtifact={handleRenameArtifact}
+              onDeleteArtifact={handleDeleteArtifact}
+            />
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
