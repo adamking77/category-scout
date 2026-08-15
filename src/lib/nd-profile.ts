@@ -412,7 +412,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   // Lanes and closed doors
   const laneLines: string[] = [];
   if (profile.lanes.active.length > 0) {
-    laneLines.push("**Active lanes (what I'm keeping in play):**");
+    laneLines.push("**Active lanes (what I'm actively working on):**");
     laneLines.push(...profile.lanes.active.map((lane) => `- ${lane}`));
   }
   if (profile.lanes.closedDoors.length > 0) {

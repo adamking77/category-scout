@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, PencilSimple, Trash } from "@phosphor-icons/react";
 import { MetaLabel, PrimaryButton } from "./ui";
 import { ProcessArtifactOutput } from "./output/ProcessArtifactOutput";
@@ -75,9 +75,21 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
     setArtifacts(listProcessArtifacts());
   }, []);
 
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // The tool sits below site chrome, so an absolute scroll-to-top lands the
+  // user on the page header, not the form. Scroll the step content to the top
+  // of the viewport instead, so the next step appears in place.
+  function scrollStepIntoView() {
+    const el = contentRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 20;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }
+
   function goToStep(id: StepId) {
     setStep(id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollStepIntoView();
   }
 
   function next() {
@@ -174,7 +186,7 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
   const formStepCount = STEP_ORDER.length - 2;
 
   return (
-    <div>
+    <div ref={contentRef}>
       {step !== "intro" && (
         <div style={{ marginBottom: 36 }}>
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 6 }}>
@@ -191,7 +203,7 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
               {STEP_LABELS[step]}
             </h2>
             {isFormStep && formStepIndex !== null && (
-              <span className="mono" style={{ fontSize: 9, color: "var(--ink-muted)", opacity: 0.5 }}>
+              <span className="mono" style={{ fontSize: 11, color: "var(--ink-muted)" }}>
                 {formStepIndex} of {formStepCount}
               </span>
             )}
@@ -310,20 +322,50 @@ function IntroStep({
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 12px" }}>
         About 5 minutes. Stop whenever.
       </p>
-      <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: "0 0 36px" }}>
-        {hasProfile
-          ? "Your profile is loaded. The process will match how you work."
-          : "No profile found. This will still work. It will ask a few extra questions to fill the gap. Build your profile first if you want the process shaped around you from the start."}
-      </p>
+      {hasProfile ? (
+        <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 36px", maxWidth: 560 }}>
+          Your profile is loaded, so the process will match how you work.
+        </p>
+      ) : (
+        <div
+          style={{
+            border: "1px solid rgba(91, 138, 138, 0.3)",
+            background: "rgba(91, 138, 138, 0.06)",
+            borderRadius: 12,
+            padding: "18px 20px",
+            margin: "0 0 36px",
+          }}
+        >
+          <p style={{ fontSize: 15, fontWeight: 500, color: "var(--ink)", lineHeight: 1.4, margin: "0 0 6px" }}>
+            Start with your profile
+          </p>
+          <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: 0, maxWidth: 560 }}>
+            The process is shaped around how you actually work. Build your profile first, then come straight back here. Without it, this tool asks a few extra questions to fill the gap.
+          </p>
+        </div>
+      )}
       <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", marginBottom: hasSavedProcesses ? 40 : 0 }}>
-        <PrimaryButton onClick={onBegin}>
-          {hasExisting ? "Continue where I left off" : "Begin"}
-        </PrimaryButton>
-        <button onClick={onOpenContextBuilder} className="btn-text" style={{ fontSize: 12, color: "var(--ink-muted)" }}>
-          {hasProfile ? "Update profile" : "Open Context Builder first"}
-        </button>
+        {hasProfile ? (
+          <>
+            <PrimaryButton onClick={onBegin}>
+              {hasExisting ? "Continue where I left off" : "Begin"}
+            </PrimaryButton>
+            <button onClick={onOpenContextBuilder} className="btn-text" style={{ fontSize: 14, color: "var(--ink)" }}>
+              Update profile
+            </button>
+          </>
+        ) : (
+          <>
+            <PrimaryButton onClick={onOpenContextBuilder}>
+              Build your profile first
+            </PrimaryButton>
+            <button onClick={onBegin} className="btn-text" style={{ fontSize: 14, color: "var(--ink)" }}>
+              Begin without a profile
+            </button>
+          </>
+        )}
         {hasExisting && (
-          <button onClick={onStartFresh} className="btn-text" style={{ fontSize: 12, color: "var(--ink-muted)" }}>
+          <button onClick={onStartFresh} className="btn-text" style={{ fontSize: 14, color: "var(--ink)" }}>
             Start fresh
           </button>
         )}
@@ -605,7 +647,7 @@ function SavedProcessesSection({
                     {artifact.name}
                     {isCurrent ? " (current)" : ""}
                   </p>
-                  <p className="mono" style={{ fontSize: 9, color: "var(--ink-muted)", opacity: 0.6, margin: 0 }}>
+                  <p className="mono" style={{ fontSize: 11, color: "var(--ink-muted)", margin: 0 }}>
                     Updated {new Date(artifact.updatedAt).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
                   </p>
                 </div>

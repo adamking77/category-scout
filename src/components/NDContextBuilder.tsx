@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { MetaLabel, PrimaryButton } from "./ui";
 import { ContextProfileOutput } from "./output/ContextProfileOutput";
@@ -500,6 +500,26 @@ function ShutdownStep({
   const shutdownOptions = (Object.entries(SHUTDOWN_LABELS) as [ShutdownTrigger, string][]).map(([value, label]) => ({ value, label }));
   const showOtherField = profile.shutdown.triggers.includes("other");
 
+  // Lanes are parsed on blur or continue, never on every keystroke. Parsing on
+  // change trims a trailing space out of state, so the space vanishes until
+  // the next letter makes it internal. The raw text stays in draft state while
+  // typing; the clean array is committed when the field is left.
+  const [draftActive, setDraftActive] = useState(() => profile.lanes.active.join("\n"));
+  const [draftClosed, setDraftClosed] = useState(() => profile.lanes.closedDoors.join("\n"));
+
+  function parseLanes(raw: string): string[] {
+    return raw.split("\n").map((s) => s.trim()).filter(Boolean);
+  }
+
+  function commitLanes() {
+    onLanesChange({ active: parseLanes(draftActive), closedDoors: parseLanes(draftClosed) });
+  }
+
+  function handleContinue() {
+    commitLanes();
+    onContinue();
+  }
+
   function toggleTrigger(t: ShutdownTrigger, checked: boolean) {
     const next = checked
       ? [...profile.shutdown.triggers, t]
@@ -554,41 +574,44 @@ function ShutdownStep({
       </Field>
 
       <Field>
-        <MetaLabel size="section">What are you keeping in play right now?</MetaLabel>
+        <MetaLabel size="section">What are you actively working on right now?</MetaLabel>
         <textarea
-          value={profile.lanes.active.join("\n")}
-          onChange={(e) => onLanesChange({ active: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })}
-          placeholder="One to three lanes. The things you're actually committed to. One per line"
+          value={draftActive}
+          onChange={(e) => setDraftActive(e.target.value)}
+          onBlur={() => onLanesChange({ active: parseLanes(draftActive) })}
+          placeholder={"One to three lanes. These are the things you are actually showing up for. One per line.\n\nExample: launching the spring newsletter\nExample: client work for Northwind\nExample: weekly long run"}
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>This person can do almost anything, so they commit to nothing. Naming one to three lanes defends the yes.</FieldHint>
+        <FieldHint>List one to three. An agent reading your profile will narrow to these when you ask for help with what to do next.</FieldHint>
       </Field>
 
       <Field>
-        <MetaLabel size="section">What are you closing the door on, for now?</MetaLabel>
+        <MetaLabel size="section">What are you setting aside, for now?</MetaLabel>
         <textarea
-          value={profile.lanes.closedDoors.join("\n")}
-          onChange={(e) => onLanesChange({ closedDoors: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) })}
-          placeholder="Named closed doors. It's okay for closing a door to hurt a little; that's the grief step"
+          value={draftClosed}
+          onChange={(e) => setDraftClosed(e.target.value)}
+          onBlur={() => onLanesChange({ closedDoors: parseLanes(draftClosed) })}
+          placeholder={"What you're choosing not to do for the next season. It is allowed to hurt to name these. That's the grief step.\n\nExample: not pitching new podcast guests this quarter\nExample: not re-platforming the site\nExample: not taking on a new retainer"}
           rows={3}
           style={{ fontSize: 13 }}
         />
+        <FieldHint>This is the section that makes the yes possible. Skip it and the active lanes get crowded by the things you haven't named you're not doing.</FieldHint>
       </Field>
 
       <Field>
-        <MetaLabel size="section">What makes a space usable, and what breaks it?</MetaLabel>
+        <MetaLabel size="section">Which rooms are safe to be accurate in, and which ones aren't?</MetaLabel>
         <textarea
           value={profile.roomSafety}
           onChange={(e) => onRoomSafetyChange(e.target.value)}
-          placeholder="Per context. Which rooms, people, or settings are safe to be accurate in? What turns a space unusable?"
+          placeholder={"List them by room. People, settings, contexts. For each: is it safe to be precise here, or do you have to soften first?\n\nExample: 1:1 with my manager: safe to be precise\nExample: large team meetings: have to soften first\nExample: solo writing at night: safe to be precise\nExample: DMs from strangers: unsafe, do not engage"}
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>Room safety is context, not character. Agents that read your profile calibrate expectations per room.</FieldHint>
+        <FieldHint>This is per room, not a fixed trait. Agents that read your profile treat each context as its own room.</FieldHint>
       </Field>
 
-      <StepNav onBack={onBack} onContinue={onContinue} />
+      <StepNav onBack={onBack} onContinue={handleContinue} />
     </div>
   );
 }
@@ -956,9 +979,21 @@ export function NDContextBuilder() {
     setProfile((p) => ({ ...p, infoConditions: { ...p.infoConditions, ...update } }));
   }, []);
 
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // The tool sits below site chrome, so an absolute scroll-to-top lands the
+  // user on the page header, not the form. Scroll the step content to the top
+  // of the viewport instead, so the next step appears in place.
+  function scrollStepIntoView() {
+    const el = contentRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 20;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }
+
   function goToStep(id: StepId) {
     setStep(id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollStepIntoView();
   }
 
   function next() {
@@ -989,7 +1024,7 @@ export function NDContextBuilder() {
   const formStepCount = STEP_ORDER.length - 2; // exclude intro and done
 
   return (
-    <div>
+    <div ref={contentRef}>
       {step !== "intro" && (
         <div style={{ marginBottom: 36 }}>
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 6 }}>
@@ -1004,7 +1039,7 @@ export function NDContextBuilder() {
               {STEP_LABELS[step]}
             </h2>
             {isFormStep && formStepIndex !== null && (
-              <span className="mono" style={{ fontSize: 9, color: "var(--ink-muted)", opacity: 0.5 }}>
+              <span className="mono" style={{ fontSize: 11, color: "var(--ink-muted)" }}>
                 {formStepIndex} of {formStepCount}
               </span>
             )}
