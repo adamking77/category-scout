@@ -32,21 +32,31 @@ export default function App({
       {!embedded ? (
         <>
           <div style={{ maxWidth: 640, margin: "0 0 56px" }}>
-          <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
-            AI is the most adaptive partner neurodivergent people have ever had access to. The problem is context: it doesn't know your activation patterns, what causes shutdown, when you have real capacity, or what produces action versus paralysis. That context is hard to articulate, so it almost never gets in. NeuroDiv OS helps you build that full context and hand it to your AI, so every tool and every session responds to how you actually work.
-          </p>
-          <p style={{ fontSize: 14, color: "var(--ink-muted)", lineHeight: 1.7, margin: "12px 0 0" }}>
-            A tool for neurodivs by the neurodivs at{" "}
-            <a
-              href="https://gokart.studio"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "var(--teal-deep)" }}
-            >
-              GoKart Studio
-            </a>
-          </p>
-        </div>
+            <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: 0 }}>
+              AI is the most adaptive partner neurodivergent people have ever had access to. But it doesn't know your activation patterns, what causes shutdown, or what produces action versus paralysis. That context is hard to articulate, so it almost never gets in.
+            </p>
+            <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "12px 0 0" }}>
+              NeuroDiv OS is two steps. Build a context profile that names how you work. Design a process shaped around that profile, organized by how you actually feel on a given day.
+            </p>
+            <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "12px 0 0" }}>
+              Both steps happen here. The{" "}
+              <a href={TOOL_ROUTES.skills} style={{ color: "var(--teal-deep)", textDecoration: "none" }}>
+                Skill Suite
+              </a>{" "}
+              is the same tools as downloadable files that run inside your own AI, so every conversation starts with the context you already built.
+            </p>
+            <p style={{ fontSize: 14, color: "var(--ink-muted)", lineHeight: 1.7, margin: "12px 0 0" }}>
+              A tool for neurodivs by the neurodivs at{" "}
+              <a
+                href="https://gokart.studio"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "var(--teal-deep)" }}
+              >
+                GoKart Studio
+              </a>
+            </p>
+          </div>
 
         <div
           style={{

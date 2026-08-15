@@ -10,16 +10,13 @@ const ORDER_STEPS = [
     title: "Design a process.",
     body: "One goal, shaped around your profile. Step menus for each working mode.",
   },
-  {
-    title: "Run a session.",
-    body: "Picks the next move based on today's energy, not a calendar.",
-  },
 ] as const;
 
 /**
  * The suite's recommended order, shown on every tool's intro step so the
  * relationship between the tools is explicit: profile first, then process,
- * then session. Recommended, never enforced.
+ * then the Skill Suite carries it into your own AI. Recommended, never
+ * enforced. The Session Loop is a skill, not a web-tool step.
  */
 export function SuiteOrder() {
   return (
