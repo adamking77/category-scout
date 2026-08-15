@@ -335,6 +335,26 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   const traitsSection = section("My Neurodivergent Profile", traitLines.join("\n"));
   if (traitsSection) parts.push(traitsSection);
 
+  // Strengths
+  const strengthLines: string[] = [];
+  const selectedStrengths = profile.strengths.selected
+    .filter((s) => s !== "other")
+    .map((s) => `- ${STRENGTH_LABELS[s]}`);
+  if (selectedStrengths.length > 0) {
+    strengthLines.push("**Where I'm sharp:**");
+    strengthLines.push(...selectedStrengths);
+  }
+  if (profile.strengths.other.trim()) {
+    strengthLines.push(`- ${profile.strengths.other.trim()}`);
+  }
+  const strengthsSection = section("What My Wiring Is Good At", strengthLines.join("\n"));
+  if (strengthsSection) parts.push(strengthsSection);
+
+  // Sovereignty
+  if (profile.sovereignty.trim()) {
+    parts.push(section("Sovereignty", `**What sovereignty looks like for me right now:**\n${profile.sovereignty.trim()}`));
+  }
+
   // Activation
   const activationLines: string[] = [];
   const activationPatterns = profile.activation.patterns
@@ -351,6 +371,11 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     if (activationLines.length > 0) activationLines.push("");
     activationLines.push("**What a good working session feels like:**");
     activationLines.push(profile.activation.goodDayDescription.trim());
+  }
+  if (profile.activation.patternCost.trim()) {
+    if (activationLines.length > 0) activationLines.push("");
+    activationLines.push("**What the sharpness costs:**");
+    activationLines.push(profile.activation.patternCost.trim());
   }
   const activationSection = section("What Activates Me", activationLines.join("\n"));
   if (activationSection) parts.push(activationSection);
@@ -371,6 +396,16 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     if (shutdownLines.length > 0) shutdownLines.push("");
     shutdownLines.push("**What shutdown or avoidance actually looks like for me:**");
     shutdownLines.push(profile.shutdown.shutdownDescription.trim());
+  }
+  if (profile.shutdown.hiddenDemand.trim()) {
+    if (shutdownLines.length > 0) shutdownLines.push("");
+    shutdownLines.push("**What it might be refusing:**");
+    shutdownLines.push(profile.shutdown.hiddenDemand.trim());
+  }
+  if (profile.shutdown.innerTyrant.trim()) {
+    if (shutdownLines.length > 0) shutdownLines.push("");
+    shutdownLines.push("**The standard it holds:**");
+    shutdownLines.push(profile.shutdown.innerTyrant.trim());
   }
   const shutdownSection = section("What Causes Shutdown or Avoidance", shutdownLines.join("\n"));
   if (shutdownSection) parts.push(shutdownSection);
@@ -409,6 +444,10 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   if (profile.baseline.expectedData.trim()) {
     baselineLines.push("**Expected data, not failure:**");
     baselineLines.push(profile.baseline.expectedData.trim());
+  }
+  if (profile.baseline.variableCapacities.trim()) {
+    baselineLines.push("**Unreliable day to day:**");
+    baselineLines.push(profile.baseline.variableCapacities.trim());
   }
   const baselineSection = section("What's Different Now Than a Year Ago", baselineLines.join("\n"));
   if (baselineSection) parts.push(baselineSection);
@@ -481,6 +520,11 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     if (historyLines.length > 0) historyLines.push("");
     historyLines.push("**What fell apart:**");
     historyLines.push(profile.history.whatFailed.trim());
+  }
+  if (profile.history.futility.trim()) {
+    if (historyLines.length > 0) historyLines.push("");
+    historyLines.push("**Futility history:**");
+    historyLines.push(profile.history.futility.trim());
   }
   const historySection = section("Systems I've Tried", historyLines.join("\n"));
   if (historySection) parts.push(historySection);

@@ -137,7 +137,7 @@ export default function App({
       {activeTool === "context-builder" && (
         <ToolSection
           label="Context Builder"
-          description="Step one. You answer a few questions about how you actually work, and get a profile that tells any AI what activates you, what shuts you down, and what helps. The other tools read from it."
+          description="Step one. You answer a few questions about how you actually work, and get a profile that tells any AI how to work with you. The other tools read from it."
         >
           <NDContextBuilder />
         </ToolSection>
