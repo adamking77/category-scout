@@ -562,15 +562,15 @@ function ShutdownStep({
       </Field>
 
       <Field>
-        <MetaLabel size="section">What are you not doing?</MetaLabel>
+        <MetaLabel size="section">What are you keeping out right now?</MetaLabel>
         <textarea
           value={profile.notDoing}
           onChange={(e) => onNotDoingChange(e.target.value)}
-          placeholder="Real boundaries, not disclaimers. What you're deliberately keeping out of your life right now"
+          placeholder="The things you keep out on purpose. One per line."
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>This becomes a first-class section of your profile. It's not a limitation list; it's what makes the yes possible.</FieldHint>
+        <FieldHint>Not a limitation list. Naming the no's is what makes the rest possible.</FieldHint>
       </Field>
 
       <Field>
@@ -579,7 +579,7 @@ function ShutdownStep({
           value={draftActive}
           onChange={(e) => setDraftActive(e.target.value)}
           onBlur={() => onLanesChange({ active: parseLanes(draftActive) })}
-          placeholder={"One to three lanes. These are the things you are actually showing up for. One per line.\n\nExample: launching the spring newsletter\nExample: client work for Northwind\nExample: weekly long run"}
+          placeholder="One to three. The things you're actually showing up for. One per line."
           rows={3}
           style={{ fontSize: 13 }}
         />
@@ -592,11 +592,11 @@ function ShutdownStep({
           value={draftClosed}
           onChange={(e) => setDraftClosed(e.target.value)}
           onBlur={() => onLanesChange({ closedDoors: parseLanes(draftClosed) })}
-          placeholder={"What you're choosing not to do for the next season. It is allowed to hurt to name these. That's the grief step.\n\nExample: not pitching new podcast guests this quarter\nExample: not re-platforming the site\nExample: not taking on a new retainer"}
+          placeholder="Things you're choosing not to do this season. One per line."
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>This is the section that makes the yes possible. Skip it and the active lanes get crowded by the things you haven't named you're not doing.</FieldHint>
+        <FieldHint>It's allowed to hurt to name these. That's the grief step. Naming them protects your active lanes.</FieldHint>
       </Field>
 
       <Field>
@@ -604,7 +604,7 @@ function ShutdownStep({
         <textarea
           value={profile.roomSafety}
           onChange={(e) => onRoomSafetyChange(e.target.value)}
-          placeholder={"List them by room. People, settings, contexts. For each: is it safe to be precise here, or do you have to soften first?\n\nExample: 1:1 with my manager: safe to be precise\nExample: large team meetings: have to soften first\nExample: solo writing at night: safe to be precise\nExample: DMs from strangers: unsafe, do not engage"}
+          placeholder="The rooms and settings you're in. For each: safe to be precise, or do you soften first?"
           rows={3}
           style={{ fontSize: 13 }}
         />
@@ -686,11 +686,11 @@ function TimeStep({
       </Field>
 
       <Field>
-        <MetaLabel size="section">What's different now than a year ago?</MetaLabel>
+        <MetaLabel size="section">What used to be easy a year ago that now takes real effort?</MetaLabel>
         <textarea
           value={profile.baseline.changedSinceYearAgo}
           onChange={(e) => onBaselineChange({ changedSinceYearAgo: e.target.value })}
-          placeholder="What used to be automatic that now takes effort? What's shifted? Lost abilities are data, not failure"
+          placeholder="Focus, energy, rest, getting started. What got harder?"
           rows={3}
           style={{ fontSize: 13 }}
         />
@@ -756,15 +756,15 @@ function HistoryStep({
       </Field>
 
       <Field>
-        <MetaLabel size="section">What did you notice and fix this week before anyone else did?</MetaLabel>
+        <MetaLabel size="section">What did you notice and fix this week without being asked?</MetaLabel>
         <textarea
           value={profile.invisibleLabor}
           onChange={(e) => onInvisibleLaborChange(e.target.value)}
-          placeholder="The overfunctioning loop is real data, not a boast. It belongs in your profile"
+          placeholder="Small things nobody noticed. Refilled the coffee, caught the typo, kept the project moving."
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>People who can do almost anything end up doing everything nobody asked for. Naming it makes it visible instead of automatic.</FieldHint>
+        <FieldHint>The things that keep everything running and never get credited. Naming them makes them visible instead of automatic.</FieldHint>
       </Field>
 
       <StepNav onBack={onBack} onContinue={onContinue} />
