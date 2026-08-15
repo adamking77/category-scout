@@ -375,10 +375,10 @@ function IntroStep({
   return (
     <div style={{ maxWidth: 680 }}>
       <p style={{ fontSize: 15, color: "var(--ink)", lineHeight: 1.75, margin: "0 0 20px" }}>
-        Most planning systems assume you will do tomorrow what you decided today. If your energy shifts day to day, that assumption breaks fast.
+        Planning systems break the same way every time. You build the plan on a sharp day, and the plan assumes tomorrow will be sharp too. When your energy shifts, the plan stops working and you're left managing the gap between what you wrote and what you can actually do.
       </p>
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 20px" }}>
-        Give this tool one goal and your profile. It builds a set of options you can pick from based on how you feel. You get a document any AI can read and run.
+        This tool takes one goal and your profile and builds a working process organized by energy state. Instead of a single sequence that needs a good day, you get step menus for each working mode, rescue moves for hard days, and a check-in for what's actually available today. The output is a document any AI can read and run, so the process keeps working when you're low, not only when you're sharp.
       </p>
       <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 12px" }}>
         About 5 minutes. Stop whenever.
@@ -386,7 +386,7 @@ function IntroStep({
       <SuiteOrder />
       {hasProfile ? (
         <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 36px", maxWidth: 560 }}>
-          Your profile is loaded, so the process will match how you work.
+          Your profile is loaded. The process will be shaped around how you actually work.
         </p>
       ) : (
         <div
@@ -402,7 +402,7 @@ function IntroStep({
             Start with your profile
           </p>
           <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.7, margin: 0, maxWidth: 560 }}>
-            The process is shaped around how you actually work. Build your profile first, then come straight back here. Without one, this tool asks a few extra questions to cover the basics.
+            The process works best when it knows how you work. Build your profile first, then come straight back. The tool still works without one.
           </p>
         </div>
       )}

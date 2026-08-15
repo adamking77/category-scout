@@ -3,12 +3,12 @@ import { MetaLabel } from "./MetaLabel";
 
 const ORDER_STEPS = [
   {
-    title: "Build context profile.",
+    title: "Build your context profile.",
     body: "Names how you work so your AI doesn't have to guess.",
   },
   {
-    title: "Design a process.",
-    body: "One goal, shaped around your profile. Step menus for each working mode.",
+    title: "Design a process around it.",
+    body: "One goal, shaped to your energy patterns. Step menus for each working mode.",
   },
 ] as const;
 
@@ -80,7 +80,7 @@ export function SuiteOrder() {
           borderTop: "1px solid rgba(91, 138, 138, 0.2)",
         }}
       >
-        The profile is what makes the plan yours. Without one, this tool asks a few extra questions to cover the basics.
+        Your profile is what makes the process fit. Without one, the tool gathers what it needs by asking a few extra questions.
       </p>
     </div>
   );
@@ -93,7 +93,7 @@ export function SuiteOrder() {
 export function SkillsCallout() {
   return (
     <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.6, margin: "28px 0 0" }}>
-      Want this as a skill inside your own AI?{" "}
+      Want to run this inside your own AI?{" "}
       <a href={TOOL_ROUTES.skills} style={{ color: "var(--teal-deep)", textDecoration: "none" }}>
         See the Skill Suite
       </a>
