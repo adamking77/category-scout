@@ -22,9 +22,25 @@
 - Verified each round: tsc clean, 22/22 tests, `astro build`, copy linter clean, Vercel deploy confirmed serving the new copy live.
 
 **Open decisions (ONE recommendation each):**
-1. Tool order: reorder the suite pills to Spine → Context → Process → Session. **Recommend yes** — five-minute change, all four lanes agree it makes the progression visible.
+1. Tool order: **RESOLVED** via the nav divider (follow-up 3) — steps (Context Builder, Process Designer) first, options (Spine-Finder, Skills) separated by a hairline. The earlier "Spine first" suggestion was not adopted: Spine Finder is an option, not a step.
 2. Missing-tool roadmap: **recommend building the Not-Today/boundary-decision surface first** when the roadmap opens; nothing before then.
 3. Full-app copy audit: the Context Builder is clean; the audit pattern (hints that characterize vs. guide) now exists to sweep the remaining surfaces — Process Designer, Spine Finder page, Skills catalog, output artifacts. **Recommend running it next copy pass.**
+
+**Follow-up 3 (2026-08-15, full team + Steve audit, green-lit by Adam):** explicit suite order, Steve's Opus 4.6 user-flow audit, and all fixes landed. Commits `7f7efff`, `dcdd660`, `4a4cf65`, `b438c0f`.
+- Suite order now explicit: both tool intros carry a shared "How the suite fits together" block (1 Build context profile → 2 Design a process → 3 Run a session) plus the why ("The profile is what makes the plan yours"); both intros end with a Skill Suite callout. Page intros label Context Builder "Step one" and Process Designer "Step two". Spine Finder and Skills are framed as OPTIONS, never steps — no step numbers on them (Adam's correction).
+- Steve's audit (Claude Code, Opus 4.6 high, full COO persona, walked the app as a first-time ND user): verdict was "close, not ready". All findings landed:
+  - Process Designer FieldHints 12px muted → 13px lighter (protect-list violation, fixed).
+  - Could/Should/Want boxes got section labels; intro line brightened.
+  - Rounded cards squared (SuiteOrder + no-profile card) per DESIGN.md §4.
+  - SuiteOrder pressure line ("built from guesses") reframed as an invitation matching the PD card.
+  - Spine-Finder essay title quoted (citation-exempt em-dash, Lindsey's own title).
+  - "Build my process" → "See my process" (invitation register).
+  - Privacy hosting footnote brightened from muted.
+  - Shutdown step split into two: "What to avoid" (triggers, shutdown description, not-doing) + "Where you're focused" (lanes, closed doors, room safety). Data model unchanged; the lanes typing fix moved intact.
+  - Context Builder time estimate updated to "15 to 20 minutes" (the form grew).
+  - Nav now separates STEPS (Context Builder, Process Designer) from OPTIONS (Spine-Finder, Skills) with a hairline divider, so options don't read as steps 3 and 4.
+- Open: the new Focus step intro line is live pending Isla's optional pass (one-line swap); the missing-tool candidates (Not-Today, Let-Go/Regeneration, Work-Fit, first-step, Forward-Builder) remain considerations, not builds; Session Loop still exists only as a skill, not a web page.
+- Verified each round: tsc clean, 22/22 tests, astro build, deploy confirmed serving the new build live.
 
 **How to read this:** the tool is closer to done than it looks. Section 2 lists what must not be touched. Sections 3-7 are the gaps, ordered by leverage. Section 8 is the anti-pattern red-line list. Section 9 is the sequencing plan with owners.
 
