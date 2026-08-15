@@ -11,9 +11,9 @@ export const TOOL_ROUTES: Record<ActiveTool, string> = {
   skills: "/skills",
 };
 
-export const TOOL_LINKS: Array<{ id: ActiveTool; label: string }> = [
-  { id: "context-builder", label: "Context Builder" },
-  { id: "process-designer", label: "Process Designer" },
-  { id: "spine-finder", label: "Spine-Finder" },
-  { id: "skills", label: "Skills" },
+export const TOOL_LINKS: Array<{ id: ActiveTool; label: string; group: "steps" | "options" }> = [
+  { id: "context-builder", label: "Context Builder", group: "steps" },
+  { id: "process-designer", label: "Process Designer", group: "steps" },
+  { id: "spine-finder", label: "Spine-Finder", group: "options" },
+  { id: "skills", label: "Skills", group: "options" },
 ];

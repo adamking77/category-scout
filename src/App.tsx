@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { NDContextBuilder } from "./components/NDContextBuilder";
 import { NDProcessDesigner } from "./components/NDProcessDesigner";
 import { SkillsLibrary } from "./components/SkillsLibrary";
@@ -85,30 +86,44 @@ export default function App({
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32, overflowX: "auto", paddingBottom: 2 }}>
         <div style={{ display: "inline-flex", gap: 2, padding: 3, borderRadius: 999, flexWrap: "nowrap", minWidth: "max-content" }}>
-          {TOOL_LINKS.map(({ id, label }) => {
+          {TOOL_LINKS.map(({ id, label, group }, i) => {
             const isActive = activeTool === id;
+            const showDivider = i > 0 && TOOL_LINKS[i - 1].group !== group;
             return (
-              <a
-                key={id}
-                href={TOOL_ROUTES[id]}
-                className={`nav-pill${isActive ? " nav-pill--active" : ""}`}
-                style={{
-                  fontSize: 12,
-                  fontWeight: isActive ? 600 : 500,
-                  color: isActive ? "#fff" : "var(--ink-muted)",
-                  background: isActive ? "var(--teal)" : "transparent",
-                  border: "none",
-                  borderRadius: 999,
-                  padding: "5px 14px",
-                  fontFamily: "var(--font-display)",
-                  letterSpacing: "0.02em",
-                  lineHeight: 1,
-                  textDecoration: "none",
-                  display: "inline-block",
-                }}
-              >
-                {label}
-              </a>
+              <Fragment key={id}>
+                {showDivider && (
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      width: 1,
+                      alignSelf: "stretch",
+                      background: "var(--rule)",
+                      margin: "0 6px",
+                      flexShrink: 0,
+                    }}
+                  />
+                )}
+                <a
+                  href={TOOL_ROUTES[id]}
+                  className={`nav-pill${isActive ? " nav-pill--active" : ""}`}
+                  style={{
+                    fontSize: 12,
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? "#fff" : "var(--ink-muted)",
+                    background: isActive ? "var(--teal)" : "transparent",
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "5px 14px",
+                    fontFamily: "var(--font-display)",
+                    letterSpacing: "0.02em",
+                    lineHeight: 1,
+                    textDecoration: "none",
+                    display: "inline-block",
+                  }}
+                >
+                  {label}
+                </a>
+              </Fragment>
             );
           })}
         </div>
