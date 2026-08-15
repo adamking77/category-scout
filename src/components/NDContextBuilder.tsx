@@ -311,7 +311,7 @@ function GateStep({
           selected={profile.gates.today}
           onChange={(v) => onChange({ today: v })}
         />
-        <FieldHint>Whatever you pick, the profile and the agents that read it will work with it, not push through it.</FieldHint>
+        <FieldHint>Whatever you pick, the agents reading this will work with it, not against it.</FieldHint>
       </Field>
 
       <Field>
@@ -323,7 +323,7 @@ function GateStep({
           placeholder="Your name, a nickname, or leave it blank"
           style={{ fontSize: 13, padding: "9px 12px" }}
         />
-        <FieldHint>This becomes the headline of your profile. It's your file, so it should feel like yours.</FieldHint>
+        <FieldHint>This is what shows at the top of your profile. Use whatever name you want here.</FieldHint>
       </Field>
 
       <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Continue" />
@@ -471,7 +471,7 @@ function ActivationStep({
           rows={4}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>This doesn't have to be aspirational. Describe what it's actually like when work clicks for you.</FieldHint>
+        <FieldHint>Describe what it actually looks like when work is going well. Not the ideal version; the real one.</FieldHint>
       </Field>
 
       <StepNav onBack={onBack} onContinue={onContinue} />
@@ -558,7 +558,7 @@ function ShutdownStep({
           rows={4}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>Optional but useful. The more specific you are, the more useful this becomes.</FieldHint>
+        <FieldHint>Optional. The more specific you are, the more useful to the agents that read it.</FieldHint>
       </Field>
 
       <Field>
@@ -682,7 +682,7 @@ function TimeStep({
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>These are protected zones. Any process built from your profile will treat silence here as planned rest, not drift.</FieldHint>
+        <FieldHint>These are protected. Any process built from your profile will treat silence here as planned rest.</FieldHint>
       </Field>
 
       <Field>
@@ -694,7 +694,7 @@ function TimeStep({
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>The target is a new sustainable baseline, not getting back to normal. If rest doesn't restore like it used to, that's expected data.</FieldHint>
+        <FieldHint>The target is a new baseline, not getting back to the old one. If rest doesn't restore the way it used to, that's expected.</FieldHint>
       </Field>
 
       <StepNav onBack={onBack} onContinue={onContinue} />
