@@ -11,6 +11,21 @@
 - Uniformity: teal/teal-deep usage rule codified in DESIGN.md §2; tool descriptions unified to second person; Spine-Finder em-dash removed from public copy; nav/step language verified user-first across tools.
 - Bklit decision (recorded): keep the custom calm chart layer for NeuroDiv OS; Bklit stays on the IntelliZen side for internal analytics. No swap.
 
+**Follow-up 2 (2026-08-15, Fiona + Nash + Isla, green-lit by Adam after his full test run):** bug-fix + copy pass. Four commits on top of the follow-up above (`c18123f`, `64bd429`, `8dae199`, `4a82ec6`).
+- Input bug fixed: the two lanes fields trimmed text on every keystroke, so a space typed after a comma or period vanished until the next letter. Fields now hold raw typing and parse only on blur/continue (`NDContextBuilder.tsx` ShutdownStep).
+- Scroll bug fixed: Continue/Back no longer jump to the absolute page top (which landed on the site header, not the form). Both tools scroll the step content to ~20px below the viewport top instead (`NDContextBuilder.tsx` + `NDProcessDesigner.tsx` `goToStep`).
+- Readability violations fixed: "X of Y" step counters and saved-process timestamps were 9px muted; now 11px in both tools.
+- Copy rewrite (the standard Adam set: the heading asks the specific question, the box says what to type in one breath, the hint says why): lanes, closed doors, room safety, and not-doing fields rewritten with one-line placeholders and field-guidance hints; "What are you not doing?" is now "What are you keeping out right now?"; baseline is now "What used to be easy a year ago that now takes real effort?"; invisible labor is now "What did you notice and fix this week without being asked?" Placeholders never clip (no multi-line placeholder text).
+- Isla's hint audit landed: 10 finds, of which 4 were superseded by the rewrite, 6 applied (`8dae199`), plus 1 deeper catch found in verification — the recovery trait label used the banned "just push through"; now "I need rest to function" (`4a82ec6`). A sweep of `src` confirmed zero banned phrases, em-dashes only in dev comments, and the artifact's "Never just start" kept as the corpus's own prohibition.
+- Onboarding: Process Designer now steers context-first structurally. No profile → primary button is "Build your profile first" with a teal callout; "Begin without a profile" remains the dignified secondary. No lockout, no urgency.
+- Strategy considerations (filed, NOT built): all four lanes agree Spine Finder fits as the orientation layer, not a work-loop member; suggested tool order Spine → Context → Process → Session; candidate missing tools are Not-Today/boundary-decision surface, Let-Go/Regeneration tool, Work-Fit check, first-step tool, and Forward-Builder transition. These are roadmap considerations only — nothing built without a separate Adam go.
+- Verified each round: tsc clean, 22/22 tests, `astro build`, copy linter clean, Vercel deploy confirmed serving the new copy live.
+
+**Open decisions (ONE recommendation each):**
+1. Tool order: reorder the suite pills to Spine → Context → Process → Session. **Recommend yes** — five-minute change, all four lanes agree it makes the progression visible.
+2. Missing-tool roadmap: **recommend building the Not-Today/boundary-decision surface first** when the roadmap opens; nothing before then.
+3. Full-app copy audit: the Context Builder is clean; the audit pattern (hints that characterize vs. guide) now exists to sweep the remaining surfaces — Process Designer, Spine Finder page, Skills catalog, output artifacts. **Recommend running it next copy pass.**
+
 **How to read this:** the tool is closer to done than it looks. Section 2 lists what must not be touched. Sections 3-7 are the gaps, ordered by leverage. Section 8 is the anti-pattern red-line list. Section 9 is the sequencing plan with owners.
 
 **Sources cited:**
