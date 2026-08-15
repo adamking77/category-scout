@@ -1,6 +1,6 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { ArrowRight, Check, Copy, DownloadSimple } from "@phosphor-icons/react";
-import { MetaLabel } from "../ui";
+import { MetaLabel, PrimaryButton } from "../ui";
 import type { ProcessMove, ProcessPlan } from "../../types";
 import { OutputSection, LeadTakeaway, SectionHeading } from "./OutputSection";
 import { OutputActionBar } from "./OutputActionBar";
@@ -85,6 +85,8 @@ export function ProcessArtifactOutput({
   onDownload,
   onSaveAsNew,
   onRestart,
+  restartArmed,
+  onCancelRestart,
 }: {
   plan: ProcessPlan;
   copiedBrief: boolean;
@@ -92,6 +94,8 @@ export function ProcessArtifactOutput({
   onDownload: () => void;
   onSaveAsNew: () => void;
   onRestart: () => void;
+  restartArmed: boolean;
+  onCancelRestart: () => void;
 }) {
   const allMoves = useMemo(() => plan.blocks.flatMap((b) => b.moves), [plan.blocks]);
 
@@ -132,6 +136,21 @@ export function ProcessArtifactOutput({
     const html = buildHtmlExport({ title: "ND Process", node: exportRef.current });
     downloadHtmlFile(artifactHtmlFileName("process"), html);
   }
+
+  const restartWrapRef = useRef<HTMLDivElement>(null);
+
+  // While armed, any mousedown outside the arming wrapper disarms. Blur stays
+  // as a secondary path for keyboard and tab navigation.
+  useEffect(() => {
+    if (!restartArmed) return;
+    function onDocMouseDown(e: MouseEvent) {
+      if (restartWrapRef.current && e.target instanceof Node && !restartWrapRef.current.contains(e.target)) {
+        onCancelRestart();
+      }
+    }
+    document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, [restartArmed, onCancelRestart]);
 
   return (
     <div style={{ display: "grid", gap: 72, minWidth: 0, maxWidth: 720 }}>
@@ -344,9 +363,18 @@ export function ProcessArtifactOutput({
         <OutputActionBar
           actions={[
             { key: "save", label: "Save as new", onClick: onSaveAsNew },
-            { key: "restart", label: "Start over", onClick: onRestart },
           ]}
         />
+        <div ref={restartWrapRef} onBlur={onCancelRestart} style={{ marginTop: 16 }}>
+          <PrimaryButton armed={restartArmed} onClick={onRestart}>
+            Start over
+          </PrimaryButton>
+          {restartArmed && (
+            <p className="mono" style={{ fontSize: 11, color: "var(--ink-light)", margin: "10px 0 0", borderLeft: "1px solid rgba(91,138,138,0.18)", paddingLeft: 12 }}>
+              click again to clear and start over. click elsewhere to cancel.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

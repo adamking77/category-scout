@@ -21,7 +21,7 @@ import type { ProfileAxis } from "../../lib/nd-insights";
  */
 export function ProfileBars({ axes }: { axes: ProfileAxis[] }) {
   return (
-    <div style={{ display: "grid", gap: 18 }}>
+    <div style={{ display: "grid", gap: 18, paddingBottom: 24, marginBottom: 28 }}>
       {axes.map((a) => (
         <div key={a.key}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 6 }}>
@@ -63,7 +63,7 @@ export function BalanceMeter({
   const upPct = Math.round((activators / total) * 100);
 
   return (
-    <div>
+    <div style={{ paddingBottom: 24, marginBottom: 28 }}>
       <div style={{ display: "flex", height: 12, overflow: "hidden", borderRadius: 2 }}>
         <div style={{ width: `${upPct}%`, background: "var(--teal)" }} />
         <div style={{ width: `${100 - upPct}%`, background: "var(--terracotta)" }} />
@@ -106,7 +106,7 @@ export function CoverageRing({
 }) {
   const pct = totalMoves > 0 ? Math.round((lowDayMoves / totalMoves) * 100) : 0;
   return (
-    <div style={{ width: 168, height: 168, flexShrink: 0 }}>
+    <div style={{ width: 168, height: 168, flexShrink: 0, paddingBottom: 24, marginBottom: 28 }}>
       <RingChart
         size={168}
         strokeWidth={16}
@@ -130,7 +130,7 @@ export function CoverageBars({ data }: { data: CoverageDatum[] }) {
   const max = Math.max(1, ...data.map((d) => d.value));
 
   return (
-    <div style={{ display: "grid", gap: 12 }}>
+    <div style={{ display: "grid", gap: 12, paddingBottom: 24, marginBottom: 28 }}>
       {data.map((d) => {
         const empty = d.value === 0;
         return (

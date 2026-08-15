@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, PencilSimple, Trash } from "@phosphor-icons/react";
 import { MetaLabel, PrimaryButton, SuiteOrder, SkillsCallout } from "./ui";
 import { ProcessArtifactOutput } from "./output/ProcessArtifactOutput";
@@ -46,6 +47,7 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
   const [currentArtifactId, setCurrentArtifactId] = useState<string | null>(initialArtifact?.id ?? savedDraft?.currentArtifactId ?? null);
   const [artifacts, setArtifacts] = useState<SavedProcessArtifact[]>(() => listProcessArtifacts());
   const [copiedBrief, setCopiedBrief] = useState(false);
+  const [restartArmed, setRestartArmed] = useState(false);
 
   useEffect(() => {
     const refreshProfile = () => setProfileContext(loadNDProfileContext());
@@ -76,6 +78,9 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
   }, []);
 
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const prefersReduced = useReducedMotion();
+  const stepFade = prefersReduced ? 0.01 : 0.2;
 
   // The tool sits below site chrome, so an absolute scroll-to-top lands the
   // user on the page header, not the form. Scroll the step content to the top
@@ -122,13 +127,16 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
   }
 
   function handleRestart() {
-    if (window.confirm("Start a new process? Your current draft will be cleared.")) {
-      clearProcessDesignerDraft();
-      saveCurrentProcessArtifactId(null);
-      setInputs(createEmptyProcessDesignerInputs());
-      setCurrentArtifactId(null);
-      goToStep("intro");
+    if (!restartArmed) {
+      setRestartArmed(true);
+      return;
     }
+    setRestartArmed(false);
+    clearProcessDesignerDraft();
+    saveCurrentProcessArtifactId(null);
+    setInputs(createEmptyProcessDesignerInputs());
+    setCurrentArtifactId(null);
+    goToStep("intro");
   }
 
   function handleStartFresh() {
@@ -136,7 +144,7 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
     saveCurrentProcessArtifactId(null);
     setInputs(createEmptyProcessDesignerInputs());
     setCurrentArtifactId(null);
-    goToStep("goal");
+    goToStep("intro");
   }
 
   function handleOpenArtifact(id: string) {
@@ -209,20 +217,34 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
             )}
           </div>
           {step !== "done" && (
-            <div style={{ display: "flex", gap: 4, marginTop: 10 }}>
+            <div style={{ display: "flex", gap: 4, marginTop: 10, padding: "4px 0" }}>
               {STEP_ORDER.slice(1, -1).map((s) => {
                 const idx = STEP_ORDER.indexOf(s);
                 const currentIdx = stepIndex;
                 const isDone = idx < currentIdx;
                 const isCurrent = idx === currentIdx;
+                if (isCurrent) {
+                  return (
+                    <motion.div
+                      key={s}
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={
+                        prefersReduced
+                          ? { duration: 0.01 }
+                          : { type: "spring", stiffness: 260, damping: 26 }
+                      }
+                      style={{ height: 2, flex: 1, background: "var(--teal-deep)", transformOrigin: "left" }}
+                    />
+                  );
+                }
                 return (
                   <div
                     key={s}
                     style={{
-                      height: 2,
+                      height: 1,
                       flex: 1,
-                      background: isDone ? "var(--teal)" : isCurrent ? "rgba(91, 138, 138, 0.4)" : "var(--rule)",
-                      transition: "background 0.2s",
+                      background: isDone ? "rgba(91, 138, 138, 0.4)" : "var(--rule)",
                     }}
                   />
                 );
@@ -232,20 +254,28 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
         </div>
       )}
 
-      {step === "intro" && (
-        <IntroStep
-          onBegin={() => goToStep("goal")}
-          onStartFresh={handleStartFresh}
-          hasExisting={hasExistingDraft}
-          hasProfile={!!profileContext}
-          hasSavedProcesses={hasSavedProcesses}
-          onOpenContextBuilder={onOpenContextBuilder}
-          artifacts={artifacts}
-          onOpenArtifact={handleOpenArtifact}
-          onRenameArtifact={handleRenameArtifact}
-          onDeleteArtifact={handleDeleteArtifact}
-        />
-      )}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={step}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: stepFade }}
+        >
+          {step === "intro" && (
+            <IntroStep
+              onBegin={() => goToStep("goal")}
+              onStartFresh={handleStartFresh}
+              hasExisting={hasExistingDraft}
+              hasProfile={!!profileContext}
+              hasSavedProcesses={hasSavedProcesses}
+              onOpenContextBuilder={onOpenContextBuilder}
+              artifacts={artifacts}
+              onOpenArtifact={handleOpenArtifact}
+              onRenameArtifact={handleRenameArtifact}
+              onDeleteArtifact={handleDeleteArtifact}
+            />
+          )}
       {step === "goal" && (
         <GoalStep inputs={inputs} onChange={updateInputs} onBack={back} onContinue={next} />
       )}
@@ -276,6 +306,8 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
           }}
           onSaveAsNew={handleSaveAsNew}
           onRestart={handleRestart}
+          restartArmed={restartArmed}
+          onCancelRestart={() => setRestartArmed(false)}
           onBack={back}
           artifacts={artifacts}
           currentArtifactId={currentArtifactId}
@@ -284,6 +316,8 @@ export function NDProcessDesigner({ onOpenContextBuilder }: { onOpenContextBuild
           onDeleteArtifact={handleDeleteArtifact}
         />
       )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
@@ -311,6 +345,22 @@ function IntroStep({
   onRenameArtifact: (id: string, name: string) => void;
   onDeleteArtifact: (id: string) => void;
 }) {
+  const [startFreshArmed, setStartFreshArmed] = useState(false);
+  const startFreshWrapRef = useRef<HTMLDivElement>(null);
+
+  // While armed, any mousedown outside the arming wrapper disarms. Blur stays
+  // as a secondary path for keyboard and tab navigation.
+  useEffect(() => {
+    if (!startFreshArmed) return;
+    function onDocMouseDown(e: MouseEvent) {
+      if (startFreshWrapRef.current && e.target instanceof Node && !startFreshWrapRef.current.contains(e.target)) {
+        setStartFreshArmed(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, [startFreshArmed]);
+
   return (
     <div style={{ maxWidth: 680 }}>
       <p style={{ fontSize: 15, color: "var(--ink)", lineHeight: 1.75, margin: "0 0 20px" }}>
@@ -366,9 +416,26 @@ function IntroStep({
           </>
         )}
         {hasExisting && (
-          <button onClick={onStartFresh} className="btn-text" style={{ fontSize: 14, color: "var(--ink)" }}>
-            Start fresh
-          </button>
+          <div ref={startFreshWrapRef} onBlur={() => setStartFreshArmed(false)}>
+            <PrimaryButton
+              armed={startFreshArmed}
+              onClick={() => {
+                if (!startFreshArmed) {
+                  setStartFreshArmed(true);
+                  return;
+                }
+                setStartFreshArmed(false);
+                onStartFresh();
+              }}
+            >
+              Start fresh
+            </PrimaryButton>
+            {startFreshArmed && (
+              <p className="mono" style={{ fontSize: 11, color: "var(--ink-light)", margin: "10px 0 0", borderLeft: "1px solid rgba(91,138,138,0.18)", paddingLeft: 12 }}>
+                click again to clear and start over. click elsewhere to cancel.
+              </p>
+            )}
+          </div>
         )}
       </div>
       <SkillsCallout />
@@ -569,6 +636,8 @@ function DoneStep({
   onDownload,
   onSaveAsNew,
   onRestart,
+  restartArmed,
+  onCancelRestart,
   onBack,
   artifacts,
   currentArtifactId,
@@ -582,6 +651,8 @@ function DoneStep({
   onDownload: () => void;
   onSaveAsNew: () => void;
   onRestart: () => void;
+  restartArmed: boolean;
+  onCancelRestart: () => void;
   onBack: () => void;
   artifacts: SavedProcessArtifact[];
   currentArtifactId: string | null;
@@ -598,6 +669,8 @@ function DoneStep({
         onDownload={onDownload}
         onSaveAsNew={onSaveAsNew}
         onRestart={onRestart}
+        restartArmed={restartArmed}
+        onCancelRestart={onCancelRestart}
       />
 
       <SavedProcessesSection

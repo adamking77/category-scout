@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { MetaLabel, PrimaryButton, SuiteOrder, SkillsCallout } from "./ui";
 import { ContextProfileOutput } from "./output/ContextProfileOutput";
@@ -69,7 +70,7 @@ function CheckGroup<T extends string>({
               alignItems: "flex-start",
               gap: 12,
               cursor: "pointer",
-              padding: "8px 12px",
+              padding: "12px 14px",
               border: `1px solid ${isChecked ? "var(--teal)" : "var(--rule)"}`,
               background: isChecked ? "rgba(91, 138, 138, 0.05)" : "transparent",
               transition: "border-color 0.12s, background 0.12s",
@@ -133,7 +134,7 @@ function RadioGroup<T extends string>({
               alignItems: "flex-start",
               gap: 12,
               cursor: "pointer",
-              padding: "8px 12px",
+              padding: "12px 14px",
               border: `1px solid ${isChecked ? "var(--teal)" : "var(--rule)"}`,
               background: isChecked ? "rgba(91, 138, 138, 0.05)" : "transparent",
               transition: "border-color 0.12s, background 0.12s",
@@ -234,6 +235,22 @@ function StepNav({
 
 // Step: Intro
 function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void; hasExisting: boolean; wasMigrated: boolean }) {
+  const [freshArmed, setFreshArmed] = useState(false);
+  const freshWrapRef = useRef<HTMLDivElement>(null);
+
+  // While armed, any mousedown outside the arming wrapper disarms. Blur stays
+  // as a secondary path for keyboard and tab navigation.
+  useEffect(() => {
+    if (!freshArmed) return;
+    function onDocMouseDown(e: MouseEvent) {
+      if (freshWrapRef.current && e.target instanceof Node && !freshWrapRef.current.contains(e.target)) {
+        setFreshArmed(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, [freshArmed]);
+
   return (
     <div style={{ maxWidth: 600 }}>
       <p style={{ fontSize: 15, color: "var(--ink)", lineHeight: 1.75, margin: "0 0 20px" }}>
@@ -254,23 +271,32 @@ function IntroStep({ onBegin, hasExisting, wasMigrated }: { onBegin: () => void;
       <p style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.6, margin: "0 0 36px" }}>
         Everything you answer stays in this browser, on this device. Nothing is uploaded or stored anywhere else.
       </p>
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
         <PrimaryButton onClick={onBegin}>
           {hasExisting ? "Continue where I left off" : "Begin"}
         </PrimaryButton>
         {hasExisting && (
-          <button
-            onClick={() => {
-              if (window.confirm("Start a new profile? Your current one will be cleared.")) {
+          <div ref={freshWrapRef} onBlur={() => setFreshArmed(false)}>
+            <PrimaryButton
+              armed={freshArmed}
+              onClick={() => {
+                if (!freshArmed) {
+                  setFreshArmed(true);
+                  return;
+                }
+                setFreshArmed(false);
                 clearNDProfile();
                 onBegin();
-              }
-            }}
-            className="btn-text"
-            style={{ fontSize: 12, color: "var(--ink-muted)" }}
-          >
-            Start fresh
-          </button>
+              }}
+            >
+              Start fresh
+            </PrimaryButton>
+            {freshArmed && (
+              <p className="mono" style={{ fontSize: 11, color: "var(--ink-light)", margin: "10px 0 0", borderLeft: "1px solid rgba(91,138,138,0.18)", paddingLeft: 12 }}>
+                click again to clear and start over. click elsewhere to cancel.
+              </p>
+            )}
+          </div>
         )}
       </div>
       <SkillsCallout />
@@ -890,13 +916,31 @@ function InfoStep({
 function DoneStep({
   profile,
   onRestart,
+  onCancelRestart,
+  restartArmed,
   onBack,
 }: {
   profile: NDProfile;
   onRestart: () => void;
+  onCancelRestart: () => void;
+  restartArmed: boolean;
   onBack: () => void;
 }) {
   const isEmpty = !profile.traits.selected.length && !profile.traits.other.trim();
+  const restartWrapRef = useRef<HTMLDivElement>(null);
+
+  // While armed, any mousedown outside the arming wrapper disarms. Blur stays
+  // as a secondary path for keyboard and tab navigation.
+  useEffect(() => {
+    if (!restartArmed) return;
+    function onDocMouseDown(e: MouseEvent) {
+      if (restartWrapRef.current && e.target instanceof Node && !restartWrapRef.current.contains(e.target)) {
+        onCancelRestart();
+      }
+    }
+    document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, [restartArmed, onCancelRestart]);
 
   return (
     <div>
@@ -908,14 +952,15 @@ function DoneStep({
         <>
           <ContextProfileOutput profile={profile} />
 
-          <div style={{ marginTop: 24 }}>
-            <button
-              onClick={onRestart}
-              className="btn-text"
-              style={{ fontSize: 12, color: "var(--ink-muted)" }}
-            >
+          <div ref={restartWrapRef} style={{ marginTop: 24 }} onBlur={onCancelRestart}>
+            <PrimaryButton armed={restartArmed} onClick={onRestart}>
               Start over
-            </button>
+            </PrimaryButton>
+            {restartArmed && (
+              <p className="mono" style={{ fontSize: 11, color: "var(--ink-light)", margin: "10px 0 0", borderLeft: "1px solid rgba(91,138,138,0.18)", paddingLeft: 12 }}>
+                click again to clear and start over. click elsewhere to cancel.
+              </p>
+            )}
           </div>
         </>
       )}
@@ -948,6 +993,10 @@ export function NDContextBuilder() {
       return false;
     }
   });
+
+  const [restartArmed, setRestartArmed] = useState(false);
+  const prefersReduced = useReducedMotion();
+  const stepFade = prefersReduced ? 0.01 : 0.2;
 
   // Auto-save whenever profile changes (not on intro/done steps)
   useEffect(() => {
@@ -1040,11 +1089,14 @@ export function NDContextBuilder() {
   }
 
   function handleRestart() {
-    if (window.confirm("Start a new profile? Your current one will be cleared.")) {
-      clearNDProfile();
-      setProfile(createEmptyNDProfile());
-      goToStep("intro");
+    if (!restartArmed) {
+      setRestartArmed(true);
+      return;
     }
+    setRestartArmed(false);
+    clearNDProfile();
+    setProfile(createEmptyNDProfile());
+    goToStep("intro");
   }
 
   const stepIndex = STEP_ORDER.indexOf(step);
@@ -1074,24 +1126,34 @@ export function NDContextBuilder() {
             )}
           </div>
           {step !== "done" && (
-            <div style={{ display: "flex", gap: 4, marginTop: 10 }}>
+            <div style={{ display: "flex", gap: 4, marginTop: 10, padding: "4px 0" }}>
               {STEP_ORDER.slice(1, -1).map((s) => {
                 const idx = STEP_ORDER.indexOf(s);
                 const currentIdx = stepIndex;
                 const isDone = idx < currentIdx;
                 const isCurrent = idx === currentIdx;
+                if (isCurrent) {
+                  return (
+                    <motion.div
+                      key={s}
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={
+                        prefersReduced
+                          ? { duration: 0.01 }
+                          : { type: "spring", stiffness: 260, damping: 26 }
+                      }
+                      style={{ height: 2, flex: 1, background: "var(--teal-deep)", transformOrigin: "left" }}
+                    />
+                  );
+                }
                 return (
                   <div
                     key={s}
                     style={{
-                      height: 2,
+                      height: 1,
                       flex: 1,
-                      background: isDone
-                        ? "var(--teal)"
-                        : isCurrent
-                        ? "rgba(91, 138, 138, 0.4)"
-                        : "var(--rule)",
-                      transition: "background 0.2s",
+                      background: isDone ? "rgba(91, 138, 138, 0.4)" : "var(--rule)",
                     }}
                   />
                 );
@@ -1101,9 +1163,17 @@ export function NDContextBuilder() {
         </div>
       )}
 
-      {step === "intro" && (
-        <IntroStep onBegin={() => goToStep("gate")} hasExisting={hasExisting} wasMigrated={wasMigrated} />
-      )}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={step}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: stepFade }}
+        >
+          {step === "intro" && (
+            <IntroStep onBegin={() => goToStep("gate")} hasExisting={hasExisting} wasMigrated={wasMigrated} />
+          )}
       {step === "gate" && (
         <GateStep profile={profile} onChange={updateGates} onNameChange={updateName} onBack={back} onContinue={next} />
       )}
@@ -1129,8 +1199,10 @@ export function NDContextBuilder() {
         <InfoStep profile={profile} onChange={updateInfoConditions} onBack={back} onContinue={next} />
       )}
       {step === "done" && (
-        <DoneStep profile={profile} onRestart={handleRestart} onBack={back} />
+        <DoneStep profile={profile} onRestart={handleRestart} onCancelRestart={() => setRestartArmed(false)} restartArmed={restartArmed} onBack={back} />
       )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

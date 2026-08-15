@@ -15,18 +15,14 @@ export default function App({
 }) {
   return (
     <div className="main-wrap" style={{ maxWidth: 960, margin: "0 auto", padding: "52px 40px 100px" }}>
-      <div style={{ marginBottom: 36 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 10 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <svg width="28" height="20" viewBox="0 0 32 32" fill="none" style={{ flexShrink: 0 }}>
-              <circle cx="12" cy="16" r="10" stroke="var(--teal)" strokeWidth="2" fill="none" />
-              <circle cx="20" cy="16" r="10" stroke="var(--terracotta)" strokeWidth="2" fill="none" opacity="0.85" />
-            </svg>
-            <span style={{ fontSize: 20, fontWeight: 500, color: "var(--ink)", letterSpacing: 0, lineHeight: 1 }}>
-              NeuroDiv OS
-            </span>
-          </div>
-        </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 28, paddingBottom: 20, borderBottom: "1px solid var(--rule)" }}>
+        <svg width="28" height="20" viewBox="0 0 32 32" fill="none" style={{ flexShrink: 0 }}>
+          <circle cx="12" cy="16" r="10" stroke="var(--teal)" strokeWidth="1.6" fill="none" />
+          <circle cx="20" cy="16" r="10" stroke="var(--terracotta)" strokeWidth="1.6" fill="none" opacity="0.85" />
+        </svg>
+        <span style={{ fontSize: 20, fontWeight: 500, color: "var(--ink)", letterSpacing: 0, lineHeight: 1 }}>
+          NeuroDiv OS
+        </span>
       </div>
 
       {!embedded ? (
@@ -60,10 +56,10 @@ export default function App({
 
         <div
           style={{
-            maxWidth: 640,
+            maxWidth: 720,
             margin: "0 0 40px",
-            border: "1px solid rgba(91,138,138,0.25)",
-            background: "rgba(91,138,138,0.06)",
+            border: "1px solid rgba(91,138,138,0.18)",
+            background: "rgba(91,138,138,0.04)",
             padding: "18px 20px",
           }}
         >
@@ -118,10 +114,6 @@ export default function App({
                   className={`nav-pill${isActive ? " nav-pill--active" : ""}`}
                   style={{
                     fontSize: 12,
-                    fontWeight: isActive ? 600 : 500,
-                    color: isActive ? "#fff" : "var(--ink-muted)",
-                    background: isActive ? "var(--teal)" : "transparent",
-                    border: "none",
                     borderRadius: 999,
                     padding: "5px 14px",
                     fontFamily: "var(--font-display)",
@@ -129,6 +121,7 @@ export default function App({
                     lineHeight: 1,
                     textDecoration: "none",
                     display: "inline-block",
+                    transition: "background 0.15s, color 0.15s",
                   }}
                 >
                   {label}

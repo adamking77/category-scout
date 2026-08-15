@@ -93,7 +93,7 @@ export function ToolSection({
             </div>
           )}
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 7 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <span
                 style={{
                   fontSize: 19,
@@ -107,7 +107,7 @@ export function ToolSection({
               </span>
               {statusChip && <span style={{ flexShrink: 0 }}>{statusChip}</span>}
             </div>
-            <p style={{ fontSize: 13, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: 14, color: "var(--ink-light)", lineHeight: 1.6, margin: 0, maxWidth: 640 }}>
               {description}
             </p>
           </div>
@@ -172,7 +172,7 @@ export function ProjectDrawer({
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={{ type: "spring", stiffness: 300, damping: 28 }}
             style={{
               position: "fixed",
               top: 0,
@@ -230,7 +230,7 @@ export function ProjectDrawer({
                       key={project.id}
                       style={{
                         padding: "10px 12px",
-                        borderRadius: 6,
+                        borderRadius: 0,
                         background: isCurrent ? "rgba(91, 138, 138, 0.07)" : "transparent",
                         border: `1px solid ${isCurrent ? "var(--teal)" : "transparent"}`,
                         cursor: isEditing ? "default" : "pointer",
@@ -262,7 +262,7 @@ export function ProjectDrawer({
                               color: "var(--ink)",
                               background: "transparent",
                               border: "1px solid var(--rule)",
-                              borderRadius: 4,
+                              borderRadius: 0,
                               padding: "3px 6px",
                               flex: 1,
                               outline: "none",
