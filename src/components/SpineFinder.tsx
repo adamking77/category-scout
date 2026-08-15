@@ -104,7 +104,7 @@ const STAGES: Stage[] = [
           From the insights, the tool builds a few <strong>example spine questions</strong>, grouped under broad problem domains, so instead of a blank page you have real things to react to. They&apos;re written as questions pitched larger than yourself, the way the framework defines a spine.
         </p>
         <p>
-          You react by feel. From there you either take one that&apos;s yours, or use them as a starting point to write your own (the tool can also dig into one with you if you want to go deeper). Both endings count. The examples are a springboard, not a menu to pick from.
+          You react by feel. From there you either take one that&apos;s yours, or use them as a starting point to write your own (the tool can also dig into one with you if you want to go deeper). All three endings count. The examples are a springboard, not a menu to pick from.
         </p>
       </>
     ),

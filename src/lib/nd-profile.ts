@@ -479,7 +479,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
     laneLines.push(...profile.lanes.active.map((lane) => `- ${lane}`));
   }
   if (profile.lanes.closedDoors.length > 0) {
-    laneLines.push("**Closed doors (named, with the grief step):**");
+    laneLines.push("**Closed doors (things you're choosing not to do this season):**");
     laneLines.push(...profile.lanes.closedDoors.map((door) => `- ${door}`));
   }
   const lanesSection = section("Lanes and Closed Doors", laneLines.join("\n"));
@@ -523,7 +523,7 @@ export function buildNDProfileMarkdown(profile: NDProfile): string {
   }
   if (profile.history.futility.trim()) {
     if (historyLines.length > 0) historyLines.push("");
-    historyLines.push("**Futility history:**");
+    historyLines.push("**Paths that are dead for you:**");
     historyLines.push(profile.history.futility.trim());
   }
   const historySection = section("Systems I've Tried", historyLines.join("\n"));

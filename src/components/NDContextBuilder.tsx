@@ -345,6 +345,7 @@ function GateStep({
           onChange={(v) => onChange({ today: v })}
         />
         <FieldHint>Whatever you pick, the agents reading this will work with it, not against it.</FieldHint>
+        <FieldHint>Each option maps to one of three gates your AI will use to match the right approach: meaning, coherence, timing.</FieldHint>
       </Field>
 
       <Field>
@@ -360,15 +361,15 @@ function GateStep({
       </Field>
 
       <Field>
-        <MetaLabel size="section">What does sovereignty look like for you, right now?</MetaLabel>
+        <MetaLabel size="section">What are you allowed to do and not do, right now?</MetaLabel>
         <textarea
           value={profile.sovereignty}
           onChange={(e) => onSovereigntyChange(e.target.value)}
-          placeholder="Not the answer you wish were true. The honest one. A week, a season, a year."
+          placeholder="The real version, not the aspirational one. A week, a season, a year."
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>The shape of I am allowed to do this and not that, in your own words. Everything else in the profile sits on top of it.</FieldHint>
+        <FieldHint>Name what's actually true for you. Everything else in the profile sits on top of this.</FieldHint>
       </Field>
 
       <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Continue" />
@@ -625,11 +626,11 @@ function ShutdownStep({
       </Field>
 
       <Field>
-        <MetaLabel size="section">What demand is the system actually refusing, one you might not see on the surface?</MetaLabel>
+        <MetaLabel size="section">What demand is your nervous system actually refusing, one you might not see on the surface?</MetaLabel>
         <textarea
           value={profile.shutdown.hiddenDemand}
           onChange={(e) => onChange({ hiddenDemand: e.target.value })}
-          placeholder="Often the visible thing is not the thing. The email looks like the email. The demand is what the email implies."
+          placeholder="Example: the tax form isn't about taxes. It's about being judged for being behind."
           rows={3}
           style={{ fontSize: 13 }}
         />
@@ -735,15 +736,15 @@ function FocusStep({
       </Field>
 
       <Field>
-        <MetaLabel size="section">Which rooms are safe to be accurate in, and which ones aren't?</MetaLabel>
+        <MetaLabel size="section">Which situations are safe to be accurate in, and which ones aren't?</MetaLabel>
         <textarea
           value={profile.roomSafety}
           onChange={(e) => onRoomSafetyChange(e.target.value)}
-          placeholder="The rooms and settings you're in. For each: safe to be precise, or do you soften first?"
+          placeholder="The situations you're in. For each: safe to be precise, or do you soften first? Example: direct with my partner, careful at work."
           rows={3}
           style={{ fontSize: 13 }}
         />
-        <FieldHint>This is per room, not a fixed trait. Agents that read your profile treat each context as its own room.</FieldHint>
+        <FieldHint>This is per situation, not a fixed trait. Agents that read your profile treat each context on its own terms.</FieldHint>
       </Field>
 
       <StepNav onBack={onBack} onContinue={handleContinue} />
@@ -1054,7 +1055,7 @@ function DoneStep({
     <div>
       {isEmpty ? (
         <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.7, margin: "0 0 32px", maxWidth: 560 }}>
-          You haven't filled anything in yet. Go back and complete at least the traits section to generate a useful profile.
+          The profile needs at least one section filled in before it can be built. The traits step (step 2) is a good place to start.
         </p>
       ) : (
         <>
@@ -1226,7 +1227,7 @@ export function NDContextBuilder() {
 
   const stepIndex = STEP_ORDER.indexOf(step);
   const isFormStep = step !== "intro" && step !== "done";
-  const formStepIndex = isFormStep ? STEP_ORDER.indexOf(step) - 1 : null;
+  const formStepIndex = isFormStep ? STEP_ORDER.indexOf(step) : null;
   const formStepCount = STEP_ORDER.length - 2; // exclude intro and done
 
   return (

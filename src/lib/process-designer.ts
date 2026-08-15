@@ -319,12 +319,12 @@ export function buildProcessMarkdown(inputs: ProcessDesignerInputs, plan: Proces
       lines.push(...plan.lanes.active.map((item) => `- ${item}`));
     }
     if (plan.lanes.closedDoors.length > 0) {
-      lines.push("**Closed doors (named, with the grief step):**");
+      lines.push("**Closed doors (things you're choosing not to do this season):**");
       lines.push(...plan.lanes.closedDoors.map((item) => `- ${item}`));
     }
   }
 
-  lines.push("", "## Seasons, not sprints", "", "This process has a regeneration date; it is designed to be redesigned. Returning to the old load is never a designed outcome. The target is a new sustainable baseline, and rest is planned, not owed.");
+  lines.push("", "## Seasons, not sprints", "", "This process is meant to be revisited. Redesign it when your energy or goals shift. It was built for a season, not forever.", "", "This process has a regeneration date; it is designed to be redesigned. Returning to the old load is never a designed outcome. The target is a new sustainable baseline, and rest is planned, not owed.");
 
   if (plan.notDoing.length > 0) {
     lines.push("", "## What you're not doing", "", ...plan.notDoing.map((item) => `- ${item}`));

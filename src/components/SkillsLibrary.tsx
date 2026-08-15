@@ -19,7 +19,7 @@ const SKILLS: SkillCard[] = [
     slug: "nd-context-builder",
     status: "Available",
     summary:
-      "Install this in your AI and run it there. It walks you through the same intake: activation patterns, shutdown triggers, energy rhythms, support conditions. Then it produces the same working profile, a document that tells your AI how you work, natively in your environment. Every conversation after that already knows you.",
+      "Install this in your AI and run it there. It asks the same questions as the web tool: what gets you going, what shuts you down, when you have energy, what helps you work. Then it produces the same working profile, a document that tells your AI how you work, natively in your environment. Every conversation after that already knows you.",
     includesAgent: true,
   },
   {

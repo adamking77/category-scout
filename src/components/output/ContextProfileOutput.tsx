@@ -396,7 +396,7 @@ export function ContextProfileOutput({
               )}
               {profile.history.futility.trim() && (
                 <p style={{ fontSize: 15, color: "var(--ink-light)", lineHeight: 1.6, margin: 0 }}>
-                  <strong style={{ color: "var(--ink)" }}>Futility history:</strong> {profile.history.futility.trim()}
+                  <strong style={{ color: "var(--ink)" }}>Paths that are dead for you:</strong> {profile.history.futility.trim()}
                 </p>
               )}
             </div>
